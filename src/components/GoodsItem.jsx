@@ -1,9 +1,19 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import { height } from '@mui/system';
-import React from 'react';
+import { Button, Card, CardActions, CardContent, 
+        CardMedia, Grid, Typography } from '@mui/material';
+import React, {useState} from 'react';
 
 const GoodsItem = (props) => {
     const { name, price, poster, setOrder } = props;
+
+    const [raised, setRaised] = useState(false);
+
+    const onMouseOver = () => {
+        setRaised(true)
+    }
+
+    const onMouseOut = () => {
+        setRaised(false)
+    }
 
     return (
         <Grid item xs={12} md={4}>
@@ -13,7 +23,12 @@ const GoodsItem = (props) => {
                     borderRadius: '15px',
                     height: '100%'
                 }}
+                raised={raised}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+            
             >
+          
                 <CardMedia
                     sx={{ height: 140 }}
                     image={poster}
@@ -35,6 +50,7 @@ const GoodsItem = (props) => {
                     </Typography>
 
                 </CardContent>
+                
                 <CardActions>
                     <Button
                         variant='contained'
@@ -49,7 +65,7 @@ const GoodsItem = (props) => {
                         Купить
                     </Button>
                 </CardActions>
-
+                
             </Card>
         </Grid>
     );
