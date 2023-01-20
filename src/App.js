@@ -1,24 +1,98 @@
-import logo from './logo.svg';
-import './App.css';
+
+//import './App.css';
+
+import { useState } from 'react';
+import { BasketList, Basket, GoodsList, Search, Header } from './components';
+import { goods } from './data/goods';
+import { Container } from '@mui/material';
 
 function App() {
+  const [order, setOrder] = useState([]);
+  const [search, setSearch] = useState('');
+  const [products, setProducts] = useState(goods);
+  const [isCartOpen, setCartOpen] = useState(false);
+
+  const handleChange = (e) => {
+    if (!e.target.value) {
+      setProducts(goods);
+      setSearch('');
+      return;
+    }
+
+    setSearch(e.target.value);
+    setProducts(
+      products.filter((good) =>
+        good.name.toLowerCase().includes(e.target.value.toLowerCase())
+      ))
+  };
+
+  const addToOrder = (goodsItem) => {
+    let quantity = 1;
+
+    const indexInOrder = order.findIndex(
+      (item) => item.id === goodsItem.id
+    );
+
+    if (indexInOrder > -1) {
+      quantity = order[indexInOrder].quantity + 1;
+
+      setOrder(order.map((item) => {
+        if (item.id !== goodsItem.id) return item;
+
+        return {
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity,
+        };
+      }),
+      );
+    } else {
+      setOrder([
+        ...order,
+        {
+          id: goodsItem.id,
+          name: goodsItem.name,
+          price: goodsItem.price,
+          quantity,
+        },
+      ],
+      );
+    }
+  };
+
+  const removeFromOrder = (goodsItem) => {
+    setOrder(order.filter((item) => item.id !== goodsItem));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header 
+        handleCart={() => setCartOpen(true)}
+      />
+      <Container
+        sx={{mt: '1rem'}}
+      >
+        <Search
+          value={search}
+          onChange={handleChange}
+        />
+        <GoodsList
+          goods={products}
+          setOrder={addToOrder}
+        />
+        <BasketList
+          order={order}
+          setOrder={removeFromOrder}
+        />
+      </Container>
+      <Basket 
+        order={order}
+        removeFromOrder={removeFromOrder}
+        cartOpen={isCartOpen}
+        closeCart={() => setCartOpen(false)}
+      />
+    </>
   );
 }
 
