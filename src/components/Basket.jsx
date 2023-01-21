@@ -16,12 +16,12 @@ export default function Basket({ cartOpen, closeCart, order = [], removeFromOrde
                     <ListItemIcon>
                         <ShoppingBasket />
                     </ListItemIcon>
-                    <ListItemText primary='Cart' />
+                    <ListItemText primary='Корзина' />
                 </ListItem>
                 <Divider />
 
                 {!order.length ? (
-                    <ListItem>Cart empty</ListItem>
+                    <ListItem>Товаров нет</ListItem>
                 ) : (
                     <Fragment>
 
@@ -38,7 +38,7 @@ export default function Basket({ cartOpen, closeCart, order = [], removeFromOrde
                         <Typography 
                             sx={{fontWeight: 'bold', ml: '15px'}}
                         >
-                            Сумма: {' '}
+                            Общая стоимость: {' '}
                             {order.reduce((acc, item) => {
                                 return acc + item.price * item.quantity;
                             }, 0)}{' руб.'}
