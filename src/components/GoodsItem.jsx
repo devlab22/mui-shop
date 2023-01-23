@@ -1,9 +1,10 @@
-import { Button, Card, CardActions, CardContent, 
-        CardMedia, Grid, Typography } from '@mui/material';
+
+import { Button, Card, CardActions, CardContent, Checkbox,
+        CardMedia, Chip, FormControlLabel, Grid, Typography } from '@mui/material';
 import React, {useState} from 'react';
 
 const GoodsItem = (props) => {
-    const { name, price, poster, setOrder } = props;
+    const { id, name, price, poster, setOrder, onCheckboxChanged, checked=false } = props;
 
     const [raised, setRaised] = useState(false);
 
@@ -43,12 +44,27 @@ const GoodsItem = (props) => {
                     >
                         {name}
                     </Typography>
-                    <Typography
+
+                    <Chip 
+                        label={`Цена: ${price} руб.`}
+                        color='primary'
+                        variant='outlined'
+                        />
+                   {/*  <Typography
                         variant='body1'
                         component='span'>
                         Цена: {price} руб.
-                    </Typography>
+                    </Typography> */}
 
+                    <FormControlLabel
+                        sx={{pl: '20px'}}
+                        control={<Checkbox
+                            checked={checked}
+                            onChange={(e) => onCheckboxChanged(e, id)}
+                            />}
+                        label='check'
+                    />
+                    
                 </CardContent>
                 
                 <CardActions>

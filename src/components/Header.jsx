@@ -1,8 +1,8 @@
 import { ShoppingBasket } from '@mui/icons-material'
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
+import { AppBar, Badge, IconButton, Toolbar, Typography } from '@mui/material'
 import React from 'react'
 
-export default function Header({handleCart}) {
+export default function Header({handleCart, orderCount}) {
   return (
     <AppBar
         position='sticky'
@@ -19,7 +19,14 @@ export default function Header({handleCart}) {
                 color='inherit'
                 onClick={handleCart}
             >
-                <ShoppingBasket/>
+                <Badge 
+                    badgeContent={orderCount} 
+                    color='success'
+                    showZero
+                    >
+                    <ShoppingBasket/>
+                </Badge>
+                
             </IconButton>
         </Toolbar>
     </AppBar>

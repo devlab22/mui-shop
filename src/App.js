@@ -1,16 +1,40 @@
 
 //import './App.css';
 
-import { useState } from 'react';
-import { BasketList, Basket, GoodsList, Search, Header } from './components';
+import { useState, useEffect } from 'react';
+import { Basket, GoodsList, Search, Header, Snack } from './components';
 import { goods } from './data/goods';
 import { Container } from '@mui/material';
 
 function App() {
   const [order, setOrder] = useState([]);
   const [search, setSearch] = useState('');
-  const [products, setProducts] = useState(goods);
+  const [products, setProducts] = useState([]);
   const [isCartOpen, setCartOpen] = useState(false);
+  const [isSnackOpen, setSnackOpen] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(0);
+
+  useEffect(() => {
+
+    goods.map(item => {
+      item.checked = false;
+      return item;
+    })
+
+    setProducts(goods)
+
+  }, []);
+
+  const onCheckboxChanged = (e, id) => {
+
+    setProducts(prev => prev.map(item => {
+      if(item.id === id){
+        item.checked = e.target.checked;
+      }
+
+      return item;
+    }))
+  }
 
   const handleChange = (e) => {
     if (!e.target.value) {
@@ -59,16 +83,28 @@ function App() {
       ],
       );
     }
+
+    setOrderQuantity(prev => prev + 1);
+    setSnackOpen(true);
   };
 
   const removeFromOrder = (goodsItem) => {
-    setOrder(order.filter((item) => item.id !== goodsItem));
+
+    setOrder(order.filter((item) =>{
+      if(item.id !== goodsItem){
+        return item;
+      }else{
+          setOrderQuantity(prev => prev - item.quantity)
+        }
+    } ));
+    
   };
 
   return (
     <>
       <Header 
         handleCart={() => setCartOpen(true)}
+        orderCount={orderQuantity}
       />
       <Container
         sx={{mt: '1rem'}}
@@ -79,18 +115,23 @@ function App() {
         />
         <GoodsList
           goods={products}
+          onCheckboxChanged={onCheckboxChanged}
           setOrder={addToOrder}
         />
-        <BasketList
+       {/*  <BasketList
           order={order}
           setOrder={removeFromOrder}
-        />
+        /> */}
       </Container>
       <Basket 
         order={order}
         removeFromOrder={removeFromOrder}
         cartOpen={isCartOpen}
         closeCart={() => setCartOpen(false)}
+      />
+      <Snack
+        isOpen={isSnackOpen}
+        handleOnClose={() => setSnackOpen(false)}
       />
     </>
   );

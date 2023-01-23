@@ -5,3 +5,4 @@ export { default as GoodsList } from './GoodsList';
 export { default as Search } from './Search';
 export { default as Header } from './Header';
 export { default as Basket } from './Basket';
+export {default as Snack} from './Snack';
