@@ -50,20 +50,6 @@ const GoodsItem = (props) => {
                         color='primary'
                         variant='outlined'
                         />
-                   {/*  <Typography
-                        variant='body1'
-                        component='span'>
-                        Цена: {price} руб.
-                    </Typography> */}
-
-                    <FormControlLabel
-                        sx={{pl: '20px'}}
-                        control={<Checkbox
-                            checked={checked}
-                            onChange={(e) => onCheckboxChanged(e, id)}
-                            />}
-                        label='check'
-                    />
                     
                 </CardContent>
                 
@@ -80,6 +66,15 @@ const GoodsItem = (props) => {
                     >
                         Купить
                     </Button>
+
+                    {/* <FormControlLabel
+                        sx={{pl: '20px'}}
+                        control={<Checkbox
+                            checked={checked}
+                            onChange={(e) => onCheckboxChanged(e, id)}
+                            />}
+                        label='check'
+                    /> */}
                 </CardActions>
                 
             </Card>

@@ -6,3 +6,8 @@ export { default as Search } from './Search';
 export { default as Header } from './Header';
 export { default as Basket } from './Basket';
 export {default as Snack} from './Snack';
+export { default as Shop} from './Shop';
+export { default as CardItemList} from './CardItemList';
+export { default as CardItem } from './CardItem';
+export { default as CardSkeleton } from './CardSkeleton';
+export { default as Countries } from './Countries';

@@ -1,140 +1,76 @@
 
 //import './App.css';
 
-import { useState, useEffect } from 'react';
-import { Basket, GoodsList, Search, Header, Snack } from './components';
-import { goods } from './data/goods';
-import { Container } from '@mui/material';
+import React, { useState, Fragment, useEffect } from 'react';
+import { Shop, Countries } from './components';
+import { Box, Tabs, Tab } from '@mui/material';
+import { Flag, AutoStories } from '@mui/icons-material';
+import PropTypes from 'prop-types';
 
 function App() {
-  const [order, setOrder] = useState([]);
-  const [search, setSearch] = useState('');
-  const [products, setProducts] = useState([]);
-  const [isCartOpen, setCartOpen] = useState(false);
-  const [isSnackOpen, setSnackOpen] = useState(false);
-  const [orderQuantity, setOrderQuantity] = useState(0);
+
+  const [value, setValue] = useState(parseInt(sessionStorage.getItem('tab'))|| 0);
+
 
   useEffect(() => {
-
-    goods.map(item => {
-      item.checked = false;
-      return item;
-    })
-
-    setProducts(goods)
-
-  }, []);
-
-  const onCheckboxChanged = (e, id) => {
-
-    setProducts(prev => prev.map(item => {
-      if(item.id === id){
-        item.checked = e.target.checked;
+      if(sessionStorage.getItem('tab')){
+        setValue(parseInt(sessionStorage.getItem('tab')));
       }
+  }, [])
 
-      return item;
-    }))
+  const handleOnTabChanged = (e, newValue) => {
+    setValue(newValue)
+    sessionStorage.setItem('tab', newValue)
   }
 
-  const handleChange = (e) => {
-    if (!e.target.value) {
-      setProducts(goods);
-      setSearch('');
-      return;
-    }
-
-    setSearch(e.target.value);
-    setProducts(
-      products.filter((good) =>
-        good.name.toLowerCase().includes(e.target.value.toLowerCase())
-      ))
-  };
-
-  const addToOrder = (goodsItem) => {
-    let quantity = 1;
-
-    const indexInOrder = order.findIndex(
-      (item) => item.id === goodsItem.id
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <Box
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            {children}
+          </Box>
+        )}
+      </Box>
     );
-
-    if (indexInOrder > -1) {
-      quantity = order[indexInOrder].quantity + 1;
-
-      setOrder(order.map((item) => {
-        if (item.id !== goodsItem.id) return item;
-
-        return {
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity,
-        };
-      }),
-      );
-    } else {
-      setOrder([
-        ...order,
-        {
-          id: goodsItem.id,
-          name: goodsItem.name,
-          price: goodsItem.price,
-          quantity,
-        },
-      ],
-      );
-    }
-
-    setOrderQuantity(prev => prev + 1);
-    setSnackOpen(true);
-  };
-
-  const removeFromOrder = (goodsItem) => {
-
-    setOrder(order.filter((item) =>{
-      if(item.id !== goodsItem){
-        return item;
-      }else{
-          setOrderQuantity(prev => prev - item.quantity)
-        }
-    } ));
-    
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
   };
 
   return (
     <>
-      <Header 
-        handleCart={() => setCartOpen(true)}
-        orderCount={orderQuantity}
-      />
-      <Container
-        sx={{mt: '1rem'}}
-      >
-        <Search
-          value={search}
-          onChange={handleChange}
-        />
-        <GoodsList
-          goods={products}
-          onCheckboxChanged={onCheckboxChanged}
-          setOrder={addToOrder}
-        />
-       {/*  <BasketList
-          order={order}
-          setOrder={removeFromOrder}
-        /> */}
-      </Container>
-      <Basket 
-        order={order}
-        removeFromOrder={removeFromOrder}
-        cartOpen={isCartOpen}
-        closeCart={() => setCartOpen(false)}
-      />
-      <Snack
-        isOpen={isSnackOpen}
-        handleOnClose={() => setSnackOpen(false)}
-      />
+
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleOnTabChanged} aria-label="basic tabs example">
+          <Tab label="Books" icon={<AutoStories/>} value={0}/>
+          <Tab label="Countries" icon={<Flag/>} value={1}/>
+          
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        <Fragment>
+          <Shop/>
+        </Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Countries/>
+      </TabPanel>
+      
     </>
-  );
+  )
+
 }
 
 export default App;
