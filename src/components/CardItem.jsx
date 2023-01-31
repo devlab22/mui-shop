@@ -13,7 +13,8 @@ import {
     Typography,
     ListItemIcon,
     Avatar,
-    CardHeader
+    CardHeader,
+    Box
 } from '@mui/material';
 import React, { useState } from 'react';
 import { CardSkeleton } from '../components';
@@ -113,20 +114,34 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                     {`Subregion: ${subregion}`}
                 </Typography>
 
-                <Typography
-                    variant='p'
-                    component='h4'
-                    sx={{ pb: '5px' }}
-                >
-                    {`Area: ${area} km`}
-                </Typography>
+
+                <Box sx={{ display: 'inline-flex' }}>
+
+                    <Typography
+                        variant='p'
+                        component='h4'
+                        sx={{ pb: '5px' }}
+                    >
+                        {`Area: ${new Intl.NumberFormat().format(parseInt(area))} km`}
+                    </Typography>
+
+                    <Typography
+                        variant='p'
+                        component='h5'
+                        sx={{ mt: '-5px' }}
+                    >
+                        2
+                    </Typography>
+
+                </Box>
+
 
                 <Typography
                     variant='p'
                     component='h4'
                     sx={{ pb: '5px' }}
                 >
-                    {`Population: ${population}`}
+                    {`Population: ${new Intl.NumberFormat().format(population)}`}
                 </Typography>
 
             </>

@@ -3,7 +3,7 @@ import Dashboard from '../API/apiService';
 import { Box } from '@mui/material';
 import { CardItemList, Search } from '../components';
 
-export default function Countries() {
+export default function Countries({ firstLetter = null }) {
 
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,12 @@ export default function Countries() {
 
             setIsLoading(true);
             const data = await Dashboard.getCountries();
-            setItems(data)
+            if (firstLetter) {
+                setItems(data.filter(item => item.name.common[0] === firstLetter))
+            } else {
+                setItems(data)
+            }
+
             setIsLoading(false);
         }
 
