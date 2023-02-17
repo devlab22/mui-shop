@@ -88,44 +88,44 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
         )
     }
 
-    const getCardContentBottom = () => {
+    const addContent = (key = '', value = '') => {
 
         return (
             <Stack
+                flexDirection='row'
                 gap='5px'
             >
                 <Typography
                     variant='p'
                     component='h4'
                 >
-                    {`Capital: ${capital || ''}`}
+                    {`${key}:`}
                 </Typography>
 
                 <Typography
                     variant='p'
                     component='h4'
                 >
-                    {`Region: ${region}`}
+                    {value}
                 </Typography>
 
-                <Typography
-                    variant='p'
-                    component='h4'
-                >
-                    {`Subregion: ${subregion}`}
-                </Typography>
+            </Stack>
+        )
+    }
+    const getCardContentBottom = () => {
 
+        return (
+            <Stack
+                gap='5px'
+            >
+                {addContent('Capital', capital)}
+                {addContent('Region', region)}
+                {addContent('Subregion', subregion)}
 
                 <Stack
-                   flexDirection='row'
+                    flexDirection='row'
                 >
-
-                    <Typography
-                        variant='p'
-                        component='h4'
-                    >
-                        {`Area: ${new Intl.NumberFormat().format(parseInt(area))} km`}
-                    </Typography>
+                    {addContent('Area', `${new Intl.NumberFormat().format(area)} km`)}
 
                     <Typography
                         variant='p'
@@ -137,13 +137,7 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
 
                 </Stack>
 
-
-                <Typography
-                    variant='p'
-                    component='h4'
-                >
-                    {`Population: ${new Intl.NumberFormat().format(population)}`}
-                </Typography>
+                {addContent('Population', new Intl.NumberFormat().format(parseInt(population)))}
 
             </Stack>
         )
