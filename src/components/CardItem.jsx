@@ -13,8 +13,8 @@ import {
     Typography,
     ListItemIcon,
     Avatar,
+    Stack,
     CardHeader,
-    Box
 } from '@mui/material';
 import React, { useState } from 'react';
 import { CardSkeleton } from '../components';
@@ -66,7 +66,9 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
     const getCardContentTop = () => {
 
         return (
-            <>
+            <Stack
+                alignItems='center'
+            >
 
                 <CardHeader title={name['common']} />
 
@@ -80,20 +82,21 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
 
 
                 {icon && (
-                    <img alt={name} src={icon} style={{ paddingLeft: '35%' }} />
+                    <img alt={name} src={icon} />
                 )}
-            </>
+            </Stack>
         )
     }
 
     const getCardContentBottom = () => {
 
         return (
-            <>
+            <Stack
+                gap='5px'
+            >
                 <Typography
                     variant='p'
                     component='h4'
-                    sx={{ pb: '5px' }}
                 >
                     {`Capital: ${capital || ''}`}
                 </Typography>
@@ -101,7 +104,6 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                 <Typography
                     variant='p'
                     component='h4'
-                    sx={{ pb: '5px' }}
                 >
                     {`Region: ${region}`}
                 </Typography>
@@ -109,18 +111,18 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                 <Typography
                     variant='p'
                     component='h4'
-                    sx={{ pb: '5px' }}
                 >
                     {`Subregion: ${subregion}`}
                 </Typography>
 
 
-                <Box sx={{ display: 'inline-flex' }}>
+                <Stack
+                   flexDirection='row'
+                >
 
                     <Typography
                         variant='p'
                         component='h4'
-                        sx={{ pb: '5px' }}
                     >
                         {`Area: ${new Intl.NumberFormat().format(parseInt(area))} km`}
                     </Typography>
@@ -133,18 +135,17 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                         2
                     </Typography>
 
-                </Box>
+                </Stack>
 
 
                 <Typography
                     variant='p'
                     component='h4'
-                    sx={{ pb: '5px' }}
                 >
                     {`Population: ${new Intl.NumberFormat().format(population)}`}
                 </Typography>
 
-            </>
+            </Stack>
         )
     }
 

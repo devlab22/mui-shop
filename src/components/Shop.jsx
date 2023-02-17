@@ -2,7 +2,7 @@
 //import './App.css';
 
 import { useState, useEffect } from 'react';
-import { Basket, GoodsList, Search, Header, Snack } from '../components';
+import { Basket, GoodsList, Search, Toolbar, Header, Snack } from '../components';
 import { goods } from '../data/goods';
 import { Container } from '@mui/material';
 
@@ -101,6 +101,10 @@ function App() {
     
   };
 
+  const handleOnExport = () => {
+    console.log('click')
+  }
+
   return (
     <>
       <Header 
@@ -114,12 +118,18 @@ function App() {
           value={search}
           onChange={handleChange}
         />
+
+       {/*  <Toolbar
+          buttons={[
+            {id:1, seqnr: 1, type: 'img', name:'export', image: '/img/48/system-switch-user.png', onClick: handleOnExport}
+          ]}
+        /> */}
         <GoodsList
           goods={products}
           onCheckboxChanged={onCheckboxChanged}
           setOrder={addToOrder}
         />
-       {/*  <BasketList
+        {/* <BasketList
           order={order}
           setOrder={removeFromOrder}
         /> */}

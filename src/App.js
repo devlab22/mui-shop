@@ -72,7 +72,7 @@ function App() {
           <Tab label="Countries" icon={<Flag />} value={101} />
 
           {alphabet.map((item, index) => (
-            <Tab label={`${item}`} icon={<Flag />} value={index} />
+            <Tab key={index} label={`${item}`} icon={<Flag />} value={index} />
           ))
           }
 
@@ -88,7 +88,7 @@ function App() {
       </TabPanel>
 
       {alphabet.map((item, index) => (
-        <TabPanel value={value} index={index}>
+        <TabPanel key={index} value={value} index={index}>
           <Fragment>
             <Countries firstLetter={item} />
           </Fragment>

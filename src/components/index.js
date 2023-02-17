@@ -11,3 +11,4 @@ export { default as CardItemList} from './CardItemList';
 export { default as CardItem } from './CardItem';
 export { default as CardSkeleton } from './CardSkeleton';
 export { default as Countries } from './Countries';
+export { default as Toolbar } from './Toolbar';

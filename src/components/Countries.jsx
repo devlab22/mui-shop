@@ -32,6 +32,7 @@ export default function Countries({ firstLetter = null }) {
 
         const item = items.find(item => item.name['common'] === name);
         console.log(item)
+        window.open(item.maps.googleMaps, '_blank', 'noreferrer');
     }
 
     const handleOnItemChecked = (name, checked) => {
