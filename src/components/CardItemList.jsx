@@ -5,7 +5,6 @@ import { useItems } from '../hooks/useItems';
 
 export default function CardItemList({ items = [], searchValue='', sortValue=false, onCheckboxChanged, onCardItemClicked, isLoading = false }) {
 
-   
     const filteredItems = useItems(items, sortValue, searchValue);
 
     return (

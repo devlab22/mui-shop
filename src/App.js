@@ -2,9 +2,9 @@
 //import './App.css';
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, Countries } from './components';
+import { Shop, Countries, CustomTableData } from './components';
 import { Box, Tabs, Tab } from '@mui/material';
-import { Flag, AutoStories } from '@mui/icons-material';
+import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
 function App() {
@@ -60,15 +60,15 @@ function App() {
       <Box
         sx={{
           borderBottom: 1,
-          borderColor: 'divider',      
+          borderColor: 'divider',
         }}>
         <Tabs
           variant='scrollable'
-          value={value} 
-          onChange={handleOnTabChanged} 
+          value={value}
+          onChange={handleOnTabChanged}
           aria-label="basic tabs example">
-          <Tab   
-          label="Books" icon={<AutoStories />} value={100} />
+          <Tab label="Books" icon={<AutoStories />} value={100} />
+          <Tab label="table" icon={<TableRows/>} value={102}/>
           <Tab label="Countries" icon={<Flag />} value={101} />
 
           {alphabet.map((item, index) => (
@@ -86,6 +86,10 @@ function App() {
       <TabPanel value={value} index={101}>
         <Countries />
       </TabPanel>
+      <TabPanel value={value} index={102}>
+        <CustomTableData />
+      </TabPanel>
+
 
       {alphabet.map((item, index) => (
         <TabPanel key={index} value={value} index={index}>
