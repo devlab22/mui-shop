@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 function App() {
 
-  const [value, setValue] = useState(parseInt(sessionStorage.getItem('tab')) || 0);
+  const [value, setValue] = useState(100);
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split("");
 
 
