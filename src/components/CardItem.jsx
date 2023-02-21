@@ -73,7 +73,7 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                 <CardHeader title={name['common']} />
 
                 <CardMedia
-                    height='140'
+                    height='100%'
                     image={flags['svg']}
                     component='img'
                     title={name['common']}
@@ -152,8 +152,9 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
 
                     <Card
                         sx={{
-                            maxWidth: 300,
-                            minWidth: 300,
+                            overflow: 'auto',
+                            maxWidth: 250,
+                            minWidth: 200,
                             borderRadius: '15px',
                             height: '100%',
 

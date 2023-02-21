@@ -3,7 +3,7 @@
 
 import React, { useState, Fragment, useEffect } from 'react';
 import { Shop, Countries, CustomTableData } from './components';
-import { Box, Tabs, Tab } from '@mui/material';
+import { Box, CssBaseline, Tabs, Tab } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
@@ -62,13 +62,15 @@ function App() {
           borderBottom: 1,
           borderColor: 'divider',
         }}>
+
+        <CssBaseline />
         <Tabs
           variant='scrollable'
           value={value}
           onChange={handleOnTabChanged}
           aria-label="basic tabs example">
           <Tab label="Books" icon={<AutoStories />} value={100} />
-          <Tab label="table" icon={<TableRows/>} value={102}/>
+          <Tab label="table" icon={<TableRows />} value={102} />
           <Tab label="Countries" icon={<Flag />} value={101} />
 
           {alphabet.map((item, index) => (

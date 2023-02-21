@@ -2,7 +2,7 @@
 //import './App.css';
 
 import { useState, useEffect } from 'react';
-import { Basket, GoodsList, Search, Toolbar, Header, Snack } from '../components';
+import { Basket, GoodsList, Search, Header, Snack } from '../components';
 import { goods } from '../data/goods';
 import { Container } from '@mui/material';
 
@@ -95,15 +95,12 @@ function App() {
         return item;
       }else{
           setOrderQuantity(prev => prev - item.quantity)
+          
         }
         
     } ));
     
   };
-
-  const handleOnExport = () => {
-    console.log('click')
-  }
 
   return (
     <>

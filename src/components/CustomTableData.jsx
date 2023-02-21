@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { Box, Button, Paper, CircularProgress, Stack } from '@mui/material';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { DataGrid, nlNL, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySelector, GridToolbarColumnsButton, GridToolbarFilterButton } from '@mui/x-data-grid';
+import { AlertDialog, MessageDialog } from '../components';
+import Dashboard from '../API/apiService';
 
 export default function CustomTableData() {
 
@@ -9,57 +13,93 @@ export default function CustomTableData() {
     const [selectedRows, setSelectedRows] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [maxId, setMaxId] = useState(0);
+    const [progress, setProgress] = useState(false);
+    const [modalDialog, setModalDialog] = useState(false);
+    const [messageDialog, setMessageDialog] = useState(false);
+
+    const localeText = {
+        toolbarColumns: 'Spalten'
+    }
+
+    //console.log(nlNL.components.MuiDataGrid.defaultProps.localeText)
 
     useEffect(() => {
 
-        setIsLoading(true);
-        setTimeout(() => {
+        async function loadData() {
+            setIsLoading(true);
+
+
+            /*  setColumns([
+                 { field: 'id', headerName: 'ID', width: 70 },
+                 { field: 'firstName', headerName: 'First name', width: 130 },
+                 { field: 'lastName', headerName: 'Last name', width: 130 },
+                 { field: 'age', headerName: 'Age', type: 'number', width: 90, },
+                 {
+                     field: 'fullName', headerName: 'Full name', description: 'This column has a value getter and is not sortable.',
+                     sortable: false,
+                     width: 160,
+                     valueGetter: (params) =>
+                         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+                 },
+             ]); */
 
             setColumns([
                 { field: 'id', headerName: 'ID', width: 70 },
-                { field: 'firstName', headerName: 'First name', width: 130 },
-                { field: 'lastName', headerName: 'Last name', width: 130 },
-                { field: 'age', headerName: 'Age', type: 'number', width: 90, },
-                {
-                    field: 'fullName', headerName: 'Full name', description: 'This column has a value getter and is not sortable.',
-                    sortable: false,
-                    width: 160,
-                    valueGetter: (params) =>
-                        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-                },
-            ]);
+                { field: 'name', headerName: 'Name', width: 200 },
+                { field: 'capital', headerName: 'Capital', width: 130 },
+                { field: 'region', headerName: 'Region', width: 150 },
+                { field: 'subregion', headerName: 'Subregion', width: 230 },
+                { field: 'area', headerName: 'Area', type: 'number', width: 130 },
+                { field: 'population', headerName: 'Population', type: 'number', width: 130 },
+                { field: 'image', headerName: 'Flag', width: 110, renderCell: (params) => <img height={64} width={96} src={params.row.svg} alt={params.row.name} />  },
 
-            const data = [
-                { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-                { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-                { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-                { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-                { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: 25 },
-                { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-                { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-                { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-                { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-                { id: 10, lastName: 'Snow', firstName: 'Jon', age: 35 },
-                { id: 11, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-                { id: 12, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-                { id: 13, lastName: 'Stark', firstName: 'Arya', age: 16 },
-                { id: 14, lastName: 'Targaryen', firstName: 'Daenerys', age: 25 },
-                { id: 15, lastName: 'Melisandre', firstName: null, age: 150 },
-                { id: 16, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-                { id: 17, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-                { id: 18, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-            ]
-            setRows(data)
+            ])
 
-            setMaxId(Math.max(...data.map(o => o.id)))
+            const data = await Dashboard.getCountries();
+           // console.log(data)
+
+            const tmp = data.map((item, index) => {
+
+                return {
+                    id: index,
+                    name: item.name.common || '',
+                    capital: item.capital,
+                    region: item.region,
+                    subregion: item.subregion,
+                    area: `${new Intl.NumberFormat().format(item.area)}`,
+                    population: `${new Intl.NumberFormat().format(item.population)}`,
+                    svg: item.flags.svg,
+                    image: ''
+                }
+
+            })
+
+            
+            setRows(tmp)
+
+            //setMaxId(Math.max(...tmp.map(o => o.id)))
             setIsLoading(false)
+        }
 
-        }, 2000);
+        loadData()
 
     }, [])
 
+    const handleOnDeleteDialog = () => {
+
+        if (selectedRows.length === 0) {
+            setMessageDialog(true)
+        }
+        else {
+            setModalDialog(true)
+        }
+
+
+    }
     const handleOnDelete = () => {
 
+        setModalDialog(false)
+        setProgress(true)
         const toDelete = selectedRows.map(id => {
 
             const item = rows.find(item => item.id === id)
@@ -74,6 +114,10 @@ export default function CustomTableData() {
                 return item
             }
         }))
+
+        setTimeout(() => {
+            setProgress(false)
+        }, 2000)
     }
 
     const handleOnSelectionModelChange = (ids) => {
@@ -87,26 +131,114 @@ export default function CustomTableData() {
 
     }
     const handleOnAddRow = () => {
+
+        setProgress(true);
         setRows((prev) => [...prev, createRandomRow()]);
+
+        setTimeout(() => {
+            setProgress(false)
+        }, 2000)
     }
+
+    const CustomToolbar = () => {
+
+        return (
+            <GridToolbarContainer >
+                <Stack
+                    direction='row'
+                    spacing={1}
+                >
+                    <GridToolbarColumnsButton defaultValue='Spalte' />
+                    <GridToolbarFilterButton />
+                    <GridToolbarDensitySelector />
+                    <GridToolbarExport />
+                    <Button
+                        sx={{ padding: '5px' }}
+                        startIcon={<DeleteOutlineOutlinedIcon />}
+                        onClick={handleOnDeleteDialog}>
+                        delete
+                    </Button>
+                   {/*  <Button
+                        sx={{ padding: '5px' }}
+                        startIcon={<AddBoxOutlinedIcon />}
+                        onClick={handleOnAddRow}>
+                        add row
+                    </Button> */}
+                </Stack>
+
+            </GridToolbarContainer>
+        );
+    }
+
 
     return (
         <Box
             width='100%'
         >
 
-            <Button onClick={handleOnDelete}>delete</Button>
-            <Button onClick={handleOnAddRow}>add row</Button>
-            <DataGrid
-                onSelectionModelChange={handleOnSelectionModelChange}
-                autoHeight={true}
-                autoPageSize={true}
-                rows={rows}
-                columns={columns}
-                pageSize={12}
-                loading={isLoading}
-                checkboxSelection
-            />
+            {progress ?
+
+                <Stack
+                    alignItems='center'
+                    sx={{ mt: '10%' }}
+                >
+                    <CircularProgress />
+                </Stack>
+
+                :
+
+                <Stack
+                    height='90%'
+                >
+
+                    <Paper>
+
+                        {modalDialog &&
+                            <AlertDialog
+                                question='Do you want to delete?'
+                                description='Remove items from table'
+                                toggle={modalDialog}
+                                onReject={() => setModalDialog(false)}
+                                onAccept={handleOnDelete}
+                            />
+                        }
+
+                        {messageDialog &&
+                            <MessageDialog
+                                toggle={messageDialog}
+                                width='300px'
+                                title='Table App'
+                                message='Select a row'
+                                onReject={() => setMessageDialog(false)}
+                            />
+                        }
+
+                        <DataGrid
+                            onSelectionModelChange={handleOnSelectionModelChange}
+                            autoHeight={true}
+                            autoPageSize={true}
+                            rows={rows}
+                            columns={columns}
+                            pageSize={12}
+                            loading={isLoading}
+                            checkboxSelection={true}
+                            components={{ Toolbar: CustomToolbar }}
+                            //   localeText={localeText}
+                            componentsProps={{
+                                toolbar: {
+                                    csvOptions: {
+                                        fileName: 'customerDataBase',
+                                        delimiter: ';',
+                                        utf8WithBom: true,
+                                    }
+                                }
+                            }}
+
+                        />
+                    </Paper>
+                </Stack>
+
+            }
         </Box>
     )
 }

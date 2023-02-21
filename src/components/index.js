@@ -13,3 +13,5 @@ export { default as CardSkeleton } from './CardSkeleton';
 export { default as Countries } from './Countries';
 export { default as Toolbar } from './Toolbar';
 export { default as CustomTableData} from './CustomTableData';
+export { default as AlertDialog} from './AlertDialog';
+export {default as MessageDialog} from './MessageDialog';
