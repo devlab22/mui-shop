@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Paper, CircularProgress, Stack } from '@mui/material';
+import { Box, Button, Paper, CircularProgress, Stack, Typography } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { DataGrid, nlNL, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySelector, GridToolbarColumnsButton, GridToolbarFilterButton } from '@mui/x-data-grid';
@@ -45,36 +45,37 @@ export default function CustomTableData() {
 
             setColumns([
                 { field: 'id', headerName: 'ID', width: 70 },
-                { field: 'name', headerName: 'Name', width: 200 },
-                { field: 'capital', headerName: 'Capital', width: 130 },
+                { field: 'name', headerName: 'Name', width: 250 },
+                { field: 'capital', headerName: 'Capital', width: 150 },
                 { field: 'region', headerName: 'Region', width: 150 },
                 { field: 'subregion', headerName: 'Subregion', width: 230 },
                 { field: 'area', headerName: 'Area', type: 'number', width: 130 },
-                { field: 'population', headerName: 'Population', type: 'number', width: 130 },
-                { field: 'image', headerName: 'Flag', width: 110, renderCell: (params) => <img height={64} width={96} src={params.row.svg} alt={params.row.name} />  },
+                { field: 'population', headerName: 'Population', type: 'number', width: 150 },
+                { field: 'image', sortable: false, headerName: 'Flag', width: 110, renderCell: (params) => <img height={64} width={96} src={params.row.svg} alt={params.row.name} /> },
 
             ])
 
             const data = await Dashboard.getCountries();
-           // console.log(data)
+            // console.log(data)
 
-            const tmp = data.map((item, index) => {
+            const tmp = data
+               // .sort((a, b) => a.name.common.localeCompare(b.name.common))
+                .map((item, index) => {
+                    return {
+                        id: index,
+                        name: item.name.official || '',
+                        capital: item.capital,
+                        region: item.region,
+                        subregion: item.subregion,
+                        area: item.area,
+                        population: item.population,
+                        svg: item.flags.svg,
+                        image: ''
+                    }
 
-                return {
-                    id: index,
-                    name: item.name.common || '',
-                    capital: item.capital,
-                    region: item.region,
-                    subregion: item.subregion,
-                    area: `${new Intl.NumberFormat().format(item.area)}`,
-                    population: `${new Intl.NumberFormat().format(item.population)}`,
-                    svg: item.flags.svg,
-                    image: ''
-                }
+                })
 
-            })
 
-            
             setRows(tmp)
 
             //setMaxId(Math.max(...tmp.map(o => o.id)))
@@ -148,7 +149,7 @@ export default function CustomTableData() {
                     direction='row'
                     spacing={1}
                 >
-                    <GridToolbarColumnsButton defaultValue='Spalte' />
+                    <GridToolbarColumnsButton />
                     <GridToolbarFilterButton />
                     <GridToolbarDensitySelector />
                     <GridToolbarExport />
@@ -158,7 +159,7 @@ export default function CustomTableData() {
                         onClick={handleOnDeleteDialog}>
                         delete
                     </Button>
-                   {/*  <Button
+                    {/*  <Button
                         sx={{ padding: '5px' }}
                         startIcon={<AddBoxOutlinedIcon />}
                         onClick={handleOnAddRow}>
@@ -195,7 +196,7 @@ export default function CustomTableData() {
 
                         {modalDialog &&
                             <AlertDialog
-                                question='Do you want to delete?'
+                                question='Do you want to delete item?'
                                 description='Remove items from table'
                                 toggle={modalDialog}
                                 onReject={() => setModalDialog(false)}
@@ -206,6 +207,7 @@ export default function CustomTableData() {
                         {messageDialog &&
                             <MessageDialog
                                 toggle={messageDialog}
+                                msgty='E'
                                 width='300px'
                                 title='Table App'
                                 message='Select a row'

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider, Stack } from '@mui/material';
+import HelpIcon from '@mui/icons-material/Help';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -19,10 +20,14 @@ export default function AlertDialog({ toggle = false, question = '', description
                 <DialogTitle id="alert-dialog-title">
                     {question}
                 </DialogTitle>
-                <Divider/>
+                <Divider />
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {description}
+                        <Stack direction='row' gap='5px'>
+                            <HelpIcon color='primary'/>
+                            {description}
+                        </Stack>
+
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
