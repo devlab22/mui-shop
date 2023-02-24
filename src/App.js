@@ -2,7 +2,7 @@
 //import './App.css';
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, Countries, CustomTableData } from './components';
+import { Shop, Countries, CustomTableData, AccordionData } from './components';
 import { Box, CssBaseline, Tabs, Tab } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -72,6 +72,7 @@ function App() {
           <Tab label="Books" icon={<AutoStories />} value={100} />
           <Tab label="table" icon={<TableRows />} value={102} />
           <Tab label="Countries" icon={<Flag />} value={101} />
+          <Tab label="Accordion data" icon={<Flag />} value={103} />
 
           {alphabet.map((item, index) => (
             <Tab key={index} label={`${item}`} icon={<Flag />} value={index} />
@@ -90,6 +91,9 @@ function App() {
       </TabPanel>
       <TabPanel value={value} index={102}>
         <CustomTableData />
+      </TabPanel>
+      <TabPanel value={value} index={103}>
+        <AccordionData />
       </TabPanel>
 
 

@@ -208,8 +208,9 @@ export default function CustomTableData() {
                             <MessageDialog
                                 toggle={messageDialog}
                                 msgty='E'
-                                width='300px'
-                                title='Table App'
+                                severity='error'
+                                width='500px'
+                               // title='Table App'
                                 message='Select a row'
                                 onReject={() => setMessageDialog(false)}
                             />
