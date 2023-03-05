@@ -44,7 +44,7 @@ export default function CustomTableData() {
              ]); */
 
             setColumns([
-                { field: 'id', headerName: 'ID', width: 70 },
+                { field: 'id', headerName: 'ID', width: 70, sortable: false },
                 { field: 'name', headerName: 'Name', width: 250 },
                 { field: 'capital', headerName: 'Capital', width: 150 },
                 { field: 'region', headerName: 'Region', width: 150 },
@@ -59,11 +59,11 @@ export default function CustomTableData() {
             // console.log(data)
 
             const tmp = data
-               // .sort((a, b) => a.name.common.localeCompare(b.name.common))
+                .sort((a, b) => a.name.common.localeCompare(b.name.common))
                 .map((item, index) => {
                     return {
                         id: index,
-                        name: item.name.official || '',
+                        name: item.name.common || '',
                         capital: item.capital,
                         region: item.region,
                         subregion: item.subregion,
