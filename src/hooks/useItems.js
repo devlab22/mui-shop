@@ -21,11 +21,11 @@ export const useFilteredItems = (items, search, filterValue='*') => {
     const filteredItems = useMemo(() => {
 
         if(filterValue === '*'){         
-            return items.filter(item => item.name.common.toLowerCase().includes(search.toLowerCase()))
+            return items.filter(item => item.name.common.toLowerCase().startsWith(search.toLowerCase()))
         }
         else{
             return items.filter(item => item.region.toLowerCase() === filterValue.toLowerCase())
-                        .filter(item => item.name.common.toLowerCase().includes(search.toLowerCase()))
+                        .filter(item => item.name.common.toLowerCase().startsWith(search.toLowerCase()))
         }
 
     }, [search, items, filterValue]);
