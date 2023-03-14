@@ -19,7 +19,8 @@ import {
 import React, { useState } from 'react';
 import { CardSkeleton } from '../components';
 
-export default function CardItem({ id, name, flags, capital, region, subregion, area, population, icon, onCheckboxChanged, checked = null, checkedText, onCardClicked, isLoading }) {
+export default function CardItem({ id, name, flags, capital, region, subregion, area, population, icon, 
+    onCheckboxChanged, checked = null, checkedText, onCardClicked, isLoading, unMember, continents }) {
 
     const [raised, setRaised] = useState(false);
 
@@ -121,6 +122,8 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                 {addContent('Capital', capital)}
                 {addContent('Region', region)}
                 {addContent('Subregion', subregion)}
+                {addContent('Continent',continents)}
+                {addContent('Un Member', (Boolean(unMember)) ? 'Yes' : 'No' )}
 
                 <Stack
                     flexDirection='row'
