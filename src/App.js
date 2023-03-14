@@ -3,7 +3,7 @@
 
 import React, { useState, Fragment, useEffect } from 'react';
 import { Shop, Countries, CustomTableData, AccordionData } from './components';
-import { Box, CssBaseline, Tabs, Tab } from '@mui/material';
+import { Box, CssBaseline, Tabs, Tab, Badge } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
@@ -11,6 +11,7 @@ function App() {
 
   const [value, setValue] = useState(100);
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split("");
+  const [booksCount, setBooksCount] = useState(0);
 
 
   useEffect(() => {
@@ -68,8 +69,10 @@ function App() {
           variant='scrollable'
           value={value}
           onChange={handleOnTabChanged}
-          aria-label="basic tabs example">
-          <Tab label="Books" icon={<AutoStories />} value={100} />
+          aria-label="basic tabs example"
+        >
+
+          <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
           <Tab label="table" icon={<TableRows />} value={102} />
           <Tab label="Countries" icon={<Flag />} value={101} />
           <Tab label="Accordion data" icon={<Flag />} value={103} />
@@ -83,7 +86,7 @@ function App() {
       </Box>
       <TabPanel value={value} index={100}>
         <Fragment>
-          <Shop />
+          <Shop setCount={setBooksCount}/>
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={101}>

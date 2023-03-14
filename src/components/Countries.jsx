@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Dashboard from '../API/apiService';
 import { Box } from '@mui/material';
-import { CardItemList, Search } from '../components';
+import { CardItemList, MyTools } from '../components';
 
 export default function Countries({ firstLetter = null }) {
 
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [search, setSearch] = useState('');
+    const [filterValue, setFilterValue] = useState('*')
 
     useEffect(() => {
 
@@ -31,12 +32,15 @@ export default function Countries({ firstLetter = null }) {
     const handleOnItemClicked = (name) => {
 
         const item = items.find(item => item.name['common'] === name);
-        console.log(item)
         window.open(item.maps.googleMaps, '_blank', 'noreferrer');
     }
 
     const handleOnItemChecked = (name, checked) => {
 
+    }
+
+    const handleOnRegionChange = (value) => {
+        setFilterValue(value)
     }
 
     const handleChange = (event) => {
@@ -46,7 +50,7 @@ export default function Countries({ firstLetter = null }) {
     return (
         <Box
             sx={{
-                pt: '80px',
+                pt: '0px',
                 pb: '10px',
                 height: '100%',
                 width: '100%',
@@ -55,15 +59,26 @@ export default function Countries({ firstLetter = null }) {
             }}
         >
 
-            <Search
-                value={search}
-                onChange={handleChange}
+            <MyTools
+                onChangeSearchValue={handleChange}
+                filter={[
+                    {key: '*', value: 'All'},
+                    {key: 'europe', value: 'Europe'},
+                    {key: 'asia', value: 'Asia'},
+                    {key: 'americas', value: 'Americas'},
+                    {key: 'oceania', value: 'Oceania'},
+                    {key: 'antarctic', value: 'Antarctic'},
+                ]}
+                sortValue={filterValue}
+                onChangeSortValue={handleOnRegionChange}
+                filterLabel='Region'
             />
 
             <CardItemList
                 items={items}
                 isLoading={isLoading}
-                sortValue={true}
+                sort={true}
+                filterValue={filterValue}
                 searchValue={search}
                 onCardItemClicked={handleOnItemClicked}
                 onCheckboxChanged={handleOnItemChecked}

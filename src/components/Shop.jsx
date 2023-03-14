@@ -6,7 +6,8 @@ import { Basket, GoodsList, Search, Header, Snack } from '../components';
 import { goods } from '../data/goods';
 import { Container } from '@mui/material';
 
-function App() {
+function App({setCount=Function.prototype}) {
+
   const [order, setOrder] = useState([]);
   const [search, setSearch] = useState('');
   const [products, setProducts] = useState([]);
@@ -22,6 +23,7 @@ function App() {
     })
 
     setProducts(goods)
+    setCount(goods.length)
 
   }, []);
 

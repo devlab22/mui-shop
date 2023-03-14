@@ -1,31 +1,45 @@
 import React from 'react'
 import CardItem from './CardItem';
-import { Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { useItems } from '../hooks/useItems';
 
-export default function CardItemList({ items = [], searchValue='', sortValue=false, onCheckboxChanged, onCardItemClicked, isLoading = false }) {
+export default function CardItemList({ items = [], searchValue = '', sort = false, filterValue = '*', onCheckboxChanged, onCardItemClicked, isLoading = false }) {
 
-    const filteredItems = useItems(items, sortValue, searchValue);
+    const filteredItems = useItems(items, sort, searchValue, filterValue);
 
     return (
-        <Grid
-            container
-            spacing={2}
-            sx={{
-                pl: '10px'
-            }}
-        >
+        <Box>
 
-            {(isLoading ? [...Array(3)] : filteredItems)
-                .map((item, index) => (
-                    <CardItem
-                        key={index}
-                        isLoading={isLoading}
-                        onCheckboxChanged={onCheckboxChanged}
-                        onCardClicked={onCardItemClicked}
-                        {...item} />
-                ))}
+            <Typography 
+                variant="h2" 
+                component="h1"
+                sx={{
+                    textAlign: 'center'
+                }}
+                >
+                {`Count: ${filteredItems.length}`}
+            </Typography>
 
-        </Grid>
+            <Grid
+                container
+                spacing={2}
+                sx={{
+                    pl: '10px'
+                }}
+            >
+
+                {(isLoading ? [...Array(3)] : filteredItems)
+                    .map((item, index) => (
+                        <CardItem
+                            key={index}
+                            isLoading={isLoading}
+                            onCheckboxChanged={onCheckboxChanged}
+                            onCardClicked={onCardItemClicked}
+                            {...item} />
+                    ))}
+
+            </Grid>
+        </Box>
+
     )
 }

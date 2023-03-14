@@ -16,3 +16,5 @@ export { default as CustomTableData} from './CustomTableData';
 export { default as AlertDialog} from './AlertDialog';
 export {default as MessageDialog} from './MessageDialog';
 export {default as AccordionData} from './AccordionData';
+export {default as MyFilter} from './MyFilter';
+export {default as MyTools} from './MyTools';
