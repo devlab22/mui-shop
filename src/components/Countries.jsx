@@ -65,13 +65,15 @@ export default function Countries({ firstLetter = null }) {
                     {key: '*', value: 'All'},
                     {key: 'europe', value: 'Europe'},
                     {key: 'asia', value: 'Asia'},
+                    {key: 'north america', value: 'North America'},
+                    {key: 'south america', value: 'South America'},
                     {key: 'americas', value: 'Americas'},
                     {key: 'oceania', value: 'Oceania'},
-                    {key: 'antarctic', value: 'Antarctic'},
+                    {key: 'antarctica', value: 'Antarctica'},
                 ]}
                 sortValue={filterValue}
                 onChangeSortValue={handleOnRegionChange}
-                filterLabel='Region'
+                filterLabel='Continent'
             />
 
             <CardItemList
@@ -79,6 +81,7 @@ export default function Countries({ firstLetter = null }) {
                 isLoading={isLoading}
                 sort={true}
                 filterValue={filterValue}
+                filterField='continents'
                 searchValue={search}
                 onCardItemClicked={handleOnItemClicked}
                 onCheckboxChanged={handleOnItemChecked}

@@ -3,13 +3,12 @@ import CardItem from './CardItem';
 import { Box, Grid, Typography } from '@mui/material';
 import { useItems } from '../hooks/useItems';
 
-export default function CardItemList({ items = [], searchValue = '', sort = false, filterValue = '*', onCheckboxChanged, onCardItemClicked, isLoading = false }) {
+export default function CardItemList({ items = [], searchValue = '', sort = false, filterField='region', filterValue = '*', onCheckboxChanged, onCardItemClicked, isLoading = false }) {
 
-    const filteredItems = useItems(items, sort, searchValue, filterValue);
+    const filteredItems = useItems(items, sort, searchValue, filterValue, filterField);
 
     return (
         <Box>
-
             <Typography 
                 variant="h2" 
                 component="h1"

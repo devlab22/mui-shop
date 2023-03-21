@@ -123,7 +123,7 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                 {addContent('Region', region)}
                 {addContent('Subregion', subregion)}
                 {addContent('Continent',continents)}
-                {addContent('Un Member', (Boolean(unMember)) ? 'Yes' : 'No' )}
+                {addContent('UN Member', (Boolean(unMember)) ? 'Yes' : 'No' )}
 
                 <Stack
                     flexDirection='row'

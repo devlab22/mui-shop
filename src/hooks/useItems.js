@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export const useSortedItems = (items, sort=false) => {
+export const useSortedItems = (items, sort = false) => {
 
     const sortedItems = useMemo(() => {
 
@@ -15,28 +15,61 @@ export const useSortedItems = (items, sort=false) => {
     return sortedItems;
 }
 
-export const useFilteredItems = (items, search, filterValue='*') => {
-    
+export const useFilteredItems = (items, filterValue = '*', filterField = 'region') => {
 
     const filteredItems = useMemo(() => {
 
-        if(filterValue === '*'){         
-            return items.filter(item => item.name.common.toLowerCase().startsWith(search.toLowerCase()))
+        if (filterValue === '*') {
+            return items;
         }
-        else{
-            return items.filter(item => item.region.toLowerCase() === filterValue.toLowerCase())
-                        .filter(item => item.name.common.toLowerCase().startsWith(search.toLowerCase()))
+        else {
+
+            return items.filter(item => {
+
+                if (Array.isArray(item[filterField])) {
+
+                    const tmp = item[filterField].map(element => element.toLowerCase());
+
+                    if (filterValue === 'americas' && (tmp.includes('north america') || tmp.includes('south america'))) {
+                        return item;
+                    }
+
+                    if (tmp.includes(filterValue.toLowerCase())) {
+                        return item;
+                    }
+
+                }
+                else {
+                    if (item[filterField].toLowerCase() === filterValue.toLowerCase()) {
+                        return item
+                    }
+                }
+
+
+
+            });
         }
 
-    }, [search, items, filterValue]);
+    }, [items, filterField, filterValue]);
 
     return filteredItems;
 
 }
 
-export const useItems = (items, sort=false, search, filterValue='*') => {
+export const useSearchItems = (items, search) => {
 
-    const filteredItems = useFilteredItems(items, search, filterValue);
-    const filteredAndSortItems = useSortedItems(filteredItems, sort);
+    const filteredItems = useMemo(() => {
+        return items.filter(item => item.name.common.toLowerCase().startsWith(search.toLowerCase()))
+
+    }, [items, search]);
+
+    return filteredItems;
+}
+
+export const useItems = (items, sort = false, search, filterValue = '*', filterField = 'region') => {
+
+    const filteredItems = useFilteredItems(items, filterValue, filterField);
+    const searchItems = useSearchItems(filteredItems, search);
+    const filteredAndSortItems = useSortedItems(searchItems, sort);
     return filteredAndSortItems;
 }

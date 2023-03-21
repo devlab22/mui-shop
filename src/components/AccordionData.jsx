@@ -87,6 +87,7 @@ export default function AccordionData() {
                         <AccordionDetails>
                             <Stack>
                                 {addContent('Capital', item.capital)}
+                                {addContent('Continent', item.continents)}
                                 {addContent('Region', item.region)}
                                 {addContent('Subregion', item.subregion)}
                                 {addContent('Area', `${new Intl.NumberFormat().format(item.area)} km`)}
