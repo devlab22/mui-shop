@@ -92,6 +92,7 @@ export default function AccordionData() {
                                 {addContent('Subregion', item.subregion)}
                                 {addContent('Area', `${new Intl.NumberFormat().format(item.area)} km`)}
                                 {addContent('Population', new Intl.NumberFormat().format(parseInt(item.population)))}
+                                {addContent('UN Member', (Boolean(item.unMember)) ? 'Yes' : 'No' )}
                             </Stack>
                         </AccordionDetails>
                     </Accordion>

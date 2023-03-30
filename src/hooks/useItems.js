@@ -26,26 +26,25 @@ export const useFilteredItems = (items, filterValue = '*', filterField = 'region
 
             return items.filter(item => {
 
-                if (Array.isArray(item[filterField])) {
+                if (item[filterField]) {
 
-                    const tmp = item[filterField].map(element => element.toLowerCase());
+                    if (Array.isArray(item[filterField])) {
 
-                    if (filterValue === 'americas' && (tmp.includes('north america') || tmp.includes('south america'))) {
-                        return item;
+                        const tmp = item[filterField].map(element => element.toLowerCase());
+
+                        if (tmp.includes(filterValue.toLowerCase())) {
+                            return item;
+                        }
+
                     }
-
-                    if (tmp.includes(filterValue.toLowerCase())) {
-                        return item;
+                    else {
+                       
+                        if (item[filterField].toLowerCase() === filterValue.toLowerCase()) {
+                            return item
+                        }
                     }
 
                 }
-                else {
-                    if (item[filterField].toLowerCase() === filterValue.toLowerCase()) {
-                        return item
-                    }
-                }
-
-
 
             });
         }

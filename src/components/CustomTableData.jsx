@@ -49,8 +49,10 @@ export default function CustomTableData() {
                 { field: 'capital', headerName: 'Capital', width: 150 },
                 { field: 'region', headerName: 'Region', width: 150 },
                 { field: 'subregion', headerName: 'Subregion', width: 230 },
+                { field: 'continent', headerName: 'Continent', width: 150 },
                 { field: 'area', headerName: 'Area', type: 'number', width: 130 },
                 { field: 'population', headerName: 'Population', type: 'number', width: 150 },
+                { field: 'unmember', headerName: 'UN Member', width: 100 },
                 { field: 'image', sortable: false, headerName: 'Flag', width: 110, renderCell: (params) => <img height={64} width={96} src={params.row.svg} alt={params.row.name} /> },
 
             ])
@@ -67,9 +69,11 @@ export default function CustomTableData() {
                         capital: item.capital,
                         region: item.region,
                         subregion: item.subregion,
+                        continent: item.continents || '',
                         area: item.area,
                         population: item.population,
                         svg: item.flags.svg,
+                        unmember: (Boolean(item.unMember)) ? 'Yes' : 'No' ,
                         image: ''
                     }
 

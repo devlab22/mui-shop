@@ -11,9 +11,6 @@ export default function MyFilter({ options=[], onChange, label='', value, readOn
             readOnly={readOnly}
             onChange={e => onChange(e.target.value)}
             label={label}
-            sx={{
-                width: '250px',
-            }}
         >
     {
         options.map(option => (

@@ -8,7 +8,9 @@ export default function CardItemList({ items = [], searchValue = '', sort = fals
     const filteredItems = useItems(items, sort, searchValue, filterValue, filterField);
 
     return (
-        <Box>
+        <Box>  
+
+            {!isLoading &&         
             <Typography 
                 variant="h2" 
                 component="h1"
@@ -18,6 +20,7 @@ export default function CardItemList({ items = [], searchValue = '', sort = fals
                 >
                 {`Count: ${filteredItems.length}`}
             </Typography>
+            }
 
             <Grid
                 container
@@ -38,6 +41,7 @@ export default function CardItemList({ items = [], searchValue = '', sort = fals
                     ))}
 
             </Grid>
+
         </Box>
 
     )

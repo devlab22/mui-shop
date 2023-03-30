@@ -116,6 +116,7 @@ function App({setCount=Function.prototype}) {
         <Search
           value={search}
           onChange={handleChange}
+          sx={{mb: '1rem'}}
         />
 
        {/*  <Toolbar

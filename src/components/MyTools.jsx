@@ -5,7 +5,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
 
-export default function MyTools({ onChangeSearchValue = Function.prototype, sortValue, onChangeSortValue = Function.prototype, filter = [], filterLabel='sort' }) {
+export default function MyTools({
+    onChangeSearchValue = Function.prototype,
+    sortValue,
+    onChangeSortValue = Function.prototype,
+    filter = [],
+    filterLabel = 'Sort',
+    fields = [],
+    fieldValue,
+    fieldLabel = 'Fieldname',
+    onChangeFieldValue = Function.prototype,
+}) {
 
     const [raised, setRaised] = useState(false);
 
@@ -29,13 +39,22 @@ export default function MyTools({ onChangeSearchValue = Function.prototype, sort
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '5px'
+                        gap: '10px'
                     }}
                 >
 
 
                     {onChangeSearchValue &&
                         <Search onChange={onChangeSearchValue} />
+                    }
+
+                    {Array.isArray(fields) && fields.length > 0 &&
+                        <MyFilter
+                            label={fieldLabel}
+                            options={fields}
+                            value={fieldValue}
+                            onChange={onChangeFieldValue}
+                        />
                     }
 
                     {Array.isArray(filter) && filter.length > 0 &&
@@ -46,6 +65,8 @@ export default function MyTools({ onChangeSearchValue = Function.prototype, sort
                             onChange={onChangeSortValue}
                         />
                     }
+
+
                 </CardContent>
             </Card>
         </ThemeProvider>
