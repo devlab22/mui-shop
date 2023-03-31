@@ -9,9 +9,9 @@ export default function Countries({ firstLetter = null }) {
     const [isLoading, setIsLoading] = useState(false);
     const [search, setSearch] = useState('');
     const [filterValue, setFilterValue] = useState('*')
-    const [fieldValue, setFieldValue] = useState('');
+    const [fieldValue, setFieldValue] = useState('region');
     const [filterValues, setFilterValues] = useState([])
-    const [regionItems, setRegionItems] = useState( new Set());
+    const [regionItems, setRegionItems] = useState(new Set());
     const [subregionItems, setSubregionItems] = useState(new Set());
     const [continentItems, setContinentItems] = useState(new Set());
 
@@ -20,13 +20,8 @@ export default function Countries({ firstLetter = null }) {
         async function loadData() {
 
             setIsLoading(true);
-           // console.log('load')
+
             const data = await Dashboard.getCountries();
-            const filter = Dashboard.getFilters(data)
-            
-            setRegionItems(filter.regionItems);
-            setSubregionItems(filter.subregionItems);
-            setContinentItems(filter.continentItems);
 
             if (firstLetter) {
                 setItems(data.filter(item => item.name.common[0] === firstLetter));
@@ -34,43 +29,44 @@ export default function Countries({ firstLetter = null }) {
                 setItems(data);
             }
 
+            const filter = Dashboard.getFilters(data)
+
+            setRegionItems(filter.regionItems);
+            setSubregionItems(filter.subregionItems);
+            setContinentItems(filter.continentItems);
+
             setIsLoading(false);
         }
 
         loadData();
-        setFieldValue('region')
-        
 
     }, [])
 
     useEffect(() => {
-        fillFilterValues(fieldValue);
-    }, [fieldValue])
+        fillFilterValues();
+    }, [fieldValue, isLoading])
 
-   
-    const fillFilterValues = (fieldname) => {
+    const fillFilterValues = () => {
 
-       // console.log(fieldname)
         setFilterValues([])
         var tmp = []
-        tmp.push({ key: '*', value: 'All'})
+        tmp.push({ key: '*', value: 'All' })
 
-        switch(fieldname){
+        switch (fieldValue) {
             case 'region':
-                regionItems.forEach(item => tmp.push({key: item.toLowerCase(), value: item}) );
+                regionItems.forEach(item => tmp.push({ key: item.toLowerCase(), value: item }));
                 break;
             case 'subregion':
-                subregionItems.forEach(item => tmp.push({key: item.toLowerCase(), value: item}) );
+                subregionItems.forEach(item => tmp.push({ key: item.toLowerCase(), value: item }));
                 break;
             case 'continents':
-                continentItems.forEach(item => tmp.push({key: item.toLowerCase(), value: item}) );
+                continentItems.forEach(item => tmp.push({ key: item.toLowerCase(), value: item }));
                 break;
             default:
                 console.log('unknown field')
         }
-        
+
         setFilterValues(tmp)
-       // setFieldValue(fieldname)
     }
     const handleOnItemClicked = (name) => {
 
@@ -89,7 +85,6 @@ export default function Countries({ firstLetter = null }) {
     const handleOnFieldChange = (value) => {
         setFilterValue('*')
         setFieldValue(value)
-       // fillFilterValues(value)
     }
 
     const handleChange = (event) => {
@@ -108,22 +103,22 @@ export default function Countries({ firstLetter = null }) {
             }}
         >
 
-            { !isLoading && 
-            <MyTools
-                onChangeSearchValue={handleChange}
-                filter={filterValues}
-                sortValue={filterValue}
-                onChangeSortValue={handleOnRegionChange}
-                fields = {[
-                    {key: 'region', value: 'Region'},
-                    {key: 'subregion', value: 'Subregion'},
-                    {key: 'continents', value: 'Continent'},
-                ]}
-                fieldValue={fieldValue}
-                onChangeFieldValue={handleOnFieldChange}
-            />
-                }
-
+            {!isLoading &&
+                <MyTools
+                    onChangeSearchValue={handleChange}
+                    filter={filterValues}
+                    sortValue={filterValue}
+                    onChangeSortValue={handleOnRegionChange}
+                    fields={[
+                        { key: 'region', value: 'Region' },
+                        { key: 'subregion', value: 'Subregion' },
+                        { key: 'continents', value: 'Continent' },
+                    ]}
+                    fieldValue={fieldValue}
+                    onChangeFieldValue={handleOnFieldChange}
+                />
+            }
+            
             <CardItemList
                 items={items}
                 isLoading={isLoading}
