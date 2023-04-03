@@ -18,3 +18,4 @@ export {default as MessageDialog} from './MessageDialog';
 export {default as AccordionData} from './AccordionData';
 export {default as MyFilter} from './MyFilter';
 export {default as MyTools} from './MyTools';
+export {default as LoadingCircle} from './LoadingCircle';
