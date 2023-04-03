@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Accordion, AccordionDetails, Paper, AccordionSummary, Stack, Box, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, Paper, AccordionSummary, Stack, Box, Typography, Skeleton } from '@mui/material';
 import Dashboard from '../API/apiService';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -14,7 +14,7 @@ export default function AccordionData() {
 
             setIsLoading(true);
             const data = await Dashboard.getCountries();
-            setItems(data.sort((a,b) => a.name.common.localeCompare(b.name.common)))
+            setItems(data.sort((a, b) => a.name.common.localeCompare(b.name.common)))
             setIsLoading(false)
 
         }
@@ -53,52 +53,66 @@ export default function AccordionData() {
     }
 
     return (
-        <Box>
-            <Paper
-                sx={{width: '800px', m: 'auto'}}
-            >
+        <Box 
+        sx={{alignItems: 'center'}}
+        >
 
-                {items.map((item, index) => (
+            {isLoading ?
+                <Skeleton 
+                    variant="circular" 
+                    width={50} 
+                    height={50} 
+                    sx={{ bgcolor: 'grey.900' }} 
+                    alignItems='center'
+                    /> :
 
-                    <Accordion
-                        key={index}
-                        expanded={expanded === item.name.common}
-                        onChange={handleChange(item.name.common)}
-                        
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
+                <Paper
+                    sx={{ width: '800px', m: 'auto' }}
+                >
+
+                    {items.map((item, index) => (
+
+                        <Accordion
+                            key={index}
+                            expanded={expanded === item.name.common}
+                            onChange={handleChange(item.name.common)}
+
                         >
-                            <Stack
-                                width='100%'
-                                direction='row'
-                                justifyContent='space-between'
-                                alignItems='center'
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
                             >
-                                <Typography 
-                                  sx={{  flexShrink: 0 }}
-                                  >
-                                    {`${item.name.common} ( ${item.name.official} )`}
-                                </Typography>
-                                <img src={item.flags.svg} height='40px' width='auto' alt={item.name.common} />
-                            </Stack>
+                                <Stack
+                                    width='100%'
+                                    direction='row'
+                                    justifyContent='space-between'
+                                    alignItems='center'
+                                >
+                                    <Typography
+                                        sx={{ flexShrink: 0 }}
+                                    >
+                                        {`${item.name.common} ( ${item.name.official} )`}
+                                    </Typography>
+                                    <img src={item.flags.svg} height='40px' width='auto' alt={item.name.common} />
+                                </Stack>
 
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Stack>
-                                {addContent('Capital', item.capital)}
-                                {addContent('Continent', item.continents)}
-                                {addContent('Region', item.region)}
-                                {addContent('Subregion', item.subregion)}
-                                {addContent('Area', `${new Intl.NumberFormat().format(item.area)} km`)}
-                                {addContent('Population', new Intl.NumberFormat().format(parseInt(item.population)))}
-                                {addContent('UN Member', (Boolean(item.unMember)) ? 'Yes' : 'No' )}
-                            </Stack>
-                        </AccordionDetails>
-                    </Accordion>
-                ))}
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Stack>
+                                    {addContent('Capital', item.capital)}
+                                    {addContent('Continent', item.continents)}
+                                    {addContent('Region', item.region)}
+                                    {addContent('Subregion', item.subregion)}
+                                    {addContent('Area', `${new Intl.NumberFormat().format(item.area)} km`)}
+                                    {addContent('Population', new Intl.NumberFormat().format(parseInt(item.population)))}
+                                    {addContent('UN Member', (Boolean(item.unMember)) ? 'Yes' : 'No')}
+                                </Stack>
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
 
-            </Paper>
+                </Paper>
+            }
+
         </Box>
     )
 }
