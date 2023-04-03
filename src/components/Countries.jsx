@@ -3,7 +3,7 @@ import Dashboard from '../API/apiService';
 import { Box } from '@mui/material';
 import { CardItemList, MyTools } from '../components';
 
-export default function Countries({ firstLetter = null }) {
+export default function Countries({ firstLetter = null, changeCount=Function.prototype }) {
 
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +22,7 @@ export default function Countries({ firstLetter = null }) {
             setIsLoading(true);
 
             const data = await Dashboard.getCountries();
+            
 
             if (firstLetter) {
                 setItems(data.filter(item => item.name.common[0] === firstLetter));
@@ -79,16 +80,25 @@ export default function Countries({ firstLetter = null }) {
     }
 
     const handleOnRegionChange = (value) => {
+        setIsLoading(true)
         setFilterValue(value)
+        setIsLoading(false)
     }
 
     const handleOnFieldChange = (value) => {
+        setIsLoading(true)
         setFilterValue('*')
         setFieldValue(value)
+        setIsLoading(false)
     }
 
     const handleChange = (event) => {
         setSearch(event.target.value)
+    }
+
+    const handleOnChangeCount = (count) => {
+        console.log(count)
+        changeCount(count)
     }
 
     return (
@@ -128,6 +138,7 @@ export default function Countries({ firstLetter = null }) {
                 searchValue={search}
                 onCardItemClicked={handleOnItemClicked}
                 onCheckboxChanged={handleOnItemChecked}
+                changeCount={handleOnChangeCount}
             />
 
         </Box>
