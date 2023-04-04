@@ -6,6 +6,7 @@ import { Shop, Countries, CustomTableData, AccordionData } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
+import Dashboard from './API/apiService';
 
 function App() {
 
@@ -13,30 +14,56 @@ function App() {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split("");
   const [booksCount, setBooksCount] = useState(0);
   const [cntCountry, setCntCountry] = useState(0)
+  const [isLoading, setIsLoading] = useState(false);
+  const [cntTab, setCntTab] = useState([]);
+  const [countries, setCountries] = useState([])
 
 
   useEffect(() => {
+
+    async function loadData() {
+
+      setIsLoading(true);
+
+      const data = await Dashboard.getCountries();
+      //setCountries(data)
+      setCntCountry(data.length);
+      var tmp = [];
+      data.forEach(element => {
+        var key = element.name.common[0];
+        var keyvalue = tmp.find(obj => obj.key === key);
+        if (keyvalue) {
+          tmp.map(item => {
+
+            if (item.key === key) {
+              item.count++;
+            }
+
+            return item;
+          })
+        } else {
+          tmp.push({ key: key, count: 1 })
+        }
+
+      });
+
+      setCntTab(tmp);
+
+      setIsLoading(false);
+    }
+
     if (sessionStorage.getItem('tab')) {
       setValue(parseInt(sessionStorage.getItem('tab')));
     }
+
+    loadData();
 
     // alphabet = String.fromCharCode(...Array(128).keys()).slice(65, 91);
 
   }, [])
 
-  const handleOnChangeCount = (count) => {
-
-    console.log(count)
-    document.getElementById('countryTab').textContent = `Countries (${count})`
-    if(count !== cntCountry){
-       setCntCountry(count)
-    }
-   
-
-  }
-
   const TabWithCount = ({ children, count = 0 }) => {
-  
+
     return (
       <Box sx={{ display: "inline-flex", alignItems: "center" }}>
 
@@ -80,6 +107,27 @@ function App() {
     value: PropTypes.number.isRequired,
   };
 
+  const getCount = (letter = null) => {
+
+    var summe = 0;
+    if (letter) {
+      const keyvalue = cntTab.find(item => item.key === letter);
+      if (keyvalue) {
+        summe = keyvalue.count
+      }
+    }
+    else {
+
+      cntTab.forEach(item => {
+        summe = summe + item.count;
+      })
+      
+    }
+
+    return summe;
+
+  }
+
   return (
     <>
 
@@ -100,18 +148,18 @@ function App() {
           <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
           <Tab label="table" icon={<TableRows />} value={102} />
           <Tab
-            label={<TabWithCount count={cntCountry} >Countries</TabWithCount>}
+            label={`Countries (${getCount(null)})`}
             icon={<Flag />}
             value={101} />
           <Tab label="Accordion data" icon={<Flag />} value={103} />
 
           {alphabet.map((item, index) => (
-            <Tab 
-              key={index} 
-              label={`${item}`} 
-              icon={<Flag />} 
-              value={index} 
-              />
+            <Tab
+              key={index}
+              label={`${item} (${getCount(item)})`}
+              icon={<Flag />}
+              value={index}
+            />
           ))
           }
 
@@ -123,7 +171,7 @@ function App() {
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={101}>
-        <Countries changeCount={handleOnChangeCount} />
+        <Countries countries={countries}/>
       </TabPanel>
       <TabPanel value={value} index={102}>
         <CustomTableData />
@@ -136,7 +184,7 @@ function App() {
       {alphabet.map((item, index) => (
         <TabPanel key={index} value={value} index={index}>
           <Fragment>
-            <Countries firstLetter={item} />
+            <Countries firstLetter={item} countries={countries} />
           </Fragment>
         </TabPanel>
       ))

@@ -54,7 +54,7 @@ export default function AccordionData() {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main">
 
             {isLoading ? (
                <Box>

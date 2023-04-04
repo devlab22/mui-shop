@@ -1,25 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import CardItem from './CardItem';
 import { Box, Grid, Typography } from '@mui/material';
 import { useItems } from '../hooks/useItems';
 
 export default function CardItemList({ items = [], searchValue = '', sort = false,
     filterField = 'region', filterValue = '*', onCheckboxChanged, onCardItemClicked,
-    isLoading = false, changeCount = Function.prototype }) {
+    isLoading = false }) {
 
     const filteredItems = useItems(items, sort, searchValue, filterValue, filterField);
-    const [cnt, setCnt] = useState(0)
-    console.log(isLoading)
-
-    useEffect(() => {
-        
-        console.log('use effect', filteredItems.length)
-        setCnt(filteredItems.length)
-        console.log(cnt)
-        changeCount(cnt)
-
-    }, [isLoading])
-
 
     return (
         <Box>

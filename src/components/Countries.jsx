@@ -3,7 +3,7 @@ import Dashboard from '../API/apiService';
 import { Box } from '@mui/material';
 import { CardItemList, MyTools } from '../components';
 
-export default function Countries({ firstLetter = null, changeCount=Function.prototype }) {
+export default function Countries({ firstLetter = null, countries = [] }) {
 
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -19,22 +19,40 @@ export default function Countries({ firstLetter = null, changeCount=Function.pro
 
         async function loadData() {
 
+            if(items.length > 0){
+                return;
+            }
             setIsLoading(true);
 
-            const data = await Dashboard.getCountries();
-            
+            if (countries.length === 0) {
+               
+                const data = await Dashboard.getCountries();
 
-            if (firstLetter) {
-                setItems(data.filter(item => item.name.common[0] === firstLetter));
-            } else {
-                setItems(data);
+                if (firstLetter) {
+                    setItems(data.filter(item => item.name.common[0] === firstLetter));
+                } else {
+                    setItems(data);
+                }
+
+                const filter = Dashboard.getFilters(data)
+                setRegionItems(filter.regionItems);
+                setSubregionItems(filter.subregionItems);
+                setContinentItems(filter.continentItems);
+
+            }else{
+
+                if (firstLetter) {
+                    setItems(countries.filter(item => item.name.common[0] === firstLetter));
+                } else {
+                    setItems(countries);
+                }
+
+                const filter = Dashboard.getFilters(countries)
+                setRegionItems(filter.regionItems);
+                setSubregionItems(filter.subregionItems);
+                setContinentItems(filter.continentItems);
             }
 
-            const filter = Dashboard.getFilters(data)
-
-            setRegionItems(filter.regionItems);
-            setSubregionItems(filter.subregionItems);
-            setContinentItems(filter.continentItems);
 
             setIsLoading(false);
         }
@@ -80,25 +98,16 @@ export default function Countries({ firstLetter = null, changeCount=Function.pro
     }
 
     const handleOnRegionChange = (value) => {
-        setIsLoading(true)
         setFilterValue(value)
-        setIsLoading(false)
     }
 
     const handleOnFieldChange = (value) => {
-        setIsLoading(true)
         setFilterValue('*')
         setFieldValue(value)
-        setIsLoading(false)
     }
 
     const handleChange = (event) => {
         setSearch(event.target.value)
-    }
-
-    const handleOnChangeCount = (count) => {
-        console.log(count)
-        changeCount(count)
     }
 
     return (
@@ -128,7 +137,7 @@ export default function Countries({ firstLetter = null, changeCount=Function.pro
                     onChangeFieldValue={handleOnFieldChange}
                 />
             }
-            
+
             <CardItemList
                 items={items}
                 isLoading={isLoading}
@@ -138,7 +147,6 @@ export default function Countries({ firstLetter = null, changeCount=Function.pro
                 searchValue={search}
                 onCardItemClicked={handleOnItemClicked}
                 onCheckboxChanged={handleOnItemChecked}
-                changeCount={handleOnChangeCount}
             />
 
         </Box>
