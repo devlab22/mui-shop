@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Dashboard from '../API/apiService';
 import { Box } from '@mui/material';
@@ -59,7 +60,7 @@ export default function Countries({ firstLetter = null, countries = [] }) {
 
         loadData();
 
-    }, [])
+    }, [] )
 
     useEffect(() => {
         fillFilterValues();

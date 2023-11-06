@@ -1,12 +1,15 @@
+/* eslint-disable no-unused-vars */
 
 //import './App.css';
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, Countries, CustomTableData, AccordionData } from './components';
+import { Shop, Countries, CustomTableData, AccordionData, TreeData } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import Dashboard from './API/apiService';
+import treeData from './data/treeData.json';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 function App() {
 
@@ -17,6 +20,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [cntTab, setCntTab] = useState([]);
   const [countries, setCountries] = useState([])
+  const [tree, setTree] = useState()
+
 
 
   useEffect(() => {
@@ -24,7 +29,8 @@ function App() {
     async function loadData() {
 
       setIsLoading(true);
-
+      setTree(treeData)
+     
       const data = await Dashboard.getCountries();
       //setCountries(data)
       setCntCountry(data.length);
@@ -79,6 +85,7 @@ function App() {
   const handleOnTabChanged = (e, newValue) => {
     setValue(newValue)
     sessionStorage.setItem('tab', newValue)
+   
   }
 
   function TabPanel(props) {
@@ -128,6 +135,18 @@ function App() {
 
   }
 
+  const onCheckboxChanged = (node, checked) => {
+    console.log(node, checked)
+
+   /*  setTree(prev => prev.children.map(item => {
+      if(item.id === node.id){
+        item.checked = checked;
+      }
+
+      return item;
+    })) */
+  }
+
   return (
     <>
 
@@ -147,6 +166,7 @@ function App() {
 
           <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
           <Tab label="table" icon={<TableRows />} value={102} />
+          <Tab label="Tree Data" icon={<AccountTreeIcon/>} value={104} />
           <Tab
             label={`Countries (${getCount(null)})`}
             icon={<Flag />}
@@ -165,6 +185,11 @@ function App() {
 
         </Tabs>
       </Box>
+      <TabPanel value={value} index={104}>
+          <Fragment>
+              <TreeData nodes={tree} handleCheck={onCheckboxChanged}/>
+          </Fragment>
+      </TabPanel>
       <TabPanel value={value} index={100}>
         <Fragment>
           <Shop setCount={setBooksCount} />

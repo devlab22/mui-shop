@@ -19,3 +19,4 @@ export {default as AccordionData} from './AccordionData';
 export {default as MyFilter} from './MyFilter';
 export {default as MyTools} from './MyTools';
 export {default as LoadingCircle} from './LoadingCircle';
+export {default as TreeData} from './TreeData';
