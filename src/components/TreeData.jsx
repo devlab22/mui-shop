@@ -10,16 +10,18 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
 import ArticleIcon from '@mui/icons-material/Article';
 
-export default function TreeData({ nodes, toggleMenu = true, handleClick = Function.prototype, handleCheck=Function.prototype }) {
+export default function TreeData({ nodes, checkbox = false, handleClick = Function.prototype, handleCheck = Function.prototype }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState([])
     const [selectedId, setSelectedId] = useState(null);
     const [open, setOpen] = useState(false);
+    const [reload, setReload] = useState(false)
     var id = 0;
 
     useEffect(() => {
 
+        // console.log(nodes)
         setIsLoading(true);
         setItems([]);
         setLevel(nodes, 1)
@@ -29,9 +31,10 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const onCheckBoxChanged = (node, event) => {
+    const onCheckBoxChanged = (node, checked) => {
 
-        handleCheck(node, event.target.checked)
+        handleCheck(node, checked)
+        setReload(!reload)
     }
     const setExpand = (node, expand = false) => {
 
@@ -134,7 +137,7 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
                 <Collapse in={menu.expand} timeout="auto" unmountOnExit>
                     <List component="div">
                         {
-                            node.children.map(item => buildListItem(item, { pl: item.level * 4 }))
+                            node.children.map(item => buildListItem(item, { pl: item.level * 3 }))
                         }
                     </List>
                 </Collapse>
@@ -142,10 +145,11 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
         }
 
     }
+
     const buildListItem = (node, styles = {}) => {
 
         var menu = getMenu(node);
-        
+
         return (
             <div key={node.id}>
 
@@ -153,7 +157,7 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
                     <ListSubheader
                         component="div"
                         color="primary"
-                       // inset={toggleMenu}
+                        inset={true}
                         sx={{
                             fontSize: '1.2rem',
                             fontWeight: "bold"
@@ -164,56 +168,92 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
                 }
 
                 <ListItemButton
-
                     sx={styles}
-                    onClick={(e) => (node.checked ? '' : handleOnButtonClick(node)) }
+                    onClick={() => handleOnButtonClick(node)}
                     dense={false}
                     selected={selectedId === node.id}
                     title={node.name}
                 >
 
-                { (node.checked) && 
-                    <ListItemIcon>
-                        <Checkbox
-                            edge="start"
-                            // checked={checked.indexOf(value) !== -1}
-                            tabIndex={-1}
-                            disableRipple
-                            checked={node.checked}
-                            onChange={(event) => onCheckBoxChanged(node, event)}
-                        // inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                    </ListItemIcon>                  
-                }
-                    <ListItemIcon>
-                        {node.children ? <FolderIcon /> : <ArticleIcon />}
-                    </ListItemIcon>
+                    {checkbox &&
+                        <ListItemIcon
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Checkbox
+                                edge="start"
+                                checked={node.checked}
+                                onChange={(e) => onCheckBoxChanged(node, e.target.checked)}
+                            />
+                        </ListItemIcon>
+                    }
 
-                   
-                        <Fragment>
-                            <Stack
-                                direction="row"
-                                spacing={10}
+                    <ListItemText primary={node.name} />
 
+                    <ListItemIcon
+                                sx={{
+                                    display: `${node.children ? '' : 'none'}`,
+                                    left: "10px"
+                                }}                          
                             >
-                                <ListItemText primary={node.name} />
-                                <ListItemText primary={node.id} sx={{ pl: `${50}px` }} />
-                                <ListItemText primary={node.level} sx={{ pl: `${90}px` }} />
+                                {menu.expand ? 
+                                    <ExpandMore  
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleOnButtonClick(node)
+                                        }}
+                                        /> : 
+                                    <ChevronRight  
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleOnButtonClick(node)
+                                        }} 
+                                        />
+                                        }
+                            </ListItemIcon>
 
-                                <ListItemIcon
-                                    sx={{
-                                        display: `${node.children ? '' : 'none'}`,
-                                        left: "10px"
-                                    }}
-                                    onClick={() => handleOnButtonClick(node) }
-                                >
-                                    {menu.expand ? <ExpandMore /> : <ChevronRight />}
-                                </ListItemIcon>
-                            </Stack>
+                    {/*  <ListItemIcon>
+                        {node.children ? <FolderIcon color='primary'/> : <ArticleIcon color='primary'/>}
+                    </ListItemIcon> */}
 
-                        </Fragment>
-                    
+                    {/*  <ListItemIcon>
+                        {node.icon}
+                    </ListItemIcon> */}
 
+
+                    {/* <Fragment>
+                        <Stack
+                            direction="row"
+                            spacing={30}
+
+                        >
+                            <ListItemText primary={node.name} />
+                            <ListItemText primary={node.id} sx={{ ml: `${150}px` }} />
+                            <ListItemText primary={node.level} sx={{ ml: `${150}px` }} />
+
+                            <ListItemIcon
+                                sx={{
+                                    display: `${node.children ? '' : 'none'}`,
+                                    left: "10px"
+                                }}                          
+                            >
+                                {menu.expand ? 
+                                    <ExpandMore  
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleOnButtonClick(node)
+                                        }}
+                                        /> : 
+                                    <ChevronRight  
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleOnButtonClick(node)
+                                        }} 
+                                        />
+                                        }
+                            </ListItemIcon>
+                        </Stack>
+
+                    </Fragment> */}
 
                 </ListItemButton>
 
@@ -252,13 +292,11 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
         return (
             <List
                 sx={{
-                    width: 'auto',
-                    minWidth: '250px',
-                    maxWidth: '800px',
+                    width: '100%',
                     bgcolor: 'background.paper'
                 }}
                 component="nav"
-                subheader={renderHeader()}
+                //subheader={renderHeader()}
             >
                 {
                     nodes.children.map(node => buildListItem(node))
@@ -269,7 +307,7 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
     }
 
     return (
-        <Container component="main">
+        <Container component="main" width="100%">
             {isLoading ? (
                 <Box>
                     <LoadingCircle typeContent='circle' />
@@ -278,7 +316,7 @@ export default function TreeData({ nodes, toggleMenu = true, handleClick = Funct
             ) :
                 <Box>
                     <Paper
-                        sx={{ width: 'auto', m: 'auto' }}
+                        sx={{ width: '50%' }}
                     >
                         {renderListMenu(nodes)}
                     </Paper>

@@ -3,7 +3,7 @@
 //import './App.css';
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, Countries, CustomTableData, AccordionData, TreeData } from './components';
+import { Shop, Countries, CustomTableData, AccordionData, TreeData, TreeDataView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -21,20 +21,24 @@ function App() {
   const [cntTab, setCntTab] = useState([]);
   const [countries, setCountries] = useState([])
   const [tree, setTree] = useState()
-
+  const [treeView, setTreeView] = useState()
 
 
   useEffect(() => {
 
     async function loadData() {
 
+      var tmp = [];
       setIsLoading(true);
+
+      recursiveTree(treeData.children, null, false)
       setTree(treeData)
-     
+      setTreeView(treeData)
+
       const data = await Dashboard.getCountries();
       //setCountries(data)
       setCntCountry(data.length);
-      var tmp = [];
+      tmp = []
       data.forEach(element => {
         var key = element.name.common[0];
         var keyvalue = tmp.find(obj => obj.key === key);
@@ -85,7 +89,7 @@ function App() {
   const handleOnTabChanged = (e, newValue) => {
     setValue(newValue)
     sessionStorage.setItem('tab', newValue)
-   
+
   }
 
   function TabPanel(props) {
@@ -128,28 +132,44 @@ function App() {
       cntTab.forEach(item => {
         summe = summe + item.count;
       })
-      
+
     }
 
     return summe;
 
   }
 
-  const onCheckboxChanged = (node, checked) => {
-    console.log(node, checked)
+  const recursiveTree = (items, node, checked) => {
 
-   /*  setTree(prev => prev.children.map(item => {
-      if(item.id === node.id){
-        item.checked = checked;
+    items.forEach(item => {
+
+      if (!node) {
+        item.checked = checked
+      }
+      else {
+
+        if (item.id === node.id) {
+          item.checked = checked
+          return item
+        }
       }
 
-      return item;
-    })) */
+      if (item.children) {
+        recursiveTree(item.children, node, checked)
+      }
+
+    })
+  }
+
+  const onCheckboxChanged = (node, checked) => {
+
+    var tmp = tree
+    recursiveTree(tmp.children, node, checked)
+    setTree(tmp)
   }
 
   return (
     <>
-
       <Box
         sx={{
           borderBottom: 1,
@@ -166,7 +186,8 @@ function App() {
 
           <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
           <Tab label="table" icon={<TableRows />} value={102} />
-          <Tab label="Tree Data" icon={<AccountTreeIcon/>} value={104} />
+          <Tab label="Tree Data" icon={<AccountTreeIcon />} value={104} />
+          <Tab label="Tree Data View" icon={<AccountTreeIcon />} value={105} />
           <Tab
             label={`Countries (${getCount(null)})`}
             icon={<Flag />}
@@ -186,9 +207,14 @@ function App() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={104}>
-          <Fragment>
-              <TreeData nodes={tree} handleCheck={onCheckboxChanged}/>
-          </Fragment>
+        <Fragment>
+          <TreeData nodes={tree} checkbox handleCheck={onCheckboxChanged} />
+        </Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={105}>
+        <Fragment>
+          <TreeDataView nodes={treeView} checkbox  />
+        </Fragment>
       </TabPanel>
       <TabPanel value={value} index={100}>
         <Fragment>
@@ -196,7 +222,7 @@ function App() {
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={101}>
-        <Countries countries={countries}/>
+        <Countries countries={countries} />
       </TabPanel>
       <TabPanel value={value} index={102}>
         <CustomTableData />
