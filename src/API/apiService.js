@@ -2,6 +2,19 @@ import axios from "axios";
 
 export default class Dashboard {
 
+    static async getAccumCountry(){
+
+        const { data } = await axios('https://restcountries.com/v3.1/all');
+
+        var count = data.reduce((accum, current) => accum + current.population, 0)
+        var area = data.reduce((accum, current) => accum + current.area, 0)
+
+        return {
+            population: count,
+            area: area
+        }
+    }
+
     static async getCountries() {
 
         const { data } = await axios('https://restcountries.com/v3.1/all');
