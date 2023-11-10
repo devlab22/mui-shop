@@ -150,6 +150,9 @@ function App() {
 
         if (item.id === node.id) {
           item.checked = checked
+          if (item.children) {
+            recursiveTree(item.children, null, checked)
+          }
           return item
         }
       }
@@ -208,7 +211,7 @@ function App() {
       </Box>
       <TabPanel value={value} index={104}>
         <Fragment>
-          <TreeData nodes={tree} checkbox handleCheck={onCheckboxChanged} />
+          <TreeData nodes={tree} checkbox title="My Menu" handleCheck={onCheckboxChanged} />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={105}>

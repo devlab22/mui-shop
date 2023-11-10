@@ -58,7 +58,7 @@ export default function CustomTableData() {
                 { field: 'population', headerName: 'Population', type: 'number', width: 150 },
                // { field: 'populationProzt', headerName: 'Population %', type: 'number', width: 150 },
                 { field: 'unmember', headerName: 'UN Member', width: 100 , renderCell: (params) => renderChipUnMember(params)},
-                { field: 'image', sortable: false, headerName: 'Flag', width: 110, renderCell: (params) => <img height={64} width={96} src={params.row.svg} alt={params.row.name} /> },
+                { field: 'image', sortable: false, headerName: 'Flag', width: 110, renderCell: (params) => renderFlag(params)},
 
             ])
 
@@ -97,6 +97,12 @@ export default function CustomTableData() {
     
     }, [])
 
+    const renderFlag = (params) => {
+
+        return(
+            <img height={64} width={96} src={params.row.svg} alt={params.row.name} />
+        )
+    }
     const renderChipUnMember = (params) => {
 
         return(

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Box, Stack, Checkbox, List, Container, Paper, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
-import { LoadingCircle } from '.'
+import { Box, Stack, Checkbox, List, Button, IconButton, Container, Paper, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
+import { LoadingCircle, Toolbar } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
@@ -9,14 +9,16 @@ import StarBorder from '@mui/icons-material/StarBorder';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
 import ArticleIcon from '@mui/icons-material/Article';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-export default function TreeData({ nodes, checkbox = false, handleClick = Function.prototype, handleCheck = Function.prototype }) {
+export default function TreeData({ nodes, title, checkbox = false, handleClick = Function.prototype, handleCheck = Function.prototype }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState([])
     const [selectedId, setSelectedId] = useState(null);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(false)
+    const [checked, setChecked] = useState(false)
     var id = 0;
 
     useEffect(() => {
@@ -187,29 +189,29 @@ export default function TreeData({ nodes, checkbox = false, handleClick = Functi
                         </ListItemIcon>
                     }
 
-                    <ListItemText primary={node.name} />
+                    <ListItemText primary={node.name} secondary={`ID: ${node.id}, Level: ${node.level}`} />
 
                     <ListItemIcon
-                                sx={{
-                                    display: `${node.children ? '' : 'none'}`,
-                                    left: "10px"
-                                }}                          
-                            >
-                                {menu.expand ? 
-                                    <ExpandMore  
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleOnButtonClick(node)
-                                        }}
-                                        /> : 
-                                    <ChevronRight  
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleOnButtonClick(node)
-                                        }} 
-                                        />
-                                        }
-                            </ListItemIcon>
+                        sx={{
+                            display: `${node.children ? '' : 'none'}`,
+                            left: "10px"
+                        }}
+                    >
+                        {menu.expand ?
+                            <ExpandMore
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleOnButtonClick(node)
+                                }}
+                            /> :
+                            <ChevronRight
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleOnButtonClick(node)
+                                }}
+                            />
+                        }
+                    </ListItemIcon>
 
                     {/*  <ListItemIcon>
                         {node.children ? <FolderIcon color='primary'/> : <ArticleIcon color='primary'/>}
@@ -268,20 +270,61 @@ export default function TreeData({ nodes, checkbox = false, handleClick = Functi
     const renderHeader = () => {
 
         return (
-            <Stack direction="row" spacing={15}>
-                <ListSubheader
-                    component="div"
-                    id="nested-list-subheader-name"
-                    sx={{ pl: "70px" }}
+            <Stack
+                direction="column"
+                spacing={1}
+            >
+
+                {title &&
+                    <ListSubheader
+                        component="div"
+                        id="nested-list-subheader-name"
+                        color="primary"
+                        sx={{
+                            fontSize: "1.2rem",
+                            fontWeight: "bold",
+                            alignItems: "center"
+                        }}
+                    >
+                        {title}
+                    </ListSubheader>
+                }
+
+
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{
+                        p: "8px 0 8px 15px"
+                    }}
                 >
-                    Name
-                </ListSubheader>
-                <ListSubheader component="div" id="nested-list-subheader-id">
-                    Id
-                </ListSubheader>
-                <ListSubheader component="div" id="nested-list-subheader-level">
-                    Level
-                </ListSubheader>
+
+                    {checkbox &&
+                        <Checkbox
+                            edge="start"
+                            checked={checked}
+                            title=""
+                            onChange={(e) => {
+                                setChecked(e.target.checked)
+                                onCheckBoxChanged(null, e.target.checked)
+                            }}
+                        />
+                    }
+
+                    <IconButton
+                        size="small"
+                        aria-label="add"
+                        title="add item"   
+                        onClick={() => alert('add item')}                    
+                    >
+                        <AddCircleIcon
+                            color="primary"
+                            
+                        />
+                    </IconButton>
+
+                </Stack>
+
             </Stack>
         )
     }
@@ -296,7 +339,7 @@ export default function TreeData({ nodes, checkbox = false, handleClick = Functi
                     bgcolor: 'background.paper'
                 }}
                 component="nav"
-                //subheader={renderHeader()}
+                subheader={renderHeader()}
             >
                 {
                     nodes.children.map(node => buildListItem(node))
