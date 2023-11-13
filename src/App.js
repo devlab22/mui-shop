@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import Dashboard from './API/apiService';
 import treeData from './data/treeData.json';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function App() {
 
@@ -22,7 +23,6 @@ function App() {
   const [countries, setCountries] = useState([])
   const [tree, setTree] = useState()
   const [treeView, setTreeView] = useState()
-
 
   useEffect(() => {
 
@@ -167,8 +167,36 @@ function App() {
   const onCheckboxChanged = (node, checked) => {
 
     var tmp = tree
+    
+    setTree({})
     recursiveTree(tmp.children, node, checked)
     setTree(tmp)
+  }
+
+  const handleOnDeleteItem = (node) => {
+
+   
+    var tmp = tree
+    var result = deleteNode(node.id, tmp)
+    console.log(result)
+    setTree(result)
+  }
+
+  const deleteNode = (id, nodes) => {
+
+    var result = nodes.children.filter( node => {
+
+        if(node.id !== id){
+          return node
+        }
+
+        if( node.children && Array.isArray(node.children) && node.children.length > 0){
+          deleteNode(id, node.children)
+        }
+
+    })
+
+    return result
   }
 
   return (
@@ -211,7 +239,13 @@ function App() {
       </Box>
       <TabPanel value={value} index={104}>
         <Fragment>
-          <TreeData nodes={tree} checkbox title="My Menu" handleCheck={onCheckboxChanged} />
+          <TreeData 
+            nodes={tree} 
+            checkbox 
+            title="My Menu" 
+            handleCheck={onCheckboxChanged} 
+            handleDeleteItem={handleOnDeleteItem}
+            />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={105}>

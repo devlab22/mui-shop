@@ -21,3 +21,4 @@ export {default as MyTools} from './MyTools';
 export {default as LoadingCircle} from './LoadingCircle';
 export {default as TreeData} from './TreeData';
 export {default as TreeDataView} from './TreeDataView';
+export {default as TreeTable} from './TreeTable';

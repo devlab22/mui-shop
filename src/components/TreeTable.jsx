@@ -13,7 +13,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-export default function TreeData({ nodes, title, handleClick, handleCheck, handleDeleteItem, handleAddItem, handleEditItem }) {
+export default function TreeTable({ nodes, title, handleClick, handleCheck, handleDeleteItem, handleAddItem, handleEditItem }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState([])
@@ -21,103 +21,6 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(false)
     const [checked, setChecked] = useState(false)
-    var id = 0;
-
-    useEffect(() => {
-
-        setIsLoading(true);
-        setItems([]);
-        setLevel(nodes, 1)
-        setIsLoading(false)
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const onCheckBoxChanged = (node, checked) => {
-
-        handleCheck(node, checked)
-        setReload(!reload)
-    }
-    const setExpand = (node, expand = false) => {
-
-        node.children.map(child => {
-
-            const menu = getMenu(child)
-            menu.expand = expand;
-            if (child.children) {
-                setExpand(child, expand);
-            }
-            return child;
-        })
-    }
-
-    const handleOnButtonClick = (node) => {
-
-        setSelectedId(node.id);
-
-        if (node.children) {
-            setOpen(!open);
-            var menu = getMenu(node);
-            menu.expand = !menu.expand;
-
-            if (!menu.expand) {
-                setExpand(node, false);
-            }
-
-        }
-
-        if (typeof (handleClick) === 'function') {
-            handleClick(node);
-        }
-
-    }
-
-    const setLevel = (data, level) => {
-
-
-        (level === 1) && (id = 0)
-
-        data.children.map(item => {
-
-            switch (level) {
-                case 1:
-                    item.icon = <StarBorder color="primary" />
-                    break;
-                case 2:
-                    item.icon = <DraftsIcon color="primary" />
-                    break;
-                case 3:
-                    item.icon = <InboxIcon color="primary" />
-                    break;
-                case 4:
-                    item.icon = <SendIcon color="primary" />
-                    break;
-                default:
-                    item.icon = <InboxIcon color="primary" />
-            }
-
-            id++;
-            item.id = id;
-            item.level = level;
-            setItems(prev => [...prev, { id: item.id, expand: false }])
-            const lv = level + 1;
-            if (item.children) {
-                setLevel(item, lv);
-            }
-
-            return item;
-        });
-
-    }
-
-    const renderListMenu = (nodes) => {
-
-        return (
-            <Fragment>
-                {DynamicNestedItems(nodes)}
-            </Fragment>
-        )
-    }
 
     const getMenu = (node) => {
 
@@ -132,36 +35,11 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
         return menu;
     }
-
-    const buildSubMenu = (node) => {
-
-        if (node) {
-            node.children.sort((a, b) => a.seqnr - b.seqnr)
-            var menu = getMenu(node);
-            return (
-                <Collapse 
-                    in={menu.expand} 
-                    timeout="auto" 
-                    unmountOnExit
-                    >
-                    <List
-                        component="div"
-                        
-                    >
-                        {
-                            node.children.map(item => buildListItem(item, { pl: `${node.level * 40}px` }))
-                        }
-                    </List>
-                </Collapse>
-            )
-        }
-
-    }
-
-    const buildListItem = (node, styles = {}) => {
+    
+    const renderItem = (node, styles = {}) => {
 
         var menu = getMenu(node);
-       
+
         return (
             <div key={node.id}>
 
@@ -181,10 +59,10 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
                 <ListItemButton
                     sx={styles}
-                    onClick={() => handleOnButtonClick(node)}
+                    // onClick={() => handleOnButtonClick(node)}
                     dense={false}
                     selected={selectedId === node.id}
-                    //title={node.name}
+                    title={node.name}
                 >
 
                     {typeof (handleCheck) === 'function' &&
@@ -194,7 +72,7 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                             <Checkbox
                                 edge="start"
                                 checked={node.checked}
-                                onChange={(e) => onCheckBoxChanged(node, e.target.checked)}
+                            // onChange={(e) => onCheckBoxChanged(node, e.target.checked)}
                             />
                         </ListItemIcon>
                     }
@@ -259,7 +137,6 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                         }
                     </Stack>
 
-
                     <ListItemIcon
                         sx={{
                             display: `${node.children ? '' : 'none'}`,
@@ -270,13 +147,13 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                             <ExpandMore
                                 onClick={(e) => {
                                     e.stopPropagation()
-                                    handleOnButtonClick(node)
+                                  //  handleOnButtonClick(node)
                                 }}
                             /> :
                             <ChevronRight
                                 onClick={(e) => {
                                     e.stopPropagation()
-                                    handleOnButtonClick(node)
+                                  //  handleOnButtonClick(node)
                                 }}
                             />
                         }
@@ -284,96 +161,35 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
                 </ListItemButton>
 
-                {node.children && buildSubMenu(node)}
-                {node.divider && <Divider sx={{ mb: 1 }} />}
-
-
             </div>
-
         )
+
     }
+    const renderTree = (nodes) => {
 
-    const renderHeader = () => {
+        nodes.sort((a, b) => a.seqnr - b.seqnr);
 
-        return (
-            <Stack
-                direction="column"
-                spacing={1}
-            >
-
-                {title &&
-                    <ListSubheader
-                        component="div"
-                        id="nested-list-subheader-name"
-                        color="primary"
-                        sx={{
-                            fontSize: "1.2rem",
-                            fontWeight: "bold",
-                            alignItems: "center"
-                        }}
-                    >
-                        {title}
-                    </ListSubheader>
-                }
-
-                <Stack
-                    direction="row"
-                    spacing={1}
-                    sx={{
-                        p: "8px 0 8px 15px"
-                    }}
-                >
-
-                    {typeof (handleCheck) === 'function' &&
-                        <Checkbox
-                            edge="start"
-                            checked={checked}
-                            title=""
-                            onChange={(e) => {
-                                setChecked(e.target.checked)
-                                onCheckBoxChanged(null, e.target.checked)
-                            }}
-                        />
-                    }
-
-                    {typeof (handleAddItem) === 'function' &&
-                        <IconButton
-                            size="small"
-                            aria-label="add"
-                            title="add item"
-                            onClick={() => alert('add item')}
-                        >
-                            <AddCircleIcon
-                                color="primary"
-
-                            />
-                        </IconButton>
-                    }
-
-                </Stack>
-
-            </Stack>
-        )
-    }
-
-    const DynamicNestedItems = (nodes) => {
-
-        nodes.children.sort((a, b) => a.seqnr - b.seqnr);
         return (
             <List
                 sx={{
                     width: '100%',
                     bgcolor: 'background.paper'
                 }}
-                component="nav"
-                subheader={renderHeader()}
+                component="div"
+            // subheader={renderHeader()}
             >
-                {
-                    nodes.children.map(node => buildListItem(node))
-                }
+                {(nodes && Array.isArray(nodes)) &&
+                    (
+                        nodes.forEach(node => {
+                            if (node.parentId === 0) {
+                                renderItem(node)
+                            }
 
+                        })
+                    )
+                }
             </List>
-        );
+        )
     }
 
     return (
@@ -388,9 +204,9 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                     sx={{ width: '100%' }}
                 >
                     <Paper
-                        sx={{ width: '600px', m: "auto" }}
+                        sx={{ width: '100%' }}
                     >
-                        {renderListMenu(nodes)}
+                        {renderTree(nodes)}
                     </Paper>
                 </Box>
 

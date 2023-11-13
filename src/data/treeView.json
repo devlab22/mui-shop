@@ -1,0 +1,88 @@
+[
+    {
+        "id": 1,
+        "name": "Node 1 my trainings",
+        "seqnr": 1,
+        "divider": true,
+        "parentId": 0
+    },
+    {
+        "id": 2,
+        "name": "Node 1.1",
+        "seqnr": 1,
+        "parentId": 1
+    },
+    {
+        "id": 3,
+        "seqnr": 1,
+        "name": "Node 1.2",
+        "parentId": 1
+    },
+    {
+        "id": 4,
+        "seqnr": 1,
+        "name": "Node 2",
+        "subheader": "Subheader",
+        "parentId": 0
+    },
+    {
+        "id": 5,
+        "seqnr": 1,
+        "name": "Node 2.1",
+        "parentId": 4
+    },
+    {
+        "id": 6,
+        "seqnr": 1,
+        "name": "Node 2.2",
+        "parentId": 4
+    },
+    {
+        "id": 7,
+        "seqnr": 1,
+        "name": "Node 3",
+        "parentId": 0
+    },
+    {
+        "id": 8,
+        "name":"Node 3.1",
+        "seqnr": 1,
+        "parentId": 7
+    },
+    {
+        "id": 9,
+        "seqnr": 1,
+        "name":"Node 3.1.1",
+        "parentId": 8
+    },
+    {
+        "id": 10,
+        "seqnr": 1,
+        "name":"Node 3.1.2",
+        "parentId": 8
+    },
+    {
+        "id": 11,
+        "seqnr": 1,
+        "name":"Node 3.1.2.1",
+        "parentId": 10
+    },
+    {
+        "id": 5,
+        "seqnr": 1,
+        "name":"Node 3.1.2.1.1",
+        "parentId": 11
+    },
+    {
+        "id": 6,
+        "seqnr": 1,
+        "name":"Node 3.1.2.2.2",
+        "parentId": 11
+    },
+    {
+        "id": 6,
+        "seqnr": 1,
+        "name":"Node 3.1.2.2",
+        "parentId": 10
+    }
+]

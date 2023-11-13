@@ -1,37 +1,131 @@
-/* eslint-disable array-callback-return */
 import React from 'react';
-import { Box, Button, IconButton, Checkbox } from '@mui/material';
+//import { CSVLink } from 'react-csv';
+import { Box, Avatar, Stack, Button, Checkbox, IconButton, TextField } from '@mui/material';
 
-export default function Toolbar({ buttons = [] }) {
-
+export default function Toolbar({ buttons = [], styles = {} }) {
 
     const setToolbar = () => {
 
         buttons.sort((a, b) => a.seqnr - b.seqnr);
+    
+        return (
+            <Box sx={styles}>
+                <Stack
+                    direction="row"                  
+                >
+
+                    {
+                        buttons.map(button => {
+                            if (button.type === 'checkbox') {
+                                return setCheckboxToolbar(button);
+                            }
+                            else if (button.type === 'img') {
+                                return setImageToolbar(button);
+                            }
+                            else if (button.type === 'input') {
+                                return setInputToolbar(button);
+                            }
+                            /*  else if (button.type === 'CSVLink') {
+                                 return setCSVLink(button);
+                             } */
+                            else {
+                                return setButtonToolbar(button);
+                            }
+                        })
+                    }
+
+                </Stack>
+            </Box >
+
+        )
+    }
+
+    const setButtonToolbar = (button) => {
 
         return (
-            <Box>
-                {
-                    buttons.map(button => {
+            <Button
+                key={button.id}
+                variant="contained"
+                onClick={button.onClick}
+                title={button.name}
+            >
+                {button.name}
+            </Button>
+        )
+    }
+    const setInputToolbar = (button) => {
 
-                        if (button.type === 'img') {
-                            return setImageToolbar(button);
-                        }
-                        else if (button.type === 'icon') {
-                            return setIconButtonToolbar(button)
-                        }
-                        else if (button.type === "button") {
-                            return setButtonToolbar(button)
-                        }
-                        else if(button.type === "checkbox"){
-                            return setCheckboxToolbar(button)
-                        }
-                        else {
-                            return (<Box key='99'></Box>)
-                        }
-                    })
+        return (
+            <IconButton key={button.id}>
+
+                <label >
+                    <TextField
+                        type='file'
+                        accept={button.accept}
+                        onChange={button.onClick}
+                        sx={{ display: 'none' }}
+                    />
+
+                    {
+                        button.avatar && (
+                            <Avatar
+                                title={button.name}
+                                alt={button.name}
+                                color='primary'
+                                sx={{
+                                    bgcolor: 'primary.main',
+                                    cursor: 'pointer'
+                                }}>
+                                {button.avatar}
+                            </Avatar>
+                        )
+                    }
+
+                    {button.image && (
+                        <img
+                            src={button.image}
+                            alt={button.name}
+                            title={button.name}
+                            style={{ cursor: 'pointer' }}
+                        />
+                    )}
+
+                </label>
+            </IconButton>
+        )
+
+    }
+
+    const setImageToolbar = (button) => {
+        return (
+            <IconButton
+                key={button.id}
+                onClick={button.onClick}
+            >
+
+                {
+                    button.avatar && (
+                        <Avatar
+                            title={button.name}
+                            alt={button.name}
+                            sx={{
+                                bgcolor: 'primary.main'
+                            }}>
+                            {button.avatar}
+                        </Avatar>
+                    )
                 }
-            </Box>
+
+                {button.image && (
+                    <img
+                        src={button.image}
+                        alt={button.name}
+                        title={button.name}
+                    />
+                )}
+
+            </IconButton>
+
         )
     }
 
@@ -39,75 +133,56 @@ export default function Toolbar({ buttons = [] }) {
 
         return (
             <Checkbox
-                edge="start"
-                checked={button.checked}
-                onClick={(e) => button.onClick(null, e.target.checked)}
-            />
-            
-        )
-    }
-    const setButtonToolbar = (button) => {
-
-        return (
-            <Button
-                title={button.title || ""}
-                onClick={button.onClick}
-                variant={button.variant || "contained"}
-                color={button.color || "primary"}
-            >
-                {button.name}
-            </Button>
-        )
-    }
-    const setIconButtonToolbar = (button) => {
-
-        return (
-            <IconButton
-                size={button.size || "small"}
-                aria-label={button.areaLabel || ""}
-                title={button.title || ""}
-                onClick={button.onClick}
-            >
-                {button.icon}
-            </IconButton>
-        )
-    }
-    const setImageToolbar = (button) => {
-
-        return (
-            <img
-                height={48}
-                width='auto'
                 key={button.id}
-                src={button.image}
-                alt={button.name}
-                onClick={button.onClick}
+                checked={button.checked}
+                onChange={e => button.onClick(null, e.target.checked)}
                 title={button.name}
-                style={{
-                    cursor: 'pointer',
-                    marginRight: '10px',
-                    opacity: 0.8,
-                    "&:hover": {
-                        opacity: 1
-                    },
-
+                sx={{
+                    //  border: '1px solid #9c27b0',  
+                    // color: '#9c27b0'                
                 }}
-
             />
         )
     }
+
+    /*  const setCSVLink = (button) => {
+ 
+         return (
+             <IconButton key={button.id}>
+                 <CSVLink filename={button.filename} data={button.exportData} separator={";"}>
+ 
+                     {
+                         button.avatar && (
+                             <Avatar
+                                 title={button.name}
+                                 alt={button.name}
+                                 sx={{
+                                     bgcolor: 'primary.main'
+                                 }}>
+                                 {button.avatar}
+                             </Avatar>
+                         )
+                     }
+ 
+                     {button.image && (
+                         <img
+                             src={button.image}
+                             alt={button.name}
+                             title={button.name}
+                         />)}
+ 
+                 </CSVLink>
+             </IconButton>
+         )
+     } */
+
     return (
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                margin: '5px 0',
-                overflow: 'auto',
-                width: '100%',
-                padding: '5px 0',
-                mb: '15px',
-                border: '1px solid grey'
+                justifyContent: 'flex-start',
+                alignContent: 'space-between',
+
             }}
         >
             {
