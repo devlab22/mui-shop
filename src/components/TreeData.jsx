@@ -144,12 +144,9 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                     timeout="auto" 
                     unmountOnExit
                     >
-                    <List
-                        component="div"
-                        
-                    >
+                    <List component="div">
                         {
-                            node.children.map(item => buildListItem(item, { pl: `${node.level * 40}px` }))
+                            node.children.map(item => buildListItem(item, { maxHeight: 100, overflow: "auto", pl: `${node.level * 40}px` }))
                         }
                     </List>
                 </Collapse>
@@ -388,7 +385,7 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                     sx={{ width: '100%' }}
                 >
                     <Paper
-                        sx={{ width: '600px', m: "auto" }}
+                        sx={{ width: '700px', m: "auto" }}
                     >
                         {renderListMenu(nodes)}
                     </Paper>

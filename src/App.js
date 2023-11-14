@@ -35,7 +35,8 @@ function App() {
       setTree(treeData)
       setTreeView(treeData)
 
-      const data = await Dashboard.getCountries();
+      try{
+        const data = await Dashboard.getCountries();
       //setCountries(data)
       setCntCountry(data.length);
       tmp = []
@@ -60,6 +61,10 @@ function App() {
       setCntTab(tmp);
 
       setIsLoading(false);
+      }
+      catch(e) {
+        console.log(e)
+      }
     }
 
     if (sessionStorage.getItem('tab')) {
@@ -179,7 +184,7 @@ function App() {
     var tmp = tree
     var result = deleteNode(node.id, tmp)
     console.log(result)
-    setTree(result)
+    //setTree(result)
   }
 
   const deleteNode = (id, nodes) => {
@@ -250,7 +255,7 @@ function App() {
       </TabPanel>
       <TabPanel value={value} index={105}>
         <Fragment>
-          <TreeDataView nodes={treeView} checkbox  />
+          <TreeDataView nodes={treeView}  />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={100}>
