@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Box, Stack, Button, Checkbox, List, Container, Paper, Typography, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
-import { LoadingCircle } from '.'
+import { LoadingCircle, StyledTreeItem } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
@@ -13,7 +13,6 @@ import ArticleIcon from '@mui/icons-material/Article';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
 import { styled, useTheme } from '@mui/material/styles';
-//import {default as StyledItem } from './StyledTreeItemRoot'
 
 export default function TreeDataView({ nodes, title, handleClick = Function.prototype, handleCheck = Function.prototype }) {
 
@@ -23,12 +22,13 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(false)
 
-    const myFolderIcon = <FolderIcon color='primary'/>
+    
     var id = 0;
 
 
     useEffect(() => {
 
+        console.log(nodes)
         setIsLoading(true);
         setItems([]);
         setLevel(nodes, 1)
@@ -84,7 +84,25 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 defaultCollapseIcon={<ExpandMore />}
                 defaultExpandIcon={<ChevronRight />}
             >
-                {title && renderHeader()}
+                {renderHeader("tree view")}
+                {Array.isArray(nodes.children)
+                    ? nodes.children.map((node) => renderTreeItems(node))
+                    : null
+                }
+            </TreeView>
+        )
+    }
+
+    const renderStyledTree = (nodes) => {
+
+        return (
+            <TreeView
+                aria-label="rich object"
+                defaultCollapseIcon={<ExpandMore />}
+                defaultExpandIcon={<ChevronRight />}
+                sx={{ flexGrow: 1, overflowY: 'auto' }}
+            >
+                {renderHeader("styled tree view")}
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderStyledItems(node))
                     : null
@@ -93,7 +111,7 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
         )
     }
 
-    const renderHeader = () => {
+    const renderHeader = (sTitle) => {
 
         return (
             <Stack direction="row">
@@ -103,7 +121,7 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                     sx={{ ml: "15px" }}
                     color="primary"
                 >
-                    {title}
+                    {sTitle}
                 </ListSubheader>
             </Stack>
         )
@@ -125,7 +143,7 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 icon={Array.isArray(nodes.children) ? <FolderIcon color="primary" /> : <ArticleIcon color='primary' />}
 
             >
-                {/* <StyledItem nodeId={`${nodes.id.toString()}-styledItem`} labelText="styled item" labelInfo="info item"/> */}
+            
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderTreeItems(node))
                     : null
@@ -135,89 +153,6 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
         )
     }
 
-
-
-    const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-        color: theme.palette.text.secondary,
-        [`& .${treeItemClasses.content}`]: {
-            color: theme.palette.text.secondary,
-            borderTopRightRadius: theme.spacing(2),
-            borderBottomRightRadius: theme.spacing(2),
-            paddingRight: theme.spacing(1),
-            fontWeight: theme.typography.fontWeightMedium,
-            '&.Mui-expanded': {
-                fontWeight: theme.typography.fontWeightRegular,
-            },
-            '&:hover': {
-                backgroundColor: theme.palette.action.hover,
-            },
-            '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-                backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-                color: 'var(--tree-view-color)',
-            },
-            [`& .${treeItemClasses.label}`]: {
-                fontWeight: 'inherit',
-                color: 'inherit',
-            },
-        },
-        [`& .${treeItemClasses.group}`]: {
-            marginLeft: 0,
-            [`& .${treeItemClasses.content}`]: {
-                paddingLeft: theme.spacing(2),
-            },
-        },
-    }));
-
-    const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
-        const theme = useTheme();
-        const {
-            bgColor,
-            color,
-            labelIcon: LabelIcon,
-            labelInfo,
-            labelText,
-            colorForDarkMode,
-            bgColorForDarkMode,
-            ...other
-        } = props;
-
-        const styleProps = {
-            '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
-            '--tree-view-bg-color':
-                theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
-        };
-
-        return (
-            <StyledTreeItemRoot
-                label={
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            p: '4px 0px 4px 0px',
-                            spacing: 4
-                        }}
-                    >
-                        <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
-                        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
-                            {labelText}
-                        </Typography>
-                        <Typography variant="caption" color="inherit">
-                            {labelInfo}
-                        </Typography>
-
-                        <ListItemIcon>
-                        <SendIcon color='primary'/>
-                        </ListItemIcon>
-                    </Box>
-                }
-                style={styleProps}
-                {...other}
-                ref={ref}
-            />
-        );
-    });
-
     const renderStyledItems = (node) => {
 
         return (
@@ -225,8 +160,8 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 key={node.id}
                 nodeId={`${node.id.toString()}-styled-item`}
                 labelText={node.name}
-                labelInfo={node.level}
-                labelIcon={node.children ? myFolderIcon : ArticleIcon }
+                labelInfo={`ID: ${node.id}, Level: ${node.level}`}
+                labelIcon={node.children ? <FolderIcon color='primary'/> : <ArticleIcon color='primary'/> }
             >
 
                 {Array.isArray(node.children)
@@ -251,6 +186,12 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                         sx={{ width: 'auto', m: 'auto' }}
                     >
                         {renderTree(nodes)}
+                    </Paper>
+
+                    <Paper
+                        sx={{ width: 'auto', m: 'auto' }}
+                    >
+                        {renderStyledTree(nodes)}
                     </Paper>
                 </Box>
 

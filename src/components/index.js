@@ -22,3 +22,4 @@ export {default as LoadingCircle} from './LoadingCircle';
 export {default as TreeData} from './TreeData';
 export {default as TreeDataView} from './TreeDataView';
 export {default as TreeTable} from './TreeTable';
+export {default as StyledTreeItem} from './StyledTreeItem';
