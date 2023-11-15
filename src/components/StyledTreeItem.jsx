@@ -1,7 +1,11 @@
 import React from 'react'
 import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
 import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography, Checkbox } from '@mui/material';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EditIcon from '@mui/icons-material/Edit';
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     color: theme.palette.text.secondary,
@@ -27,7 +31,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
         },
     },
     [`& .${treeItemClasses.group}`]: {
-        marginLeft: 0,
+        //marginLeft: 0,
         [`& .${treeItemClasses.content}`]: {
             paddingLeft: theme.spacing(2),
         },
@@ -41,11 +45,16 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
     const {
         bgColor,
         color,
+        checked,
         labelIcon: LabelIcon,
         labelInfo,
         labelText,
         colorForDarkMode,
         bgColorForDarkMode,
+        onRemove,
+        onAdd,
+        onEdit,
+        onCheck,
         ...other
     } = props;
 
@@ -58,29 +67,76 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
     return (
         <StyledTreeItemRoot
             label={
-                 <Stack
-                   direction="row"
-                   display="flex"
-                   alignItems="center"
-                   spacing={1}
-                > 
-                    <Box 
-                        component="div" 
-                        color="inherit" 
-                        sx={{ mt: 0.5 }} 
-                        >                       
+                <Stack
+                    direction="row"
+                    display="flex"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ p: "8px 0px"}}
+                >
+
+                    <Box
+                        component="div"
+                        color="inherit"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Checkbox 
+                            checked={checked}
+                            onChange={onCheck}
+                        />
+                    </Box>
+                    <Box
+                        component="div"
+                        color="inherit"
+                        sx={{ pt: 0.8 }}
+                    >
                         {LabelIcon}
                     </Box>
-                   
-                    <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+
+
+                    <Typography variant="body" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
                         {labelText}
                     </Typography>
-                    <Typography variant="caption" color="inherit" sx={{ fontWeight: 'inherit', flexGrow: 2 }}>
+                    <Typography variant="caption" color="inherit" >
                         {labelInfo}
                     </Typography>
 
-                    
-                 </Stack>
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+
+                        {onAdd &&
+                            <IconButton
+                                title="add item"
+                                onClick={onAdd}
+                            >
+                                <AddCircleIcon color='primary' />
+                            </IconButton>
+                        }
+
+                        {typeof (onEdit) === 'function' &&
+                            <IconButton
+                                title="edit item"
+                                onClick={onEdit}
+                            >
+                                <EditIcon color='primary' />
+                            </IconButton>
+                        }
+
+                        {onRemove &&
+                            <IconButton
+                                title="delete item"
+                                onClick={onRemove}
+                            >
+                                <DeleteIcon color='primary' />
+                            </IconButton>
+                        }
+
+                    </Stack>
+
+                </Stack>
             }
             style={styleProps}
             {...other}

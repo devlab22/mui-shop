@@ -7,8 +7,8 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
 import StarBorder from '@mui/icons-material/StarBorder';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-//import FolderIcon from '@mui/icons-material/Folder';
-//import ArticleIcon from '@mui/icons-material/Article';
+import FolderIcon from '@mui/icons-material/Folder';
+import ArticleIcon from '@mui/icons-material/Article';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -183,6 +183,10 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                     selected={selectedId === node.id}
                     //title={node.name}
                 >
+
+                    <ListItemIcon>
+                        {node.children ? <FolderIcon color='primary'/> : <ArticleIcon color='primary'/>}
+                    </ListItemIcon>
 
                     {typeof (handleCheck) === 'function' &&
                         <ListItemIcon

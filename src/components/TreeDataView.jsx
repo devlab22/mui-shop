@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Box, Stack, Button, Checkbox, List, Container, Paper, Typography, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
+import { Box, Stack, IconButton, Button, Checkbox, List, Container, Paper, Typography, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
 import { LoadingCircle, StyledTreeItem } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -9,26 +9,27 @@ import StarBorder from '@mui/icons-material/StarBorder';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
 import ArticleIcon from '@mui/icons-material/Article';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
 import { styled, useTheme } from '@mui/material/styles';
 
-export default function TreeDataView({ nodes, title, handleClick = Function.prototype, handleCheck = Function.prototype }) {
+export default function TreeDataView({ nodes, title, handleClick = Function.prototype, onCheck, onRemove, onAdd, onEdit }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState([])
     const [selectedId, setSelectedId] = useState(null);
-    const [open, setOpen] = useState(false);
+   // const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(false)
 
-    
+
     var id = 0;
 
 
     useEffect(() => {
 
-        console.log(nodes)
         setIsLoading(true);
         setItems([]);
         setLevel(nodes, 1)
@@ -38,6 +39,40 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const renderToolbar = () => {
+
+        return (
+            <Stack
+                direction="row"
+                spacing={1}
+                sx={{ p: 1 }}
+            >
+
+                {onAdd &&
+                    <IconButton
+                        title="add item"
+                        onClick={() => onAdd(null)}
+                    >
+                        <AddCircleIcon color='primary' />
+                    </IconButton>
+                }
+
+                {onAdd &&
+                    <Button
+                        title="add item"
+                        onClick={() => onAdd(null)}
+                        variant="contained"
+                        size="small"
+                       // startIcon={<AddCircleIcon />}
+                        endIcon={<AddCircleIcon/>}
+                    >
+                        add item
+                    </Button>
+                }
+
+            </Stack>
+        )
+    }
     const setLevel = (data, level) => {
 
 
@@ -84,7 +119,7 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 defaultCollapseIcon={<ExpandMore />}
                 defaultExpandIcon={<ChevronRight />}
             >
-                {renderHeader("tree view")}
+                {renderHeader("Tree view")}
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderTreeItems(node))
                     : null
@@ -102,7 +137,8 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 defaultExpandIcon={<ChevronRight />}
                 sx={{ flexGrow: 1, overflowY: 'auto' }}
             >
-                {renderHeader("styled tree view")}
+                {renderHeader("Styled tree view")}
+                {renderToolbar()}
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderStyledItems(node))
                     : null
@@ -118,7 +154,7 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 <ListSubheader
                     component="div"
                     id="nested-list-subheader-name"
-                    sx={{ ml: "15px" }}
+                    sx={{ ml: "15px", fontWeight: 'bold', fontSize: "1.2rem" }}
                     color="primary"
                 >
                     {sTitle}
@@ -143,7 +179,7 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 icon={Array.isArray(nodes.children) ? <FolderIcon color="primary" /> : <ArticleIcon color='primary' />}
 
             >
-            
+
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderTreeItems(node))
                     : null
@@ -161,7 +197,11 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 nodeId={`${node.id.toString()}-styled-item`}
                 labelText={node.name}
                 labelInfo={`ID: ${node.id}, Level: ${node.level}`}
-                labelIcon={node.children ? <FolderIcon color='primary'/> : <ArticleIcon color='primary'/> }
+                onRemove={!node.children && (() => onRemove(node.id))}
+                labelIcon={node.children ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
+                onAdd={() => onAdd(node.id)}
+                onEdit={() => onEdit(node.id)}
+                onCheck={(e) => onCheck(node.id, e.target.checked)}
             >
 
                 {Array.isArray(node.children)

@@ -9,8 +9,9 @@ import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import Dashboard from './API/apiService';
 import treeData from './data/treeData.json';
+import myData from './data/treeView.json';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
   const [countries, setCountries] = useState([])
   const [tree, setTree] = useState()
   const [treeView, setTreeView] = useState()
+  const [data, setData] = useState([]);
 
   useEffect(() => {
 
@@ -30,6 +32,8 @@ function App() {
 
       var tmp = [];
       setIsLoading(true);
+
+      setData(myData)
 
       recursiveTree(treeData.children, null, false)
       setTree(treeData)
@@ -248,14 +252,21 @@ function App() {
             nodes={tree} 
             checkbox 
             title="My Menu" 
-            handleCheck={onCheckboxChanged} 
+           // handleCheck={onCheckboxChanged} 
             handleDeleteItem={handleOnDeleteItem}
             />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={105}>
         <Fragment>
-          <TreeDataView nodes={treeView}  />
+          <TreeDataView 
+            nodes={treeView} 
+            onAdd={(parentId) => alert(`add to parent ${parentId}`)}
+            onRemove={(id) => alert(`delete ID: ${id}`)}  
+            onEdit={(id) => alert(`edit item ID: ${id}`)}
+            onCheck={(id, checked) => console.log(`ID: ${id}, checked: ${checked}`)}
+            
+            />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={100}>
