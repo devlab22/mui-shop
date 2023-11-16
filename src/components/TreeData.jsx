@@ -133,9 +133,11 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
         return menu;
     }
 
-    const buildSubMenu = (node) => {
+    const buildSubMenu = (node, level) => {
 
+        level++
         if (node) {
+            
             node.children.sort((a, b) => a.seqnr - b.seqnr)
             var menu = getMenu(node);
             return (
@@ -146,7 +148,7 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                     >
                     <List component="div">
                         {
-                            node.children.map(item => buildListItem(item, { maxHeight: 100, overflow: "auto", pl: `${node.level * 40}px` }))
+                            node.children.map(item => buildListItem(item, level))
                         }
                     </List>
                 </Collapse>
@@ -155,8 +157,10 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
     }
 
-    const buildListItem = (node, styles = {}) => {
+    const buildListItem = (node, level) => {
 
+        
+       // console.log(node.id, level)
         var menu = getMenu(node);
        
         return (
@@ -177,11 +181,10 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                 }
 
                 <ListItemButton
-                    sx={styles}
+                    sx={{pl: `${level*15}px`}}
                     onClick={() => handleOnButtonClick(node)}
                     dense={false}
                     selected={selectedId === node.id}
-                    //title={node.name}
                 >
 
                     <ListItemIcon>
@@ -200,7 +203,7 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                         </ListItemIcon>
                     }
 
-                    <ListItemText primary={node.name} secondary={`ID: ${node.id}, Level: ${node.level}`} />
+                    <ListItemText primary={node.name} secondary={`ID: ${node.id}`} />
 
                     <Stack
                         direction="row"
@@ -285,7 +288,7 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
                 </ListItemButton>
 
-                {node.children && buildSubMenu(node)}
+                {node.children && buildSubMenu(node, level++)}
                 {node.divider && <Divider sx={{ mb: 1 }} />}
 
 
@@ -370,7 +373,7 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                 subheader={renderHeader()}
             >
                 {
-                    nodes.children.map(node => buildListItem(node))
+                    nodes.children.map(node => buildListItem(node, 1))
                 }
 
             </List>

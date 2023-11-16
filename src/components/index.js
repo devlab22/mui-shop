@@ -23,3 +23,4 @@ export {default as TreeData} from './TreeData';
 export {default as TreeDataView} from './TreeDataView';
 export {default as TreeTable} from './TreeTable';
 export {default as StyledTreeItem} from './StyledTreeItem';
+export {default as VideoPlayer} from './VideoPlayer';

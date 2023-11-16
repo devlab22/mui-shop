@@ -265,7 +265,7 @@ function App() {
             onRemove={(id) => alert(`delete ID: ${id}`)}  
             onEdit={(id) => alert(`edit item ID: ${id}`)}
             onCheck={(id, checked) => console.log(`ID: ${id}, checked: ${checked}`)}
-            
+            autoSelect
             />
         </Fragment>
       </TabPanel>

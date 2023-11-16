@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Box, Stack, IconButton, Button, Checkbox, List, Container, Paper, Typography, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
-import { LoadingCircle, StyledTreeItem } from '.'
+import React, { useState, useEffect } from 'react';
+import { Box, Stack, IconButton, Button, Container, Paper, ListSubheader, Checkbox } from '@mui/material';
+import { LoadingCircle, StyledTreeItem, VideoPlayer, Toolbar } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
@@ -13,15 +13,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TreeView } from '@mui/x-tree-view/TreeView';
-import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
-import { styled, useTheme } from '@mui/material/styles';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 
-export default function TreeDataView({ nodes, title, handleClick = Function.prototype, onCheck, onRemove, onAdd, onEdit }) {
+
+export default function TreeDataView({ nodes, title, handleClick = Function.prototype, onCheck, onRemove, onAdd, onEdit, autoSelect=false }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState([])
     const [selectedId, setSelectedId] = useState(null);
-   // const [open, setOpen] = useState(false);
+    const [check, setCheck] = useState(false)
+    // const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(false)
 
 
@@ -48,6 +49,16 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 sx={{ p: 1 }}
             >
 
+                {(onCheck && autoSelect) &&
+                    <Checkbox
+                        checked={check}
+                        onChange={(e) => {
+                            setCheck(e.target.checked)
+                            onCheck(null, e.target.checked)
+                        }}
+                    />
+
+                }
                 {onAdd &&
                     <IconButton
                         title="add item"
@@ -63,8 +74,8 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                         onClick={() => onAdd(null)}
                         variant="contained"
                         size="small"
-                       // startIcon={<AddCircleIcon />}
-                        endIcon={<AddCircleIcon/>}
+                        // startIcon={<AddCircleIcon />}
+                        endIcon={<AddCircleIcon />}
                     >
                         add item
                     </Button>
@@ -130,15 +141,40 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
 
     const renderStyledTree = (nodes) => {
 
+        const buttons = [
+            {
+                type: "checkbox",
+                onClick: onCheck,
+                seqnr: 1,
+                id: 1
+            },
+            {
+                id: 2,
+                type: "img",
+                icon: <AddCircleIcon color='primary' />,
+                onClick: onAdd,
+                seqnr: 2
+                
+            },
+            {
+                id: 3,
+                type: "button",
+                onClick: onAdd,
+                seqnr: 3,
+                name: "add item",
+                endIcon: <AddCircleIcon/>
+                
+            }
+        ]
         return (
             <TreeView
                 aria-label="rich object"
                 defaultCollapseIcon={<ExpandMore />}
                 defaultExpandIcon={<ChevronRight />}
-                sx={{ flexGrow: 1, overflowY: 'auto' }}
             >
-                {renderHeader("Styled tree view")}
-                {renderToolbar()}
+                {/* {renderHeader("Styled tree view")} */}
+                <Toolbar buttons={buttons} styles={{pl: '20px', border: '0px solid grey'}}/>
+                {/* {renderToolbar()} */}
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderStyledItems(node))
                     : null
@@ -222,17 +258,37 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
 
             ) :
                 <Box>
-                    <Paper
-                        sx={{ width: 'auto', m: 'auto' }}
+                    <Stack
+                        spacing={2}
                     >
-                        {renderTree(nodes)}
-                    </Paper>
+                        <Paper>
+                            {renderTree(nodes)}
+                        </Paper>
 
-                    <Paper
-                        sx={{ width: 'auto', m: 'auto' }}
-                    >
-                        {renderStyledTree(nodes)}
-                    </Paper>
+                        <Paper>
+                            {renderStyledTree(nodes)}
+                        </Paper>
+
+                        <Paper>
+                            <VideoPlayer
+                                title='Flower'
+                                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                                type="video/mp4"
+                                width="600"
+                            />
+                        </Paper>
+
+                        <Paper>
+                            <VideoPlayer
+                                title='Big Buck Bunny'
+                                src="https://www.w3schools.com/html/mov_bbb.mp4"
+                                type="video/mp4"
+                                width="600"
+                            />
+                        </Paper>
+
+                    </Stack>
+
                 </Box>
 
             }

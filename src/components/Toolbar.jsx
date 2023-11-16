@@ -11,7 +11,10 @@ export default function Toolbar({ buttons = [], styles = {} }) {
         return (
             <Box sx={styles}>
                 <Stack
-                    direction="row"                  
+                    direction="row"
+                    spacing={1}
+                    alignItems='flex-start'
+                    sx={{p:1}}               
                 >
 
                     {
@@ -35,7 +38,7 @@ export default function Toolbar({ buttons = [], styles = {} }) {
                     }
 
                 </Stack>
-            </Box >
+             </Box >
 
         )
     }
@@ -46,11 +49,14 @@ export default function Toolbar({ buttons = [], styles = {} }) {
             <Button
                 key={button.id}
                 variant="contained"
-                onClick={button.onClick}
+                onClick={() => button.onClick(null)}
                 title={button.name}
+                endIcon={button.endIcon && button.endIcon}
+                startIcon={button.startIcon && button.startIcon}
             >
                 {button.name}
             </Button>
+           
         )
     }
     const setInputToolbar = (button) => {
@@ -97,23 +103,15 @@ export default function Toolbar({ buttons = [], styles = {} }) {
     }
 
     const setImageToolbar = (button) => {
+        
         return (
             <IconButton
                 key={button.id}
-                onClick={button.onClick}
+                onClick={() => button.onClick(null)}
             >
 
-                {
-                    button.avatar && (
-                        <Avatar
-                            title={button.name}
-                            alt={button.name}
-                            sx={{
-                                bgcolor: 'primary.main'
-                            }}>
-                            {button.avatar}
-                        </Avatar>
-                    )
+                {button.icon &&
+                    button.icon
                 }
 
                 {button.image && (
@@ -137,10 +135,6 @@ export default function Toolbar({ buttons = [], styles = {} }) {
                 checked={button.checked}
                 onChange={e => button.onClick(null, e.target.checked)}
                 title={button.name}
-                sx={{
-                    //  border: '1px solid #9c27b0',  
-                    // color: '#9c27b0'                
-                }}
             />
         )
     }
