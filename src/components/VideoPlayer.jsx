@@ -10,11 +10,12 @@ const VideoPlayer = ({ title, src, type, width, resize = [600, 560, 320, 420] })
     const [stop, setStop] = useState(true)
     const [videoWidth, setVideoWidth] = useState(width)
 
-    if (!(resize.includes(Number(width)))) {
-        resize.push(width)
-    }
-
+    resize.push(Number(width))
     resize.sort()
+    const resizesSet = new Set(resize)
+
+    resize = []
+    resizesSet.forEach(item => resize.push(item))
 
     const handleOnPause = () => {
         ref.current.pause()
@@ -62,7 +63,7 @@ const VideoPlayer = ({ title, src, type, width, resize = [600, 560, 320, 420] })
                 direction='row'
                 spacing={1}
             >
-               
+
                 {stop ?
                     <IconButton
                         title='Play'
@@ -81,20 +82,23 @@ const VideoPlayer = ({ title, src, type, width, resize = [600, 560, 320, 420] })
                     </IconButton>
                 }
 
-                <FormControl fullWidth sx={{ minWidth: 120 }} size="small">
-                    <InputLabel id="video-select-label">Width</InputLabel>
-                    <Select
-                        labelId="video-select-label"
-                        id="video-select"
-                        value={videoWidth}
-                        label="Width"
-                        onChange={handleChange}
-                    >
-                        {resize.map(value => (
-                            <MenuItem key={value} value={value}>{`${value}px`}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                {resize.length > 1 &&
+                    <FormControl fullWidth sx={{ minWidth: 120 }} size="small">
+                        <InputLabel id="video-select-label">Width</InputLabel>
+                        <Select
+                            labelId="video-select-label"
+                            id="video-select"
+                            value={videoWidth}
+                            label="Width"
+                            onChange={handleChange}
+                        >
+                            {resize.map(value => (
+                                <MenuItem key={value} value={value}>{`${value}px`}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                }
+
             </Stack>
 
         </Stack>

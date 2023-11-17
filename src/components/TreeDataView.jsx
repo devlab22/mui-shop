@@ -1,126 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Stack, IconButton, Button, Container, Paper, ListSubheader, Checkbox } from '@mui/material';
-import { LoadingCircle, StyledTreeItem, VideoPlayer, Toolbar } from '.'
+import React from 'react';
+import { Box, Stack, Container, Paper, ListSubheader } from '@mui/material';
+import { StyledTreeItem, Toolbar } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import StarBorder from '@mui/icons-material/StarBorder';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
 import ArticleIcon from '@mui/icons-material/Article';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 
 
-export default function TreeDataView({ nodes, title, handleClick = Function.prototype, onCheck, onRemove, onAdd, onEdit, autoSelect=false }) {
+export default function TreeDataView({ nodes, onCheck, onRemove, onAdd, onEdit, autoSelect = false }) {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [items, setItems] = useState([])
-    const [selectedId, setSelectedId] = useState(null);
-    const [check, setCheck] = useState(false)
-    // const [open, setOpen] = useState(false);
-    const [reload, setReload] = useState(false)
-
-
-    var id = 0;
-
-
-    useEffect(() => {
-
-        setIsLoading(true);
-        setItems([]);
-        setLevel(nodes, 1)
-        setIsLoading(false)
-
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const renderToolbar = () => {
-
-        return (
-            <Stack
-                direction="row"
-                spacing={1}
-                sx={{ p: 1 }}
-            >
-
-                {(onCheck && autoSelect) &&
-                    <Checkbox
-                        checked={check}
-                        onChange={(e) => {
-                            setCheck(e.target.checked)
-                            onCheck(null, e.target.checked)
-                        }}
-                    />
-
-                }
-                {onAdd &&
-                    <IconButton
-                        title="add item"
-                        onClick={() => onAdd(null)}
-                    >
-                        <AddCircleIcon color='primary' />
-                    </IconButton>
-                }
-
-                {onAdd &&
-                    <Button
-                        title="add item"
-                        onClick={() => onAdd(null)}
-                        variant="contained"
-                        size="small"
-                        // startIcon={<AddCircleIcon />}
-                        endIcon={<AddCircleIcon />}
-                    >
-                        add item
-                    </Button>
-                }
-
-            </Stack>
-        )
-    }
-    const setLevel = (data, level) => {
-
-
-        (level === 1) && (id = 0)
-
-        data.children.map(item => {
-
-            switch (level) {
-                case 1:
-                    item.icon = <StarBorder color="primary" />
-                    break;
-                case 2:
-                    item.icon = <DraftsIcon color="primary" />
-                    break;
-                case 3:
-                    item.icon = <InboxIcon color="primary" />
-                    break;
-                case 4:
-                    item.icon = <SendIcon color="primary" />
-                    break;
-                default:
-                    item.icon = <InboxIcon color="primary" />
-            }
-
-            id++;
-            item.id = id;
-            item.level = level;
-            setItems(prev => [...prev, { id: item.id, expand: false }])
-            const lv = level + 1;
-            if (item.children) {
-                setLevel(item, lv);
-            }
-
-            return item;
-        });
-
-    }
 
     const renderTree = (nodes) => {
 
@@ -141,40 +33,55 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
 
     const renderStyledTree = (nodes) => {
 
-        const buttons = [
-            {
+        const buttons = []
+        var padLeft = '14px';
+
+        if (autoSelect && onCheck) {
+            buttons.push({
                 type: "checkbox",
                 onClick: onCheck,
                 seqnr: 1,
                 id: 1
-            },
-            {
+            })
+
+        }
+
+        if (onCheck) {
+            padLeft = '22.5px';
+        }
+
+        if (onAdd) {
+            buttons.push({
                 id: 2,
                 type: "img",
                 icon: <AddCircleIcon color='primary' />,
                 onClick: onAdd,
+                name: "add item",
                 seqnr: 2
-                
-            },
-            {
+
+            })
+
+            buttons.push({
                 id: 3,
                 type: "button",
                 onClick: onAdd,
                 seqnr: 3,
                 name: "add item",
-                endIcon: <AddCircleIcon/>
-                
-            }
-        ]
+                startIcon: <AddCircleIcon />
+
+            })
+        }
+
+        padLeft = 0
         return (
             <TreeView
                 aria-label="rich object"
                 defaultCollapseIcon={<ExpandMore />}
                 defaultExpandIcon={<ChevronRight />}
             >
-                {/* {renderHeader("Styled tree view")} */}
-                <Toolbar buttons={buttons} styles={{pl: '20px', border: '0px solid grey'}}/>
-                {/* {renderToolbar()} */}
+                {renderHeader("Styled tree view")}
+                <Toolbar buttons={buttons} styles={{ pl: padLeft, border: '0px solid blue', width: '100%' }} />
+
                 {Array.isArray(nodes.children)
                     ? nodes.children.map((node) => renderStyledItems(node))
                     : null
@@ -232,12 +139,12 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
                 key={node.id}
                 nodeId={`${node.id.toString()}-styled-item`}
                 labelText={node.name}
-                labelInfo={`ID: ${node.id}, Level: ${node.level}`}
-                onRemove={!node.children && (() => onRemove(node.id))}
+                labelInfo={`ID: ${node.id}`}
                 labelIcon={node.children ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
-                onAdd={() => onAdd(node.id)}
-                onEdit={() => onEdit(node.id)}
-                onCheck={(e) => onCheck(node.id, e.target.checked)}
+                onRemove={(onRemove && !node.children) && (() => onRemove(node.id))}
+                onAdd={onAdd && (() => onAdd(node.id))}
+                onEdit={onEdit && (() => onEdit(node.id))}
+                onCheck={onCheck && ((e) => onCheck(node.id, e.target.checked))}
             >
 
                 {Array.isArray(node.children)
@@ -251,48 +158,21 @@ export default function TreeDataView({ nodes, title, handleClick = Function.prot
 
     return (
         <Container component="main">
-            {isLoading ? (
-                <Box>
-                    <LoadingCircle typeContent='circle' />
-                </Box>
+            <Box>
+                <Stack
+                    spacing={2}
+                >
+                    <Paper>
+                        {renderTree(nodes)}
+                    </Paper>
 
-            ) :
-                <Box>
-                    <Stack
-                        spacing={2}
-                    >
-                        <Paper>
-                            {renderTree(nodes)}
-                        </Paper>
+                    <Paper>
+                        {renderStyledTree(nodes)}
+                    </Paper>
 
-                        <Paper>
-                            {renderStyledTree(nodes)}
-                        </Paper>
+                </Stack>
 
-                        <Paper>
-                            <VideoPlayer
-                                title='Flower'
-                                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-                                type="video/mp4"
-                                width="600"
-                            />
-                        </Paper>
-
-                        <Paper>
-                            <VideoPlayer
-                                title='Big Buck Bunny'
-                                src="https://www.w3schools.com/html/mov_bbb.mp4"
-                                type="video/mp4"
-                                width="600"
-                            />
-                        </Paper>
-
-                    </Stack>
-
-                </Box>
-
-            }
-
+            </Box>
         </Container>
     )
 }

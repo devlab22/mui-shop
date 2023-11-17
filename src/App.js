@@ -3,13 +3,14 @@
 //import './App.css';
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, Countries, CustomTableData, AccordionData, TreeData, TreeDataView } from './components';
+import { Shop, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import Dashboard from './API/apiService';
 import treeData from './data/treeData.json';
 import myData from './data/treeView.json';
+import listData from './data/listView.json'
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 
@@ -25,6 +26,7 @@ function App() {
   const [tree, setTree] = useState()
   const [treeView, setTreeView] = useState()
   const [data, setData] = useState([]);
+  const [styledList, setStyledList] = useState([])
 
   useEffect(() => {
 
@@ -34,6 +36,7 @@ function App() {
       setIsLoading(true);
 
       setData(myData)
+      setStyledList(myData)
 
       recursiveTree(treeData.children, null, false)
       setTree(treeData)
@@ -184,10 +187,10 @@ function App() {
 
   const handleOnDeleteItem = (node) => {
 
-   
-    var tmp = tree
+   alert(`delete id: ${node.id}`)
+    /* var tmp = tree
     var result = deleteNode(node.id, tmp)
-    console.log(result)
+    console.log(result) */
     //setTree(result)
   }
 
@@ -233,8 +236,11 @@ function App() {
             icon={<Flag />}
             value={101} />
           <Tab label="Accordion data" icon={<Flag />} value={103} />
+          <Tab label="Styled Tree View" icon={<Flag />} value={106} />
+          <Tab label="Video View" icon={<Flag />} value={107} />
+          <Tab label="Styled List" icon={<Flag />} value={108} />
 
-          {alphabet.map((item, index) => (
+         {/*  {alphabet.map((item, index) => (
             <Tab
               key={index}
               label={`${item} (${getCount(item)})`}
@@ -242,7 +248,7 @@ function App() {
               value={index}
             />
           ))
-          }
+          } */}
 
         </Tabs>
       </Box>
@@ -251,8 +257,8 @@ function App() {
           <TreeData 
             nodes={tree} 
             checkbox 
-            title="My Menu" 
-           // handleCheck={onCheckboxChanged} 
+            title="List Item" 
+            handleCheck={onCheckboxChanged} 
             handleDeleteItem={handleOnDeleteItem}
             />
         </Fragment>
@@ -261,13 +267,37 @@ function App() {
         <Fragment>
           <TreeDataView 
             nodes={treeView} 
-            onAdd={(parentId) => alert(`add to parent ${parentId}`)}
+            onAdd={(parentId) => alert(`add to node ${parentId}`)}
             onRemove={(id) => alert(`delete ID: ${id}`)}  
-            onEdit={(id) => alert(`edit item ID: ${id}`)}
+            onEdit={(id) => alert(`edit ID: ${id}`)}
             onCheck={(id, checked) => console.log(`ID: ${id}, checked: ${checked}`)}
-            autoSelect
+           // autoSelect
             />
         </Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={106}>
+          <Fragment>
+            <StyledTreeView
+              nodes={data}
+              title='My Styled Tree View'
+            />
+          </Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={107}>
+          <Fragment>
+            <VideoView/>
+          </Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={108}>
+          <Fragment>
+            <StyledListView
+              nodes={styledList}
+              title='Styled List'
+              onRemove={(id) => alert(`remove id ${id}`)}
+              onEdit={(id) => alert(`edit id ${id}`)}
+              onAdd={(id) => alert(`add to id ${id}`)}
+            />
+          </Fragment>
       </TabPanel>
       <TabPanel value={value} index={100}>
         <Fragment>

@@ -2,7 +2,7 @@ import React from 'react';
 //import { CSVLink } from 'react-csv';
 import { Box, Avatar, Stack, Button, Checkbox, IconButton, TextField } from '@mui/material';
 
-export default function Toolbar({ buttons = [], styles = {} }) {
+export default function Toolbar({ buttons = [], styles = {width: '100%'} }) {
 
     const setToolbar = () => {
 
@@ -108,6 +108,7 @@ export default function Toolbar({ buttons = [], styles = {} }) {
             <IconButton
                 key={button.id}
                 onClick={() => button.onClick(null)}
+                title={button.name}
             >
 
                 {button.icon &&
@@ -118,7 +119,6 @@ export default function Toolbar({ buttons = [], styles = {} }) {
                     <img
                         src={button.image}
                         alt={button.name}
-                        title={button.name}
                     />
                 )}
 

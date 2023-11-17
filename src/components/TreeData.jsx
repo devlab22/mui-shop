@@ -137,15 +137,15 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
         level++
         if (node) {
-            
+
             node.children.sort((a, b) => a.seqnr - b.seqnr)
             var menu = getMenu(node);
             return (
-                <Collapse 
-                    in={menu.expand} 
-                    timeout="auto" 
+                <Collapse
+                    in={menu.expand}
+                    timeout="auto"
                     unmountOnExit
-                    >
+                >
                     <List component="div">
                         {
                             node.children.map(item => buildListItem(item, level))
@@ -159,10 +159,8 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
     const buildListItem = (node, level) => {
 
-        
-       // console.log(node.id, level)
         var menu = getMenu(node);
-       
+
         return (
             <div key={node.id}>
 
@@ -181,15 +179,13 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                 }
 
                 <ListItemButton
-                    sx={{pl: `${level*15}px`}}
+                    sx={{ pl: `${level * 20}px` }}
                     onClick={() => handleOnButtonClick(node)}
                     dense={false}
                     selected={selectedId === node.id}
                 >
 
-                    <ListItemIcon>
-                        {node.children ? <FolderIcon color='primary'/> : <ArticleIcon color='primary'/>}
-                    </ListItemIcon>
+
 
                     {typeof (handleCheck) === 'function' &&
                         <ListItemIcon
@@ -202,6 +198,10 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
                             />
                         </ListItemIcon>
                     }
+
+                    <ListItemIcon>
+                        {node.children ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
+                    </ListItemIcon>
 
                     <ListItemText primary={node.name} secondary={`ID: ${node.id}`} />
 
@@ -290,7 +290,6 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
 
                 {node.children && buildSubMenu(node, level++)}
                 {node.divider && <Divider sx={{ mb: 1 }} />}
-
 
             </div>
 

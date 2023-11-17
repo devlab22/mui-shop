@@ -31,7 +31,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
         },
     },
     [`& .${treeItemClasses.group}`]: {
-        //marginLeft: 0,
+       // marginLeft: 0,
         [`& .${treeItemClasses.content}`]: {
             paddingLeft: theme.spacing(2),
         },
@@ -72,23 +72,26 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
                     display="flex"
                     alignItems="center"
                     spacing={1}
-                    sx={{ p: "8px 0px"}}
+                    sx={{ p: "10px 0px" }}
                 >
+
+                    {onCheck &&
+                        <Box
+                            component="div"
+                            color="inherit"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Checkbox
+                                checked={checked}
+                                onChange={onCheck}
+                            />
+                        </Box>
+                    }
 
                     <Box
                         component="div"
                         color="inherit"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <Checkbox 
-                            checked={checked}
-                            onChange={onCheck}
-                        />
-                    </Box>
-                    <Box
-                        component="div"
-                        color="inherit"
-                        sx={{ pt: 0.8 }}
+                        sx={{ pt: 1 }}
                     >
                         {LabelIcon}
                     </Box>
