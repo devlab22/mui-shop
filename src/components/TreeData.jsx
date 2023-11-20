@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Box, Stack, Checkbox, List, IconButton, Container, Paper, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider, Avatar } from '@mui/material';
-import { LoadingCircle, AlertDialog } from '.'
+import { Box, Stack, Checkbox, List, IconButton, Container, Paper, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
+import { LoadingCircle } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
@@ -160,7 +160,6 @@ export default function TreeData({ nodes, title, handleClick, handleCheck, handl
     const buildListItem = (node, level) => {
 
         var menu = getMenu(node);
-
         return (
             <div key={node.id}>
 

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider, Stack } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Slide, Divider, Stack } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialog({ toggle = false, question = '', description = '', onReject = Function.prototype, onAccept = Function.prototype }) {
+export default function AlertDialog({ toggle = false, question = '', title = '', onReject = Function.prototype, onAccept = Function.prototype }) {
 
     return (
         <Box>
@@ -18,23 +18,20 @@ export default function AlertDialog({ toggle = false, question = '', description
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {question}
+                    {title}
                 </DialogTitle>
                 <Divider />
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                   
                         <Stack direction='row' gap='5px'>
                             <HelpIcon color='primary'/>
-                            {description}
+                            {question}
                         </Stack>
 
-                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onReject}>Disagree</Button>
-                    <Button onClick={onAccept} autoFocus>
-                        Agree
-                    </Button>
+                    <Button variant="contained" onClick={onReject}>Cancel</Button>
+                    <Button variant="contained" onClick={onAccept} autoFocus>Ok</Button>
                 </DialogActions>
             </Dialog>
         </Box>

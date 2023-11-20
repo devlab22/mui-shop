@@ -58,6 +58,7 @@
     {
         "id": 10,
         "seqnr": 1,
+        "subheader": "Subheader 10",
         "name":"Node 3.1.2",
         "parentId": 8
     },

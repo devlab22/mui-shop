@@ -28,3 +28,4 @@ export {default as StyledTreeView} from './StyledTreeView';
 export {default as VideoView} from './VideoView';
 export {default as StyledListItem} from './StyledListItem';
 export {default as StyledListView} from './StyledListView';
+export {default as AddItemDialog} from './AddItemDialog';

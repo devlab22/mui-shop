@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Box, Stack, Container, Paper, ListSubheader } from '@mui/material';
 import { StyledTreeItem, Toolbar } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -135,24 +135,44 @@ export default function TreeDataView({ nodes, onCheck, onRemove, onAdd, onEdit, 
     const renderStyledItems = (node) => {
 
         return (
-            <StyledTreeItem
-                key={node.id}
-                nodeId={`${node.id.toString()}-styled-item`}
-                labelText={node.name}
-                labelInfo={`ID: ${node.id}`}
-                labelIcon={node.children ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
-                onRemove={(onRemove && !node.children) && (() => onRemove(node.id))}
-                onAdd={onAdd && (() => onAdd(node.id))}
-                onEdit={onEdit && (() => onEdit(node.id))}
-                onCheck={onCheck && ((e) => onCheck(node.id, e.target.checked))}
-            >
 
-                {Array.isArray(node.children)
-                    ? node.children.map((item) => renderStyledItems(item))
-                    : null
+            <Fragment key={node.id}>
+
+                {node.subheader &&
+                    <ListSubheader
+                        component="div"
+                        color="primary"
+                        inset={true}
+                        sx={{
+                            fontSize: '1.2rem',
+                            fontWeight: "bold"
+                        }}
+                    >
+                        {node.subheader}
+                    </ListSubheader>
                 }
+                <StyledTreeItem
+                    key={node.id}
+                    nodeId={`${node.id.toString()}-styled-item`}
+                    labelText={node.name}
+                    labelInfo={`ID: ${node.id}`}
+                    labelIcon={node.children ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
+                    onRemove={(onRemove && !node.children) && (() => onRemove(node.id))}
+                    onAdd={onAdd && (() => onAdd(node.id))}
+                    onEdit={onEdit && (() => onEdit(node.id))}
+                    onCheck={onCheck && ((e) => onCheck(node.id, e.target.checked))}
+                >
 
-            </StyledTreeItem>
+
+                    {Array.isArray(node.children)
+                        ? node.children.map((item) => renderStyledItems(item))
+                        : null
+                    }
+
+                   
+
+                </StyledTreeItem>
+            </Fragment>
         )
     }
 

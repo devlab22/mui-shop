@@ -1,9 +1,7 @@
 /* eslint-disable no-unused-vars */
 
-//import './App.css';
-
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, StyledTreeView } from './components';
+import { Shop, AlertDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -27,7 +25,11 @@ function App() {
   const [treeView, setTreeView] = useState()
   const [data, setData] = useState([]);
   const [styledList, setStyledList] = useState([])
+  const [addItem, setAddItem] = useState(false)
+  const [alertItem, setAlertItem] = useState(false);
+  const [node, setNode] = useState()
 
+  
   useEffect(() => {
 
     async function loadData() {
@@ -35,8 +37,10 @@ function App() {
       var tmp = [];
       setIsLoading(true);
 
+
       setData(myData)
       setStyledList(myData)
+      
 
       recursiveTree(treeData.children, null, false)
       setTree(treeData)
@@ -82,6 +86,7 @@ function App() {
 
     // alphabet = String.fromCharCode(...Array(128).keys()).slice(65, 91);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const TabWithCount = ({ children, count = 0 }) => {
@@ -206,9 +211,54 @@ function App() {
           deleteNode(id, node.children)
         }
 
+        return null
     })
 
     return result
+  }
+
+  const handleOnRemoveStyledList = (id) => {
+
+    const selectedNode = styledList.find(item => item.id === id)
+    setNode(selectedNode)
+    setAlertItem(true)
+   // setStyledList(prev => prev.filter(item => item.id !== id))
+   
+  }
+
+  const removeStyledItem = (id) => {
+    setStyledList(prev => prev.filter(item => item.id !== id))
+  }
+
+  const handleOnItemClick = (id, expand) => {
+
+    setStyledList(prev => prev.map(item => {
+
+      if(item.id === id){
+        item.expandNode = expand
+       
+      }
+
+      return item;
+    }))
+  }
+
+  const handleOnAddStyledItem = (parentId) => {
+
+    setAddItem(true)
+  }
+
+  const handleOnCheckStyledList = (id, checked) => {
+
+    setStyledList(prev => prev.map(item => {
+
+      if(item.id === id){
+        item.checked = checked
+       
+      }
+
+      return item;
+    }))
   }
 
   return (
@@ -280,6 +330,10 @@ function App() {
             <StyledTreeView
               nodes={data}
               title='My Styled Tree View'
+              onRemove={(id) => alert(`remove id ${id}`)}
+              onEdit={(id) => alert(`edit id ${id}`)}
+              onAdd={(id) => alert(`add to id ${id}`)}
+              onCheck={(id, checked) => console.log(`ID: ${id}, cheked: ${checked}`)}
             />
           </Fragment>
       </TabPanel>
@@ -292,10 +346,12 @@ function App() {
           <Fragment>
             <StyledListView
               nodes={styledList}
-              title='Styled List'
-              onRemove={(id) => alert(`remove id ${id}`)}
+              title='My Styled List'
+              onRemove={handleOnRemoveStyledList}
               onEdit={(id) => alert(`edit id ${id}`)}
-              onAdd={(id) => alert(`add to id ${id}`)}
+              onAdd={handleOnAddStyledItem}
+              onCheck={handleOnCheckStyledList}
+              onClick={handleOnItemClick}
             />
           </Fragment>
       </TabPanel>
@@ -322,6 +378,31 @@ function App() {
           </Fragment>
         </TabPanel>
       ))
+      }
+
+      {addItem &&
+        <AddItemDialog
+          toggle={addItem}
+          title="Add Item"
+          onReject={() => setAddItem(false)}
+          onAccept={(data) => {
+            console.log('ok')
+            setAddItem(false)
+          }}
+        />
+      }
+
+      {alertItem &&
+        <AlertDialog
+          toggle={alertItem}
+          title='Remove Item'
+          question={`Do you want to remove ${node.name}, id ${node.id}`}
+          onReject={() => setAlertItem(false)}
+          onAccept={() => {
+            removeStyledItem(node.id)
+            setAlertItem(false)
+          }}
+        />
       }
 
     </>

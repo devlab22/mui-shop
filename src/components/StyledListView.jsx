@@ -1,83 +1,55 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Box, Stack, Checkbox, List, IconButton, Container, Paper, ListItemButton, ListItemIcon, ListSubheader, ListItemText, Collapse, Divider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, List, Container, Paper, ListSubheader, Collapse } from '@mui/material';
 import { StyledListItem, Toolbar } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
 import ArticleIcon from '@mui/icons-material/Article';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 export default function StyledListView({ nodes = [], toolbar = [], title, onClick, onCheck, onAdd, onRemove, onEdit }) {
 
-    const [items, setItems] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
-    const [open, setOpen] = useState(false);
+    const [itemsNodes, setItemsNodes] = useState([])
 
     useEffect(() => {
 
-        setItems(nodes.map(item => {
-            return { id: item.id, expand: false }
+        setItemsNodes(nodes.map(item => {
+
+            item.expandNode = Boolean(item.expandNode);
+            item.checked = Boolean(item.checked);
+            return item
         }))
 
-    }, [])
+    }, [nodes])
 
-    const setExpand = (node, expand = false) => {
+    const handleOnButtonClick = (id) => {
 
-        nodes.filter(item => item.parentId === node.id)
-            .map(child => {
+        var checked = false
+        if (hasChildren(id)) {
 
-                const menu = getMenu(child)
-                menu.expand = expand;
-                /*  if (hasChildren(child.id)) {
-                     setExpand(child, expand);
-                 } */
-                return child;
-            })
-    }
+            setItemsNodes(prev => prev.map(item => {
 
-    const handleOnButtonClick = (node) => {
+                if (item.id === id) {
+                    item.expandNode = !item.expandNode
+                    checked = item.expandNode
+                }
 
-        setSelectedId(node.id);
-        console.log('click', node)
-        console.log(hasChildren(node.id))
-        if (hasChildren(node.id)) {
-            console.log('open')
+                return item
+            }))
 
-            var menu = getMenu(node);
-            menu.expand = !menu.expand;
-            console.log(menu)
-
-            console.log(items)
-            /*  if (!menu.expand) {
-                 setExpand(node, false);
-             } */
-            setOpen(!open);
         }
+
+        setSelectedId(id);
 
         if (typeof (onClick) === 'function') {
-            onClick(node);
+            onClick(id, checked);
         }
 
-    }
-    const getMenu = (node) => {
-
-        var menu = null;
-        if ('id' in node) {
-            menu = items.find(item => item.id === node.id);
-        }
-
-        if (!menu) {
-            menu = { id: null, expand: false };
-        }
-
-        return menu;
     }
 
     const renderList = () => {
 
-        const children = nodes.filter(item => item.parentId === 0);
+        const children = itemsNodes.filter(item => item.parentId === 0);
         children.sort((a, b) => a.seqnr - b.seqnr);
 
         return (
@@ -90,9 +62,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
                 subheader={renderHeader(title)}
             >
                 {<Toolbar buttons={toolbar} />}
-                {
-                    children.map(node => buildListItem(node, 1))
-                }
+                {children.map(node => buildStyledListItem(node, 1))}
 
             </List>
         );
@@ -100,8 +70,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
 
     const hasChildren = (id) => {
 
-        const child = nodes.some(item => item.parentId === id);
-        if (child) {
+        if (itemsNodes.some(item => item.parentId === id)) {
             return true;
         }
         else {
@@ -128,19 +97,17 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
         level++
         if (node) {
 
-            const children = nodes.filter(item => item.parentId === node.id)
-            //  console.log(node)
-            //console.log(children)
-            var menu = getMenu(node);
+            const children = itemsNodes.filter(item => item.parentId === node.id)
+
             return (
                 <Collapse
-                    in={menu.expand}
+                    in={node.expandNode}
                     timeout="auto"
                     unmountOnExit
                 >
                     <List component="div">
                         {
-                            children.map(item => buildListItem(item, level))
+                            children.map(item => buildStyledListItem(item, level))
                         }
                     </List>
                 </Collapse>
@@ -149,141 +116,54 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
 
     }
 
-    const buildListItem = (node, level) => {
+    const getExpandIcon = (node) => {
 
-        //  console.log(node)
+        if (!hasChildren(node.id)) {
+            return null
+        }
+
+        if (node.expandNode) {
+            return <ExpandMore />
+        }
+        else {
+            return <ChevronRight />
+        }
+    }
+
+    const buildStyledListItem = (node, level) => {
+
         const children = nodes.filter(item => item.parentId === node.id)
         children.sort((a, b) => a.seqnr - b.seqnr)
 
-        var menu = getMenu(node);
-        console.log(menu)
         return (
             <div key={node.id}>
 
-                {node.subheader &&
-                    <ListSubheader
-                        component="div"
-                        color="primary"
-                        inset={true}
-                        sx={{
-                            fontSize: '1.2rem',
-                            fontWeight: "bold"
-                        }}
-                    >
-                        {node.subheader}
-                    </ListSubheader>
-                }
+                {renderHeader(node.subheader)}
 
-                <ListItemButton
-                    sx={{
-                        pl: `${level * 20}px`,
-                    }}
-                    onClick={() => handleOnButtonClick(node)}
-                    dense={false}
+                <StyledListItem
+                    id={node.id}
                     selected={selectedId === node.id}
-                >
-
-                    <ListItemIcon>
-                        {hasChildren(node.id) ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
-                    </ListItemIcon>
-
-                    {typeof (handleCheck) === 'function' &&
-                        <ListItemIcon
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Checkbox
-                                edge="start"
-                                checked={node.checked}
-                                onChange={(e) => onCheck(node.id, e.target.checked)}
-                            />
-                        </ListItemIcon>
-                    }
-
-                    <ListItemText primary={node.name} secondary={`ID: ${node.id}`} />
-
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-
-                        {typeof (onAdd) === 'function' &&
-                            <IconButton
-                                size="small"
-                                aria-label="add"
-                                title="add item"
-                                onClick={() => onAdd(node.id)}
-                            >
-                                <AddCircleIcon
-                                    color='primary'
-                                />
-                            </IconButton>
-                        }
-
-
-                        {typeof (onEdit) === 'function' &&
-                            <IconButton
-                                size="small"
-                                aria-label="edit"
-                                title="edit item"
-                                onClick={() => onEdit(node.id)}
-                            >
-                                <EditIcon
-                                    color='primary'
-                                />
-                            </IconButton>
-                        }
-
-                        {!hasChildren(node.id) &&
-                            <Fragment>
-
-                                {typeof (onRemove) === 'function' &&
-                                    <IconButton
-                                        size="small"
-                                        aria-label="delete"
-                                        title="delete item"
-                                        onClick={() => onRemove(node.id)}
-                                    >
-                                        <DeleteIcon
-                                            color='primary'
-                                        />
-                                    </IconButton>
-                                }
-
-                            </Fragment>
-                        }
-
-                    </Stack>
-
-                    {hasChildren(node.id) &&
-                        <ListItemIcon
-                        >
-                            {menu.expand ?
-                                <ExpandMore
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleOnButtonClick(node)
-                                    }}
-                                /> :
-                                <ChevronRight
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleOnButtonClick(node)
-                                    }}
-                                />
-                            }
-                        </ListItemIcon>
-                    }
-
-                </ListItemButton>
+                    primary={node.name}
+                    secondary={`ID: ${node.id}`}
+                    paddingLeft={`${level * 20}px`}
+                    itemIcon={hasChildren(node.id) ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
+                    divider={node.divider}
+                    expandIcon={getExpandIcon(node)}
+                    checked={node.checked}
+                    onClick={handleOnButtonClick}
+                    onCheck={onCheck && onCheck}
+                    onAdd={onAdd && onAdd}
+                    onEdit={onEdit && onEdit}
+                    onRemove={(onRemove && !hasChildren(node.id)) && onRemove}
+                />
 
                 {hasChildren(node.id) && buildSubMenu(node, level++)}
-                {node.divider && <Divider sx={{ mb: 1 }} />}
 
             </div>
 
         )
     }
+
     return (
         <Container component='main'>
             <Box>
