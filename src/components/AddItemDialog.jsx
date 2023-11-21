@@ -1,17 +1,15 @@
 import React from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Divider, Stack } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, TextField, Paper, Stack, DialogTitle, Slide, Divider } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AddItemDialog({toggle, onReject, title, onAccept}) {
+export default function AddItemDialog({ toggle, item={id: null, name: '', seqnr: 0}, onReject, title, onAccept }) {
 
+    const [name, setName] = React.useState(item.name);
+    const [seqnr, setSeqnr] = React.useState(item.seqnr);
 
-    const handleOnAccept = () => {
-        
-        onAccept()
-    }
     return (
         <Box>
             <Dialog
@@ -22,17 +20,48 @@ export default function AddItemDialog({toggle, onReject, title, onAccept}) {
                 aria-describedby="add-item-dialog-description"
             >
 
-                <DialogTitle id="add-item-dialog-title">
-                    {title}
-                </DialogTitle>
+                <Stack
+                    display="flex"
+                    alignItems="center"
+                    >
+                    <DialogTitle id="add-item-dialog-title">
+                        {title}
+                    </DialogTitle>
+                </Stack>
+
+
                 <Divider />
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <Stack direction='row' gap='5px'>
+                    <Paper>
+                        <Stack
+                            gap={1}
+                            sx={{ p: "15px" }}
+                        >
 
+                            <TextField
+                                id="name-field"
+                                label="Name"
+                                variant="outlined"
+                                autoFocus
+                                defaultValue={name}
+                                onChange={(e) => setName(e.target.value)}
+                            >
+                                {name}
+                            </TextField>
+
+                            <TextField
+                                id="seqnr-field"
+                                label="Seqnr"
+                                variant="outlined"
+                                type="number"
+                                defaultValue={seqnr}
+                                onChange={(e) => setSeqnr(e.target.value)}
+                            >
+                                {seqnr}
+                            </TextField>
 
                         </Stack>
-                    </DialogContentText>
+                    </Paper>
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -43,8 +72,8 @@ export default function AddItemDialog({toggle, onReject, title, onAccept}) {
                     </Button>
                     <Button
                         variant="contained"
-                        onClick={handleOnAccept}
-                        autoFocus
+                        onClick={() => onAccept({...item, name: name, seqnr: seqnr })}
+                        disabled={name.length === 0}
                     >
                         Ok
                     </Button>

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, AlertDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, StyledTreeView } from './components';
+import { Shop, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -27,9 +27,12 @@ function App() {
   const [styledList, setStyledList] = useState([])
   const [addItem, setAddItem] = useState(false)
   const [alertItem, setAlertItem] = useState(false);
-  const [node, setNode] = useState()
+  const [showMessage, setShowMessage] = useState(false);
+  const [selectedNode, setSelectedNode] = useState({id: null, name: '', seqnr: 0})
+  const [title, setTitle] = useState('')
+  const [messages, setMessages] = useState([])
 
-  
+
   useEffect(() => {
 
     async function loadData() {
@@ -40,40 +43,40 @@ function App() {
 
       setData(myData)
       setStyledList(myData)
-      
+
 
       recursiveTree(treeData.children, null, false)
       setTree(treeData)
       setTreeView(treeData)
 
-      try{
+      try {
         const data = await Dashboard.getCountries();
-      //setCountries(data)
-      setCntCountry(data.length);
-      tmp = []
-      data.forEach(element => {
-        var key = element.name.common[0];
-        var keyvalue = tmp.find(obj => obj.key === key);
-        if (keyvalue) {
-          tmp.map(item => {
+        //setCountries(data)
+        setCntCountry(data.length);
+        tmp = []
+        data.forEach(element => {
+          var key = element.name.common[0];
+          var keyvalue = tmp.find(obj => obj.key === key);
+          if (keyvalue) {
+            tmp.map(item => {
 
-            if (item.key === key) {
-              item.count++;
-            }
+              if (item.key === key) {
+                item.count++;
+              }
 
-            return item;
-          })
-        } else {
-          tmp.push({ key: key, count: 1 })
-        }
+              return item;
+            })
+          } else {
+            tmp.push({ key: key, count: 1 })
+          }
 
-      });
+        });
 
-      setCntTab(tmp);
+        setCntTab(tmp);
 
-      setIsLoading(false);
+        setIsLoading(false);
       }
-      catch(e) {
+      catch (e) {
         console.log(e)
       }
     }
@@ -86,7 +89,7 @@ function App() {
 
     // alphabet = String.fromCharCode(...Array(128).keys()).slice(65, 91);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const TabWithCount = ({ children, count = 0 }) => {
@@ -184,7 +187,7 @@ function App() {
   const onCheckboxChanged = (node, checked) => {
 
     var tmp = tree
-    
+
     setTree({})
     recursiveTree(tmp.children, node, checked)
     setTree(tmp)
@@ -192,7 +195,7 @@ function App() {
 
   const handleOnDeleteItem = (node) => {
 
-   alert(`delete id: ${node.id}`)
+    alert(`delete id: ${node.id}`)
     /* var tmp = tree
     var result = deleteNode(node.id, tmp)
     console.log(result) */
@@ -201,17 +204,17 @@ function App() {
 
   const deleteNode = (id, nodes) => {
 
-    var result = nodes.children.filter( node => {
+    var result = nodes.children.filter(node => {
 
-        if(node.id !== id){
-          return node
-        }
+      if (node.id !== id) {
+        return node
+      }
 
-        if( node.children && Array.isArray(node.children) && node.children.length > 0){
-          deleteNode(id, node.children)
-        }
+      if (node.children && Array.isArray(node.children) && node.children.length > 0) {
+        deleteNode(id, node.children)
+      }
 
-        return null
+      return null
     })
 
     return result
@@ -220,23 +223,27 @@ function App() {
   const handleOnRemoveStyledList = (id) => {
 
     const selectedNode = styledList.find(item => item.id === id)
-    setNode(selectedNode)
+    setTitle(`remove Item`)
+    setSelectedNode(selectedNode)
     setAlertItem(true)
-   // setStyledList(prev => prev.filter(item => item.id !== id))
-   
+
   }
 
   const removeStyledItem = (id) => {
     setStyledList(prev => prev.filter(item => item.id !== id))
+    setTitle(`Item removed`)
+    setMessages([`ID: ${selectedNode.id}, Name: ${selectedNode.name}`])
+    //setMessages([`ID: ${selectedNode.id}`, `Name: ${selectedNode.name}`])
+    setShowMessage(true)
   }
 
   const handleOnItemClick = (id, expand) => {
 
     setStyledList(prev => prev.map(item => {
 
-      if(item.id === id){
+      if (item.id === id) {
         item.expandNode = expand
-       
+
       }
 
       return item;
@@ -245,20 +252,66 @@ function App() {
 
   const handleOnAddStyledItem = (parentId) => {
 
+    if(parentId >= 0){
+      setSelectedNode(styledList.find(item => item.id === parentId))
+    }
+    else{
+      setSelectedNode({id: null, name: '', seqnr: 0})
+    }
+    
+    console.log(selectedNode)
     setAddItem(true)
+  }
+
+  const addStyledItem = (data) => {
+
+    var parentId = 0;
+    console.log(data)
+    const maxId = styledList.reduce((prev, current) => {
+      return (prev && prev.id > current.id ? prev.id : current.id)
+    })
+    console.log(selectedNode)
+    if (data.id !== selectedNode.id) {
+      // insert
+      if (selectedNode) {
+        parentId = selectedNode.id
+      }
+      console.log(maxId, parentId)
+      setStyledList(prev => [...prev, { id: maxId + 1, parentId: parentId, name: data.name, seqnr: data.seqnr }])
+    }
+    else {
+      // update
+      setStyledList(prev => prev.map(item => {
+
+        if (item.id === data.id) {
+          item.name = data.name;
+          item.seqnr = data.seqnr;
+        }
+
+        return item;
+      }))
+    }
+
   }
 
   const handleOnCheckStyledList = (id, checked) => {
 
     setStyledList(prev => prev.map(item => {
 
-      if(item.id === id){
+      if (item.id === id) {
         item.checked = checked
-       
+
       }
 
       return item;
     }))
+  }
+
+  const handleOnEditStyledList = (id) => {
+
+    setSelectedNode(styledList.find(item => item.id === id));
+    console.log(selectedNode)
+    setAddItem(true)
   }
 
   return (
@@ -290,7 +343,7 @@ function App() {
           <Tab label="Video View" icon={<Flag />} value={107} />
           <Tab label="Styled List" icon={<Flag />} value={108} />
 
-         {/*  {alphabet.map((item, index) => (
+          {/*  {alphabet.map((item, index) => (
             <Tab
               key={index}
               label={`${item} (${getCount(item)})`}
@@ -304,56 +357,65 @@ function App() {
       </Box>
       <TabPanel value={value} index={104}>
         <Fragment>
-          <TreeData 
-            nodes={tree} 
-            checkbox 
-            title="List Item" 
-            handleCheck={onCheckboxChanged} 
+          <TreeData
+            nodes={tree}
+            checkbox
+            title="List Item"
+            handleCheck={onCheckboxChanged}
             handleDeleteItem={handleOnDeleteItem}
-            />
+          />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={105}>
         <Fragment>
-          <TreeDataView 
-            nodes={treeView} 
+          <TreeDataView
+            nodes={treeView}
             onAdd={(parentId) => alert(`add to node ${parentId}`)}
-            onRemove={(id) => alert(`delete ID: ${id}`)}  
+            onRemove={(id) => alert(`delete ID: ${id}`)}
             onEdit={(id) => alert(`edit ID: ${id}`)}
             onCheck={(id, checked) => console.log(`ID: ${id}, checked: ${checked}`)}
-           // autoSelect
-            />
+          // autoSelect
+          />
         </Fragment>
       </TabPanel>
       <TabPanel value={value} index={106}>
-          <Fragment>
-            <StyledTreeView
-              nodes={data}
-              title='My Styled Tree View'
-              onRemove={(id) => alert(`remove id ${id}`)}
-              onEdit={(id) => alert(`edit id ${id}`)}
-              onAdd={(id) => alert(`add to id ${id}`)}
-              onCheck={(id, checked) => console.log(`ID: ${id}, cheked: ${checked}`)}
-            />
-          </Fragment>
+        <Fragment>
+          <StyledTreeView
+            nodes={data}
+            title='My Styled Tree View'
+            onRemove={(id) => alert(`remove id ${id}`)}
+            onEdit={(id) => alert(`edit id ${id}`)}
+            onAdd={(id) => alert(`add to id ${id}`)}
+            onCheck={(id, checked) => console.log(`ID: ${id}, cheked: ${checked}`)}
+          />
+        </Fragment>
       </TabPanel>
       <TabPanel value={value} index={107}>
-          <Fragment>
-            <VideoView/>
-          </Fragment>
+        <Fragment>
+          <VideoView />
+        </Fragment>
       </TabPanel>
       <TabPanel value={value} index={108}>
-          <Fragment>
-            <StyledListView
-              nodes={styledList}
-              title='My Styled List'
-              onRemove={handleOnRemoveStyledList}
-              onEdit={(id) => alert(`edit id ${id}`)}
-              onAdd={handleOnAddStyledItem}
-              onCheck={handleOnCheckStyledList}
-              onClick={handleOnItemClick}
-            />
-          </Fragment>
+        <Fragment>
+          <StyledListView
+            nodes={styledList}
+            title='My Styled List'
+            toolbar={[
+              {
+                id: 1,
+                seqnr: 1,
+                type: 'button',
+                name: 'add item',
+                onClick: handleOnAddStyledItem
+              }
+            ]}
+            onRemove={handleOnRemoveStyledList}
+            onEdit={handleOnEditStyledList}
+            onAdd={handleOnAddStyledItem}
+            onCheck={handleOnCheckStyledList}
+            onClick={handleOnItemClick}
+          />
+        </Fragment>
       </TabPanel>
       <TabPanel value={value} index={100}>
         <Fragment>
@@ -384,9 +446,10 @@ function App() {
         <AddItemDialog
           toggle={addItem}
           title="Add Item"
+          item={selectedNode}
           onReject={() => setAddItem(false)}
-          onAccept={(data) => {
-            console.log('ok')
+          onAccept={(value) => {
+            addStyledItem(value)
             setAddItem(false)
           }}
         />
@@ -395,13 +458,23 @@ function App() {
       {alertItem &&
         <AlertDialog
           toggle={alertItem}
-          title='Remove Item'
-          question={`Do you want to remove ${node.name}, id ${node.id}`}
+          title={title}
+          question={`Do you want to remove ${selectedNode.name}, id ${selectedNode.id}`}
           onReject={() => setAlertItem(false)}
           onAccept={() => {
-            removeStyledItem(node.id)
+            removeStyledItem(selectedNode.id)
             setAlertItem(false)
           }}
+        />
+      }
+
+      {showMessage &&
+        <MessageDialog
+          toggle={showMessage}
+          onReject={() => setShowMessage(false)}
+          title={title}
+          message={messages}
+          width='400px'
         />
       }
 

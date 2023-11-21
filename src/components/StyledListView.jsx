@@ -49,8 +49,8 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
 
     const renderList = () => {
 
-        const children = itemsNodes.filter(item => item.parentId === 0);
-        children.sort((a, b) => a.seqnr - b.seqnr);
+        const children = itemsNodes.filter(item => item.parentId === 0)
+                        .sort((a, b) => a.seqnr - b.seqnr);
 
         return (
             <List
@@ -98,6 +98,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
         if (node) {
 
             const children = itemsNodes.filter(item => item.parentId === node.id)
+                             .sort((a, b) => a.seqnr - b.seqnr);
 
             return (
                 <Collapse
@@ -132,9 +133,6 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
 
     const buildStyledListItem = (node, level) => {
 
-        const children = nodes.filter(item => item.parentId === node.id)
-        children.sort((a, b) => a.seqnr - b.seqnr)
-
         return (
             <div key={node.id}>
 
@@ -144,9 +142,9 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
                     id={node.id}
                     selected={selectedId === node.id}
                     primary={node.name}
-                    secondary={`ID: ${node.id}`}
+                    secondary={`ID: ${node.id}, seqnr: ${node.seqnr}`}
                     paddingLeft={`${level * 20}px`}
-                    itemIcon={hasChildren(node.id) ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
+                    itemIcon={hasChildren(node.id) ? <FolderIcon fontSize='large' color='primary' /> : <ArticleIcon fontSize='large' color='primary' />}
                     divider={node.divider}
                     expandIcon={getExpandIcon(node)}
                     checked={node.checked}

@@ -53,6 +53,7 @@ const VideoPlayer = ({ title, src, type, width, resize = [600, 560, 320, 420] })
 
             <video
                 width={videoWidth}
+                height="auto"
                 ref={ref}
                 onEnded={() => setStop(true)}
             >
