@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, List, Container, Paper, ListSubheader, Collapse } from '@mui/material';
+import { Box, List, Container, Paper, ListSubheader, Collapse, Stack } from '@mui/material';
 import { StyledListItem, Toolbar } from '.'
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ChevronRight from '@mui/icons-material/ChevronRight';
@@ -12,7 +12,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
     const [itemsNodes, setItemsNodes] = useState([])
 
     useEffect(() => {
-
+       
         setItemsNodes(nodes.map(item => {
 
             item.expandNode = Boolean(item.expandNode);
@@ -59,7 +59,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
                     bgcolor: 'background.paper'
                 }}
                 component="nav"
-                subheader={renderHeader(title)}
+                subheader={renderHeader(title, true)}
             >
                 {<Toolbar buttons={toolbar} />}
                 {children.map(node => buildStyledListItem(node, 1))}
@@ -78,10 +78,14 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
         }
     }
 
-    const renderHeader = (sTitel) => {
+    const renderHeader = (sTitel, center=false) => {
 
         return (
-            <ListSubheader
+            <Stack
+              display="flex"
+              alignItems={center && "center"}
+            >
+                 <ListSubheader
                 component="div"
                 inset={true}
                 sx={{ fontWeight: 'bold', fontSize: "1.2rem" }}
@@ -89,6 +93,8 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
             >
                 {sTitel}
             </ListSubheader>
+            </Stack>
+           
         )
     }
 
@@ -132,7 +138,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
     }
 
     const buildStyledListItem = (node, level) => {
-
+        
         return (
             <div key={node.id}>
 
@@ -144,7 +150,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
                     primary={node.name}
                     secondary={`ID: ${node.id}, seqnr: ${node.seqnr}`}
                     paddingLeft={`${level * 20}px`}
-                    itemIcon={hasChildren(node.id) ? <FolderIcon fontSize='large' color='primary' /> : <ArticleIcon fontSize='large' color='primary' />}
+                    itemIcon={hasChildren(node.id) ? <FolderIcon color='primary' /> : <ArticleIcon color='primary' />}
                     divider={node.divider}
                     expandIcon={getExpandIcon(node)}
                     checked={node.checked}
@@ -155,7 +161,7 @@ export default function StyledListView({ nodes = [], toolbar = [], title, onClic
                     onRemove={(onRemove && !hasChildren(node.id)) && onRemove}
                 />
 
-                {hasChildren(node.id) && buildSubMenu(node, level++)}
+                {hasChildren(node.id) && buildSubMenu(node, level)}
 
             </div>
 

@@ -20,7 +20,7 @@
     },
     {
         "id": 4,
-        "seqnr": 1,
+        "seqnr": 2,
         "name": "Node 2",
         "subheader": "Subheader",
         "parentId": 0

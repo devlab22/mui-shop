@@ -28,7 +28,8 @@ function App() {
   const [addItem, setAddItem] = useState(false)
   const [alertItem, setAlertItem] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
-  const [selectedNode, setSelectedNode] = useState({id: null, name: '', seqnr: 0})
+  const [selectedNode, setSelectedNode] = useState({ id: null, name: '', seqnr: 0 })
+  const [parentNode, setParentNode] = useState({ id: null, name: '', seqnr: 0 })
   const [title, setTitle] = useState('')
   const [messages, setMessages] = useState([])
 
@@ -43,7 +44,7 @@ function App() {
 
       setData(myData)
       setStyledList(myData)
-
+      
 
       recursiveTree(treeData.children, null, false)
       setTree(treeData)
@@ -251,46 +252,57 @@ function App() {
   }
 
   const handleOnAddStyledItem = (parentId) => {
+    setTitle('add item')
+    if (parentId === null) {
+      setParentNode({ id: null, name: '', seqnr: 0 })
+    }
+    else {
+      setParentNode(styledList.find(item => item.id === parentId))
+    }
 
-    if(parentId >= 0){
-      setSelectedNode(styledList.find(item => item.id === parentId))
-    }
-    else{
-      setSelectedNode({id: null, name: '', seqnr: 0})
-    }
-    
-    console.log(selectedNode)
     setAddItem(true)
   }
 
   const addStyledItem = (data) => {
 
-    var parentId = 0;
-    console.log(data)
+    var parentId = parentNode.id;
+
+    if (parentId === null) {
+      parentId = 0
+    }
+
     const maxId = styledList.reduce((prev, current) => {
       return (prev && prev.id > current.id ? prev.id : current.id)
     })
-    console.log(selectedNode)
+
+
     if (data.id !== selectedNode.id) {
       // insert
-      if (selectedNode) {
-        parentId = selectedNode.id
-      }
-      console.log(maxId, parentId)
       setStyledList(prev => [...prev, { id: maxId + 1, parentId: parentId, name: data.name, seqnr: data.seqnr }])
     }
     else {
-      // update
-      setStyledList(prev => prev.map(item => {
 
-        if (item.id === data.id) {
-          item.name = data.name;
-          item.seqnr = data.seqnr;
-        }
+      if (selectedNode.id === null) {
+        
+        setStyledList(prev => [...prev, { id: maxId + 1, parentId: parentId, name: data.name, seqnr: data.seqnr }])
+      }
+      else {
+        
+        setStyledList(prev => prev.map(item => {
 
-        return item;
-      }))
+          if (item.id === data.id) {
+            item.name = data.name;
+            item.seqnr = data.seqnr;
+          }
+
+          return item;
+        }))
+      }
+
     }
+
+    setSelectedNode({ id: null, name: '', seqnr: 0 })
+    setParentNode({ id: null, name: '', seqnr: 0 })
 
   }
 
@@ -308,9 +320,9 @@ function App() {
   }
 
   const handleOnEditStyledList = (id) => {
-
+    setTitle('change item')
     setSelectedNode(styledList.find(item => item.id === id));
-    console.log(selectedNode)
+    setParentNode(styledList.find(item => item.id === id));
     setAddItem(true)
   }
 
@@ -331,11 +343,11 @@ function App() {
         >
 
           <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
-          <Tab label="table" icon={<TableRows />} value={102} />
+          <Tab label={`Table Countries (${cntCountry})`} icon={<TableRows />} value={102} />
           <Tab label="Tree Data" icon={<AccountTreeIcon />} value={104} />
           <Tab label="Tree Data View" icon={<AccountTreeIcon />} value={105} />
           <Tab
-            label={`Countries (${getCount(null)})`}
+            label={`Countries (${cntCountry})`}
             icon={<Flag />}
             value={101} />
           <Tab label="Accordion data" icon={<Flag />} value={103} />
@@ -445,9 +457,13 @@ function App() {
       {addItem &&
         <AddItemDialog
           toggle={addItem}
-          title="Add Item"
+          title={title}
           item={selectedNode}
-          onReject={() => setAddItem(false)}
+          onReject={() => {
+            setAddItem(false)
+            setSelectedNode({ id: null, name: '', seqnr: 0 })
+            setParentNode({ id: null, name: '', seqnr: 0 })
+          }}
           onAccept={(value) => {
             addStyledItem(value)
             setAddItem(false)

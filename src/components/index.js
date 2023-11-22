@@ -29,3 +29,4 @@ export {default as VideoView} from './VideoView';
 export {default as StyledListItem} from './StyledListItem';
 export {default as StyledListView} from './StyledListView';
 export {default as AddItemDialog} from './AddItemDialog';
+export {default as StyledSkeleton} from './StyledSkeleton';

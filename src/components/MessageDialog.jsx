@@ -5,8 +5,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function MessageDialog({ autoHide = 6000, toggle = false, title = '', message, onReject = Function.prototype, width = '300px', severity = 'info' }) {
-
+export default function MessageDialog({ autoHide = 6000, toggle = false, title = '', message=null, onReject = Function.prototype, width = '300px', severity = 'info' }) {
+    
     return (
         <Modal
             open={toggle}
@@ -27,18 +27,20 @@ export default function MessageDialog({ autoHide = 6000, toggle = false, title =
 
                     {title &&
                         <AlertTitle
-                            sx={{
+                            sx={message && ({
                                 fontSize: "1.3rem",
                                 fontWeight: "bold",
                                 mt: "-5px"
-                            }}
+                            })}
                         >
                             {title}
                         </AlertTitle>
                     }
 
                     {Array.isArray(message) ? (
-                        <Stack>
+                        <Stack
+                            sx={{mt: '-1px'}}                        
+                        >
                             {message.length > 0 && message.map((msg, index) => (
                                 <ListItemText
                                     key={index}
@@ -51,6 +53,7 @@ export default function MessageDialog({ autoHide = 6000, toggle = false, title =
                         : (
                             <ListItemText
                                 primary={message}
+                                sx={{mt: '-1px'}}
                             />
                         )
                     }

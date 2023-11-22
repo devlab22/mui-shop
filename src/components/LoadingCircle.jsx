@@ -3,11 +3,11 @@ import { Circles, Blocks, Grid, ThreeDots, Bars, Dna, MagnifyingGlass, ProgressB
 import { Stack } from '@mui/material';
 
 
-export default function LoadingCircle({ typeContent = 'circle', color = '#1976D2', height = 120, width = 120 }) {
+export default function LoadingCircle({ content = 'circle', color = '#1976D2', height = 120, width = 120 }) {
 
-    const getContent = () => {
+    const renderContent = () => {
 
-        switch (typeContent) {
+        switch (content) {
             case 'circle':
                 return (
                     <Circles
@@ -139,7 +139,7 @@ export default function LoadingCircle({ typeContent = 'circle', color = '#1976D2
         <Stack
             alignItems='center'
         >
-            {getContent()}
+            {renderContent()}
         </Stack>
     )
 }

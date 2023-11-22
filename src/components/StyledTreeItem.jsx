@@ -100,7 +100,7 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
                     <Typography variant="body" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
                         {labelText}
                     </Typography>
-                    <Typography variant="caption" color="inherit" >
+                    <Typography variant="body2" color="inherit" >
                         {labelInfo}
                     </Typography>
 
