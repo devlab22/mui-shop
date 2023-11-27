@@ -41,7 +41,6 @@ const VideoPlayer = ({ title, src, type, width, resize = [600, 560, 320, 420] })
                 variant="h2"
                 component="h2"
                 sx={{
-                    ml: "15px",
                     fontWeight: 'bold',
                     fontSize: "1.2rem"
 

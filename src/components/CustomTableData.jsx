@@ -14,7 +14,6 @@ export default function CustomTableData() {
     const [rows, setRows] = useState([]);
     const [selectedRows, setSelectedRows] = useState([])
     const [isLoading, setIsLoading] = useState(false);
-    const [maxId, setMaxId] = useState(0);
     const [progress, setProgress] = useState(false);
     const [modalDialog, setModalDialog] = useState(false);
     const [messageDialog, setMessageDialog] = useState(false);
@@ -48,8 +47,9 @@ export default function CustomTableData() {
             const tmp = data
                 .sort((a, b) => a.name.common.localeCompare(b.name.common))
                 .map((item, index) => {
+
                     return {
-                        id: index,
+                        id: index + 1,
                         name: item.name.common || '',
                         capital: item.capital,
                         region: item.region,
@@ -66,7 +66,7 @@ export default function CustomTableData() {
 
                 })
 
-
+            console.log(tmp)
             setRows(tmp)
 
             //setMaxId(Math.max(...tmp.map(o => o.id)))
@@ -108,24 +108,21 @@ export default function CustomTableData() {
 
         setModalDialog(false)
         setProgress(true)
-        const toDelete = selectedRows.map(id => {
-
-            const item = rows.find(item => item.id === id)
-            if (item) {
-                return item
-            }
-        })
 
         setRows(prev => prev.filter(item => {
 
             if (!selectedRows.includes(item.id)) {
                 return item
             }
+
+            return null;
         }))
 
-        setTimeout(() => {
+        setProgress(false);
+       /*  setTimeout(() => {
             setProgress(false)
-        }, 2000)
+        }, 2000) */
+
     }
 
     const handleOnSelectionModelChange = (ids) => {
@@ -133,9 +130,11 @@ export default function CustomTableData() {
     }
 
     const createRandomRow = () => {
-        var nextId = maxId + 1;
-        setMaxId(nextId)
-        return { id: nextId, lastName: 'Random', firstName: 'random', age: Math.floor(Math.random() * 70) }
+        var lastId = rows.reduce((prev, current) => {
+            return (prev && prev.id > current.id ? prev.id : current.id)
+          })
+        lastId++
+        return { id: lastId, name: 'Random', capital: 'random', region: "random", unMember: 'No' }
 
     }
     const handleOnAddRow = () => {
@@ -166,12 +165,12 @@ export default function CustomTableData() {
                         onClick={handleOnDeleteDialog}>
                         delete
                     </Button>
-                    {/*  <Button
+                     <Button
                         sx={{ padding: '5px' }}
                         startIcon={<AddBoxOutlinedIcon />}
                         onClick={handleOnAddRow}>
                         add row
-                    </Button> */}
+                    </Button>
                 </Stack>
 
             </GridToolbarContainer>

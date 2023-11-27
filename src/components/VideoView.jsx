@@ -1,5 +1,5 @@
 import React from 'react';
-import { VideoPlayer } from '../components'
+import { VideoPlayer, Counter } from '../components'
 import { Box, Stack, Container, Paper } from '@mui/material';
 
 
@@ -26,6 +26,24 @@ export default function VideoView() {
                             type="video/mp4"
                             width="600"
                         />
+                    </Paper>
+
+                    <Paper>
+                        <Counter 
+                            title="My Counter" 
+                            count={10}
+                            onPlus={(counter) => console.log("counter 1 plus", counter)}
+                            onMinus={(counter) => console.log("counter 1 minus", counter)}
+                            />
+                    </Paper>
+
+                    <Paper>
+                        <Counter 
+                            title="My Counter 2" 
+                            count={5}
+                            onPlus={(counter) => console.log("counter 2 plus", counter)}
+                            onMinus={(counter) => console.log("counter 2 minus", counter)}
+                            />
                     </Paper>
                 </Stack>
             </Box>
