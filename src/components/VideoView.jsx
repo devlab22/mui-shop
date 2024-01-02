@@ -45,6 +45,7 @@ export default function VideoView() {
                             onMinus={(counter) => console.log("counter 2 minus", counter)}
                             />
                     </Paper>
+                    
                 </Stack>
             </Box>
         </Container>

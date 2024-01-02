@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, StyledTreeView } from './components';
+import { Shop, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, ChartsView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -10,6 +10,7 @@ import treeData from './data/treeData.json';
 import myData from './data/treeView.json';
 import listData from './data/listView.json'
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 
 function App() {
@@ -354,6 +355,7 @@ function App() {
           <Tab label="Styled Tree View" icon={<Flag />} value={106} />
           <Tab label="Video View" icon={<Flag />} value={107} />
           <Tab label="Styled List" icon={<Flag />} value={108} />
+          <Tab label="Charts" icon={<BarChartIcon />} value={109} />
 
           {/*  {alphabet.map((item, index) => (
             <Tab
@@ -428,6 +430,9 @@ function App() {
             onClick={handleOnItemClick}
           />
         </Fragment>
+      </TabPanel>
+      <TabPanel value={value} index={109}>
+            <ChartsView/>
       </TabPanel>
       <TabPanel value={value} index={100}>
         <Fragment>
