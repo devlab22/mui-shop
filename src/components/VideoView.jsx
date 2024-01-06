@@ -1,5 +1,5 @@
 import React from 'react';
-import { VideoPlayer, Counter } from '../components'
+import { VideoPlayer, Counter, UploadButton } from '../components'
 import { Box, Stack, Container, Paper } from '@mui/material';
 
 
@@ -10,6 +10,10 @@ export default function VideoView() {
                 <Stack
                     spacing={2}
                 >
+
+                    <UploadButton
+                        handleFileUpload={(id, e) => console.log(id, e)}
+                    />
                     <Paper>
                         <VideoPlayer
                             title='Flower'
