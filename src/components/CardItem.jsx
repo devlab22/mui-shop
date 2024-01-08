@@ -16,10 +16,10 @@ import {
     Stack,
     CardHeader,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { CardSkeleton } from '../components';
 
-export default function CardItem({ id, name, flags, capital, region, subregion, area, population, icon, 
+export default function CardItem({ id, name, flags, capital, region, subregion, area, population, icon,
     onCheckboxChanged, checked = null, checkedText, onCardClicked, isLoading, unMember, continents }) {
 
     const [raised, setRaised] = useState(false);
@@ -35,23 +35,27 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
     const getCardActionAriaContent = () => {
 
         return (
-            <CardActionArea onClick={() => onCardClicked(name['common'])}>
+            <Fragment>
+                <CardActionArea onClick={() => onCardClicked(name['common'])}>
 
-                {getCardContentTop()}
+                    {getCardContentTop()}
+
+                </CardActionArea>
 
                 <CardContent>
 
                     {getCardContentBottom()}
 
                 </CardContent>
-            </CardActionArea>
+            </Fragment>
+
         )
     }
 
     const getCardContent = () => {
 
         return (
-            <>
+            <Fragment>
                 {getCardContentTop()}
 
                 <CardContent>
@@ -60,7 +64,7 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
 
 
                 </CardContent>
-            </>
+            </Fragment>
         )
     }
 
@@ -122,8 +126,8 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                 {addContent('Capital', capital)}
                 {addContent('Region', region)}
                 {addContent('Subregion', subregion)}
-                {addContent('Continent',continents)}
-                {addContent('UN Member', (Boolean(unMember)) ? 'Yes' : 'No' )}
+                {addContent('Continent', continents)}
+                {addContent('UN Member', (Boolean(unMember)) ? 'Yes' : 'No')}
 
                 <Stack
                     flexDirection='row'
