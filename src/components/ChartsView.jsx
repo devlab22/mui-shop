@@ -5,18 +5,86 @@ import { Box, Stack, Container, Paper, Divider } from '@mui/material';
 export default function ChartsView() {
 
     const headers = [
-        {fieldname: 'id', seqnr:1, name: 'ID'},
-        {fieldname: 'name', seqnr:2, name: 'Firstname'},
-        {fieldname: 'lastname', seqnr:3, name: 'Lastname'},
-        {fieldname: 'age', seqnr:4, name: 'Age'},
-        {fieldname: 'country', seqnr:5, name: 'Country'},
-        {fieldname: 'city', seqnr:6, name: 'City'},
+        {fieldname: 'name', seqnr:1, name: 'Name'},
+        {fieldname: 'serial', seqnr:2, name: 'Serial'},
+        {fieldname: 'mac', seqnr:3, name: 'Mac'},
+        {fieldname: 'model', seqnr:4, name: 'Model'},
+        {fieldname: 'firmware', seqnr:5, name: 'Firmware'},
+        {fieldname: 'status', seqnr:7, name: 'Status', colorize: true},
+        {fieldname: 'notes', seqnr:6, name: 'Notes'},
+        
     ]
 
-    const data =[
-        {seqnr:1, name: 'Peter', id:'12', lastname:'Meier', age: 20, country: 'Germany', city: 'Hamburg'},
-        {seqnr:2, name: 'Bender', id:'10', lastname: 'Klose', age: 25, country: 'USA', city: 'Los Angeles'}
+    const data = [
+        {
+            "name": "My AP",
+            "serial": "Q234-ABCD-5678",
+            "mac": "00:11:22:33:44:55",
+            "model": "MR34",
+            "status": "online",
+            "color": '#00e676',
+            "notes": "My MR",
+            "firmware": "wireless-25-14",
+        },
+        {
+            "name": "My AP 2",
+            "serial": "Q234-ABCD-1234",
+            "mac": "00:33:22:33:44:55",
+            "model": "MX34",
+            "status": "online",
+            "notes": "My MX",
+            "firmware": "wireless-20-14",
+            "color": '#00e676'
+        },
+        {
+            "name": "My AP 2",
+            "serial": "Q234-ABCD-1234",
+            "mac": "00:33:22:33:44:55",
+            "model": "MX34",
+            "status": "offline",
+            "notes": "My MX",
+            "firmware": "wireless-20-14",
+            "color": '#f50057'
+        },
+        {
+            "name": "My AP 2",
+            "serial": "Q234-ABCD-1234",
+            "mac": "00:33:22:33:44:55",
+            "model": "MX34",
+            "status": "alerting",
+            "notes": "My MX",
+            "firmware": "wireless-20-14",
+            "color": '#ffc400'
+        },
+        {
+            "name": "My AP 2",
+            "serial": "Q234-ABCD-1234",
+            "mac": "00:33:22:33:44:55",
+            "model": "MX34",
+            "status": "dormant",
+            "notes": "My MX",
+            "firmware": "wireless-20-14",
+            "color": '#e65100'
+        },
+        {
+            "name": "My AP 2",
+            "serial": "Q234-ABCD-1234",
+            "mac": "00:33:22:33:44:55",
+            "model": "MX34",
+            "status": "dormant",
+            "notes": "My MX",
+            "firmware": "wireless-20-14",
+            "color": '#e65100'
+        }
     ] 
+
+    const chartData = [
+        { name: 'Online', value: 2, color: '#00e676' },
+        { name: 'Offline', value: 1, color: '#f50057' },
+        { name: 'Alerting', value: 1, color: '#ffc400'},
+        { name: 'Dormant', value: 2, color: '#e65100' },
+    ];
+
     return (
         <Container component='main'>
             <Box>
@@ -25,12 +93,19 @@ export default function ChartsView() {
                     sx={{p:'20px'}}
                     >
                         <TableView 
-                        title='Data'
+                        title='Devices'
                         headers={headers}
                         data={data}
                         />
                     </Paper>
                     
+                    <Paper sx={{p:'20px'}}>
+                        <PieChartWithLabel 
+                            title='Status' 
+                            chartData={chartData}
+                            />
+                    </Paper>
+
                     <Paper
                     sx={{p:'20px'}}
                     >
@@ -65,10 +140,6 @@ export default function ChartsView() {
                             light
                         />
                         <StackedBarChart width='50%' />
-                    </Paper>
-
-                    <Paper sx={{p:'20px'}}>
-                        <PieChartWithLabel />
                     </Paper>
 
                 </Stack>

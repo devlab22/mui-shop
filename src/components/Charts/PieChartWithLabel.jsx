@@ -2,20 +2,8 @@ import React from 'react'
 import { Title } from '..'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-export default function PieChartWithLabel({ width = "100%", height = 300 }) {
 
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#33FF71'];
-
-    const data = [
-        { name: 'Group 1', value: 400 },
-        { name: 'Group 2', value: 300 },
-        { name: 'Group 3', value: 250 },
-        { name: 'Group 4', value: 200 },
-        { name: 'Group 5', value: 100 },
-        { name: 'Group 6', value: 50 },
-    ];
-
-    const randomColors = []
+export default function PieChartWithLabel({title='', chartData=[], height = 300 }) {
 
     const RADIAN = Math.PI / 180;
 
@@ -40,28 +28,13 @@ export default function PieChartWithLabel({ width = "100%", height = 300 }) {
         return color;
     }
 
-    data.forEach((element) => {
-
-        const color = getRandomColor()
-       
-        var handled = false
-
-        while (!handled) {
-            if (!randomColors.includes(color)) {
-                randomColors.push(color)
-                handled = true
-            }
-        }
-
-    })
-
     return (
         <React.Fragment>
-            <ResponsiveContainer width={width} height={height}>
-                <Title>PieChartWithLabel</Title>
-                <PieChart  width={width} height={height}>
+            <ResponsiveContainer height={height}>
+                <Title>{title}</Title>
+                <PieChart>
                     <Pie
-                        data={data}
+                        data={chartData}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
@@ -72,9 +45,13 @@ export default function PieChartWithLabel({ width = "100%", height = 300 }) {
                         dataKey="value"
                         nameKey="name"
                     >
-
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={randomColors[index % randomColors.length]} />
+                        {chartData.map((entry, index) => (
+                            
+                            <Cell 
+                                key={`cell-${index}`} 
+                               // fill={randomColors[index % randomColors.length]} 
+                               fill={entry.color}
+                                />
                         ))}
                     </Pie>
                     <Tooltip/>
@@ -84,11 +61,8 @@ export default function PieChartWithLabel({ width = "100%", height = 300 }) {
                         iconType='circle'
                         iconSize={10}
                     />
-
                 </PieChart>
             </ResponsiveContainer>
-
         </React.Fragment>
-
     )
 }

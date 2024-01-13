@@ -1,5 +1,5 @@
 import React from 'react'
-import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material'
+import {Typography, Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material'
 import { Title } from '../components'
 
 export default function TableView({ title = '', headers = [], data = [] }) {
@@ -13,7 +13,15 @@ export default function TableView({ title = '', headers = [], data = [] }) {
             <TableRow key={Math.random()}>
                 {headers.map(item => (
                     <TableCell key={Math.random()}>
-                        {row[item.fieldname]}
+                        <Typography
+                            component='body'
+                            variant='body'
+                            sx={{
+                                color: item.colorize && (row.color && row.color )
+                            }}
+                        >
+                            {row[item.fieldname]}
+                        </Typography>
                     </TableCell>
                 ))}
             </TableRow>
