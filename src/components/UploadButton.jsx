@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, TextField, IconButton, Avatar, LinearProgress } from '@mui/material'
+import { TextField, IconButton, Avatar, } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 export default function UploadButton({ id = null, handleFileUpload = Function.prototype }) {
@@ -13,7 +13,7 @@ export default function UploadButton({ id = null, handleFileUpload = Function.pr
             <label>
                 <TextField
                     type="file"
-                    accept="/*"
+                    accept="*.json"
                     sx={{ display: 'none' }}
                     onChange={handleOnChange}
                 />

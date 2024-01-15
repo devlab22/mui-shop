@@ -15,6 +15,10 @@ export default function VideoView() {
 
         const file = event.target.files[0];
 
+        if(file.toString().padEnd(4) !== 'json'){
+            return
+        }
+
         const reader = new FileReader();
         console.log(isLoading)
         reader.addEventListener("load", (event) => {
