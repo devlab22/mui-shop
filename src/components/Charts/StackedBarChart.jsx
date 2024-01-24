@@ -53,7 +53,7 @@ export default function StackedBarChart({ width = "100%", height = 300 }) {
     return (
         <React.Fragment>
             <ResponsiveContainer width={width} height={height}>
-                <Title>StackedBarChart</Title>
+            <Title title='Stacked Bar Chart' />
                 <BarChart
                     width={width}
                     height={height}
@@ -62,7 +62,7 @@ export default function StackedBarChart({ width = "100%", height = 300 }) {
                         top: 20,
                         right: 20,
                         left: 20,
-                        bottom: 50,
+                        bottom: 60,
                     }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />

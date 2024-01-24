@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { VideoPlayer, Counter, UploadButton, TextDialog, LoadingCircle } from '../components'
-import { Box, Stack, Container, Paper } from '@mui/material';
+import { Box, Grid, Stack, Container, Paper } from '@mui/material';
 
 
 
@@ -15,7 +15,7 @@ export default function VideoView() {
 
         const file = event.target.files[0];
 
-        if(file.toString().padEnd(4) !== 'json'){
+        if (file.toString().padEnd(4) !== 'json') {
             return
         }
 
@@ -25,7 +25,7 @@ export default function VideoView() {
 
             const value = event.target.result;
 
-             onShowContent(value, file['name'])
+            onShowContent(value, file['name'])
 
         });
 
@@ -35,13 +35,13 @@ export default function VideoView() {
 
     }
 
-    const onShowContent = (value, title=null) => {
+    const onShowContent = (value, title = null) => {
 
         setIsLoading(false)
         setTextDialog(true)
         setValues(value)
         setDialogTitle(title)
-      }
+    }
 
 
 
@@ -49,9 +49,9 @@ export default function VideoView() {
         <Container component='main'>
             <Box>
 
-                {isLoading && <LoadingCircle/>}
+                {isLoading && <LoadingCircle />}
 
-                {textDialog && 
+                {textDialog &&
                     <TextDialog
                         toggle={textDialog}
                         title={dialogTitle}
@@ -59,50 +59,73 @@ export default function VideoView() {
                         onReject={() => setTextDialog(false)}
                     />}
 
-                <Stack
-                    spacing={2}
+                <Grid
+                    container
+                    rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                   // spacing={2}
                 >
 
-                    <UploadButton
-                        handleFileUpload={uploadFile}
-                    />
-                    <Paper>
+                    {/* <Grid item xs={12}>
+                        <UploadButton
+                            handleFileUpload={uploadFile}
+                        />
+                    </Grid> */}
+
+                    <Grid 
+                        item 
+                        component={Paper} 
+                        xs={6}
+                        >
+
                         <VideoPlayer
                             title='Flower'
                             src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
                             type="video/mp4"
-                            width="600"
+                            width="480"
                         />
-                    </Paper>
 
-                    <Paper>
+                    </Grid>
+
+                    <Grid 
+                        item 
+                        component={Paper} 
+                        xs={6}
+                        >
                         <VideoPlayer
                             title='Big Buck Bunny'
                             src="https://www.w3schools.com/html/mov_bbb.mp4"
                             type="video/mp4"
-                            width="600"
+                            width="480"
                         />
-                    </Paper>
+                    </Grid>
 
-                    <Paper>
+                    <Grid 
+                        item 
+                        component={Paper} 
+                        xs={6}
+                        >
                         <Counter
                             title="My Counter"
                             count={10}
                             onPlus={(counter) => console.log("counter 1 plus", counter)}
                             onMinus={(counter) => console.log("counter 1 minus", counter)}
                         />
-                    </Paper>
+                    </Grid>
 
-                    <Paper>
+                    <Grid 
+                        item 
+                        component={Paper} 
+                        xs={6}
+                        >
                         <Counter
                             title="My Counter 2"
                             count={5}
                             onPlus={(counter) => console.log("counter 2 plus", counter)}
                             onMinus={(counter) => console.log("counter 2 minus", counter)}
                         />
-                    </Paper>
+                    </Grid>
 
-                </Stack>
+                </Grid>
             </Box>
         </Container>
     )

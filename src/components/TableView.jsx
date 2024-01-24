@@ -1,5 +1,5 @@
 import React from 'react'
-import {Typography, Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material'
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { Title } from '../components'
 
 export default function TableView({ title = '', headers = [], data = [] }) {
@@ -9,29 +9,33 @@ export default function TableView({ title = '', headers = [], data = [] }) {
 
     const renderRow = (row) => {
 
-        return(
-            <TableRow key={Math.random()}>
+        return (
+            <TableRow 
+                key={Math.random()}
+                
+               // sx={{ '&:last-child td, &:last-child th': { border: 'solid gray 2px' } }}
+                >
                 {headers.map(item => (
-                    <TableCell key={Math.random()}>
-                        <Typography
-                            component='body'
-                            variant='body'
-                            sx={{
-                                color: item.colorize && (row.color && row.color )
-                            }}
+
+                    <TableCell 
+                        key={Math.random()}
+                        sx={{
+                            color: item.colorize && (row.color && row.color)
+                        }}
                         >
                             {row[item.fieldname]}
-                        </Typography>
                     </TableCell>
-                ))}
+                    
+                        ))}
             </TableRow>
+            
         )
     }
 
     return (
         <React.Fragment>
-            <Title>{`${title}`}</Title>
-            <Table size="small">
+            <Title title={title} />
+            <Table>
                 <TableHead>
                     <TableRow>
                         {headers.map(item => (

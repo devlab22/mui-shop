@@ -26,7 +26,7 @@ export default function Chart({width="100%", height=300}) {
     return (
         <React.Fragment >
             <ResponsiveContainer width={width} height={height}>
-                <Title>Chart</Title>
+            <Title title='Chart'/>
                 <LineChart
                     width={width}
                     height={height}
@@ -34,7 +34,7 @@ export default function Chart({width="100%", height=300}) {
                     margin={{
                         top: 10,
                         right: 20,
-                        bottom: 50,
+                        bottom: 60,
                         left: 20,
                     }}
                 >

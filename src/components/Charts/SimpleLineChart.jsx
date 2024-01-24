@@ -55,7 +55,7 @@ export default function SimpleLineChart({width="100%", height=300}) {
     return (
         <React.Fragment>
             <ResponsiveContainer width={width} height={height}>
-                <Title>SimpleLineChart</Title>
+            <Title title='Simple Line Chart' />
                 <LineChart
                     width={width}
                     height={height}
@@ -64,7 +64,7 @@ export default function SimpleLineChart({width="100%", height=300}) {
                         top: 5,
                         right: 20,
                         left: 20,
-                        bottom: 50,
+                        bottom: 60,
                     }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />

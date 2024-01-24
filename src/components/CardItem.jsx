@@ -160,7 +160,7 @@ export default function CardItem({ id, name, flags, capital, region, subregion, 
                     <Card
                         sx={{
                             overflow: 'auto',
-                            maxWidth: 250,
+                            maxWidth: 300,
                             minWidth: 200,
                             borderRadius: '15px',
                             height: '100%',

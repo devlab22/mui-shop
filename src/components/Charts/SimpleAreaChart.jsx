@@ -52,7 +52,7 @@ export default function SimpleAreaChart({ width = "100%", height = 300 }) {
     return (
         <React.Fragment>
             <ResponsiveContainer width={width} height={height}>
-                <Title>SimpleAreaChart</Title>
+            <Title title='Simple Area Chart'/>
                 <AreaChart
                     width={width}
                     height={height}

@@ -26,7 +26,7 @@ export default function CustomTableData() {
             setIsLoading(true);
 
             setColumns([
-                { field: 'id', headerName: 'ID', width: 70, sortable: false },
+              //  { field: 'id', headerName: 'ID', width: 70, sortable: false },
                 { field: 'name', headerName: 'Name', width: 250 },
                 { field: 'capital', headerName: 'Capital', width: 150 },
                 { field: 'region', headerName: 'Region', width: 150 },
@@ -66,7 +66,6 @@ export default function CustomTableData() {
 
                 })
 
-            console.log(tmp)
             setRows(tmp)
 
             //setMaxId(Math.max(...tmp.map(o => o.id)))
@@ -233,7 +232,7 @@ export default function CustomTableData() {
                                 autoPageSize={true}
                                 rows={rows}
                                 columns={columns}
-                                pageSize={12}
+                                pageSize={25}
                                 loading={isLoading}
                                 checkboxSelection={true}
                                 components={{ Toolbar: CustomToolbar }}

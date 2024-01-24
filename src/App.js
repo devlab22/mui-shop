@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, ChartsView, StyledTreeView } from './components';
+import { Shop, SimpleGrid, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, ChartsView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -356,6 +356,7 @@ function App() {
           <Tab label="Video View" icon={<Flag />} value={107} />
           <Tab label="Styled List" icon={<Flag />} value={108} />
           <Tab label="Charts" icon={<BarChartIcon />} value={109} />
+          <Tab label="Simple Grid" icon={<BarChartIcon />} value={110} />
 
           {/*  {alphabet.map((item, index) => (
             <Tab
@@ -447,6 +448,9 @@ function App() {
       </TabPanel>
       <TabPanel value={value} index={103}>
         <AccordionData />
+      </TabPanel>
+      <TabPanel value={value} index={110}>
+        <SimpleGrid />
       </TabPanel>
 
 

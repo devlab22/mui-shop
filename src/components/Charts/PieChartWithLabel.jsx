@@ -3,7 +3,7 @@ import { Title } from '..'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
-export default function PieChartWithLabel({title='', chartData=[], height = 300 }) {
+export default function PieChartWithLabel({ title = '', chartData = [], height = 300 }) {
 
     const RADIAN = Math.PI / 180;
 
@@ -19,19 +19,19 @@ export default function PieChartWithLabel({title='', chartData=[], height = 300 
         );
     };
 
-   /*  const getRandomColor = () => {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    } */
+    /*  const getRandomColor = () => {
+         var letters = '0123456789ABCDEF';
+         var color = '#';
+         for (var i = 0; i < 6; i++) {
+             color += letters[Math.floor(Math.random() * 16)];
+         }
+         return color;
+     } */
 
     return (
         <React.Fragment>
             <ResponsiveContainer height={height}>
-                <Title>{title}</Title>
+                <Title title={title} />
                 <PieChart>
                     <Pie
                         data={chartData}
@@ -46,15 +46,15 @@ export default function PieChartWithLabel({title='', chartData=[], height = 300 
                         nameKey="name"
                     >
                         {chartData.map((entry, index) => (
-                            
-                            <Cell 
-                                key={`cell-${index}`} 
-                               // fill={randomColors[index % randomColors.length]} 
-                               fill={entry.color}
-                                />
+
+                            <Cell
+                                key={`cell-${index}`}
+                                // fill={randomColors[index % randomColors.length]} 
+                                fill={entry.color}
+                            />
                         ))}
                     </Pie>
-                    <Tooltip/>
+                    <Tooltip />
                     <Legend
                         verticalAlign="top"
                         height={5}
