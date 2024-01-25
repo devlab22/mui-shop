@@ -4,18 +4,20 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { DataGrid, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySelector, GridToolbarColumnsButton, GridToolbarFilterButton, bgBG, deDE } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySelector, GridToolbarColumnsButton, GridToolbarFilterButton, ruRU, deDE } from '@mui/x-data-grid';
 import { AlertDialog, MessageDialog, LoadingCircle, StyledSkeleton } from '../components';
 import Dashboard from '../API/apiService';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { deDE as coreDEDE } from '@mui/material/locale';
 
 const theme = createTheme(
-    {
+   /*  {
       palette: {
         primary: { main: '#1976d2' },
       },
-    },
+    }, */
     deDE,
+    coreDEDE,
   );
 
 export default function CustomTableData() {
@@ -28,7 +30,7 @@ export default function CustomTableData() {
     const [modalDialog, setModalDialog] = useState(false);
     const [messageDialog, setMessageDialog] = useState(false);
 
-    console.log(theme)
+    //console.log(theme)
 
     useEffect(() => {
 
