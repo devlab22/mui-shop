@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Typography, Grid, Box, Stack, Divider, Paper } from '@mui/material'
-import { Title, MyRadioGroup } from '../components'
+import { Title, MyRadioGroup, CollapsibleTableView } from '../components'
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -45,7 +45,7 @@ export default function SpacingGridDemo() {
         {/*This container will be aligned in the center */}
         {/* Spacing will vary depending on user choice.*/}
         <Title title="Grid" />
-        <Divider sx={{ m: '10px 0' }}/>
+        <Divider sx={{ m: '10px 0' }} />
         <Grid
           container
           justifyContent={justifyContent}
@@ -67,7 +67,7 @@ export default function SpacingGridDemo() {
             </Grid>
           ))}
         </Grid>
-        <Divider sx={{ m: '10px 0' }}/>
+        <Divider sx={{ m: '10px 0' }} />
       </React.Fragment>
 
       <Stack gap={2} direction='row' alignItems='center' justifyContent='space-between'>
@@ -76,7 +76,7 @@ export default function SpacingGridDemo() {
           title={`Direction = ${direction}`}
           width='300px'
           elevation={3}
-         // row
+          // row
           values={['row', 'row-reverse', 'column', 'column-reverse']}
           value={direction}
           onChange={(e) => setDirection(e.target.value)}
@@ -110,37 +110,43 @@ export default function SpacingGridDemo() {
 
       </Stack>
 
-      <Divider sx={{ m: '10px 0' }}/>
+      <Divider sx={{ m: '10px 0' }} />
 
       <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+      <Title title="Simple Table" />
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Dessert (100g serving)</TableCell>
+              <TableCell align="right">Calories</TableCell>
+              <TableCell align="right">Fat&nbsp;(g)</TableCell>
+              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
+              <TableCell align="right">Protein&nbsp;(g)</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.calories}</TableCell>
+                <TableCell align="right">{row.fat}</TableCell>
+                <TableCell align="right">{row.carbs}</TableCell>
+                <TableCell align="right">{row.protein}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Divider sx={{ m: '10px 0' }} />
+
+      <CollapsibleTableView/>
+
     </Box>
   );
 }

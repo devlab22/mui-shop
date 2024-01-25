@@ -26,7 +26,7 @@ export default function CustomTableData() {
             setIsLoading(true);
 
             setColumns([
-              //  { field: 'id', headerName: 'ID', width: 70, sortable: false },
+                //  { field: 'id', headerName: 'ID', width: 70, sortable: false },
                 { field: 'name', headerName: 'Name', width: 250 },
                 { field: 'capital', headerName: 'Capital', width: 150 },
                 { field: 'region', headerName: 'Region', width: 150 },
@@ -118,9 +118,9 @@ export default function CustomTableData() {
         }))
 
         setProgress(false);
-       /*  setTimeout(() => {
-            setProgress(false)
-        }, 2000) */
+        /*  setTimeout(() => {
+             setProgress(false)
+         }, 2000) */
 
     }
 
@@ -131,7 +131,7 @@ export default function CustomTableData() {
     const createRandomRow = () => {
         var lastId = rows.reduce((prev, current) => {
             return (prev && prev.id > current.id ? prev.id : current.id)
-          })
+        })
         lastId++
         return { id: lastId, name: 'Random', capital: 'random', region: "random", unMember: 'No' }
 
@@ -157,14 +157,20 @@ export default function CustomTableData() {
                     <GridToolbarColumnsButton />
                     <GridToolbarFilterButton />
                     <GridToolbarDensitySelector />
-                    <GridToolbarExport />
+                    <GridToolbarExport
+                        csvOptions={{
+                            fileName: 'customerDataBase',
+                            delimiter: ';',
+                            utf8WithBom: true,
+                        }}
+                    />
                     <Button
                         sx={{ padding: '5px' }}
                         startIcon={<DeleteOutlineOutlinedIcon />}
                         onClick={handleOnDeleteDialog}>
                         delete
                     </Button>
-                     <Button
+                    <Button
                         sx={{ padding: '5px' }}
                         startIcon={<AddBoxOutlinedIcon />}
                         onClick={handleOnAddRow}>
@@ -222,8 +228,8 @@ export default function CustomTableData() {
 
                         {progress ?
 
-                           // <LoadingCircle content='progressbar'/> 
-                            <StyledSkeleton content="grid"/>
+                            // <LoadingCircle content='progressbar'/> 
+                            <StyledSkeleton content="grid" />
                             :
 
                             <DataGrid
@@ -236,7 +242,7 @@ export default function CustomTableData() {
                                 loading={isLoading}
                                 checkboxSelection={true}
                                 components={{ Toolbar: CustomToolbar }}
-                                componentsProps={{
+                               /*  componentsProps={{
                                     toolbar: {
                                         csvOptions: {
                                             fileName: 'customerDataBase',
@@ -244,7 +250,7 @@ export default function CustomTableData() {
                                             utf8WithBom: true,
                                         }
                                     }
-                                }}
+                                }} */
 
                             />
                         }
