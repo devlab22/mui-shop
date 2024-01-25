@@ -4,9 +4,19 @@ import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { DataGrid, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySelector, GridToolbarColumnsButton, GridToolbarFilterButton } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySelector, GridToolbarColumnsButton, GridToolbarFilterButton, bgBG, deDE } from '@mui/x-data-grid';
 import { AlertDialog, MessageDialog, LoadingCircle, StyledSkeleton } from '../components';
 import Dashboard from '../API/apiService';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme(
+    {
+      palette: {
+        primary: { main: '#1976d2' },
+      },
+    },
+    deDE,
+  );
 
 export default function CustomTableData() {
 
@@ -18,7 +28,7 @@ export default function CustomTableData() {
     const [modalDialog, setModalDialog] = useState(false);
     const [messageDialog, setMessageDialog] = useState(false);
 
-
+    console.log(theme)
 
     useEffect(() => {
 
@@ -27,17 +37,17 @@ export default function CustomTableData() {
 
             setColumns([
                 //  { field: 'id', headerName: 'ID', width: 70, sortable: false },
-                { field: 'name', headerName: 'Name', width: 250 },
-                { field: 'capital', headerName: 'Capital', width: 150 },
-                { field: 'region', headerName: 'Region', width: 150 },
-                { field: 'subregion', headerName: 'Subregion', width: 230 },
-                { field: 'continent', headerName: 'Continent', width: 150 },
-                { field: 'area', headerName: 'Area', type: 'number', width: 130 },
+                { field: 'name', headerClassName: 'super-app-theme--header', headerName: 'Name', width: 250, headerAlign: 'left' },
+                { field: 'capital', headerName: 'Capital', width: 150, headerAlign: 'left' },
+                { field: 'region', headerName: 'Region', width: 150, headerAlign: 'left' },
+                { field: 'subregion', headerName: 'Subregion', width: 230, headerAlign: 'left' },
+                { field: 'continent', headerName: 'Continent', width: 150, headerAlign: 'left' },
+                { field: 'area', headerName: 'Area', type: 'number', width: 130, headerAlign: 'left' },
                 // { field: 'areaProzt', headerName: 'Area %', type: 'number', width: 130 },
-                { field: 'population', headerName: 'Population', type: 'number', width: 150 },
+                { field: 'population', headerName: 'Population', type: 'number', width: 150, headerAlign: 'left' },
                 // { field: 'populationProzt', headerName: 'Population %', type: 'number', width: 150 },
-                { field: 'unmember', headerName: 'UN Member', width: 100, renderCell: (params) => renderChipUnMember(params) },
-                { field: 'image', sortable: false, headerName: 'Flag', width: 110, renderCell: (params) => renderFlag(params) },
+                { field: 'unmember', headerName: 'UN Member', width: 100, headerAlign: 'left', renderCell: (params) => renderChipUnMember(params) },
+                { field: 'image', sortable: false, headerName: 'Flag', width: 110, headerAlign: 'left', renderCell: (params) => renderFlag(params) },
 
             ])
 
@@ -184,8 +194,18 @@ export default function CustomTableData() {
 
 
     return (
+
+        <ThemeProvider theme={theme}>
+
+       
         <Box
             width='100%'
+        /* sx={{
+            '& .super-app-theme--header': {
+                backgroundColor: '#212121',
+                color: 'white'
+            }
+        }} */
         >
 
             {isLoading ?
@@ -241,16 +261,19 @@ export default function CustomTableData() {
                                 pageSize={25}
                                 loading={isLoading}
                                 checkboxSelection={true}
-                                components={{ Toolbar: CustomToolbar }}
-                               /*  componentsProps={{
-                                    toolbar: {
-                                        csvOptions: {
-                                            fileName: 'customerDataBase',
-                                            delimiter: ';',
-                                            utf8WithBom: true,
-                                        }
-                                    }
+                                /* localeText={{
+                                    MuiTablePagination: {
+                                        labelDisplayedRows: ({ from, to, count }) =>
+                                            `${from} - ${to} of more than ${count}`,
+                                    },
+                                    toolbarDensity: 'Size',
+                                    toolbarDensityLabel: 'Size',
+                                    toolbarDensityCompact: 'Small',
+                                    toolbarDensityStandard: 'Medium',
+                                    toolbarDensityComfortable: 'Large',
+                                    booleanCellTrueLabel: 'Ja'
                                 }} */
+                                components={{ Toolbar: CustomToolbar }}
 
                             />
                         }
@@ -260,5 +283,6 @@ export default function CustomTableData() {
 
             }
         </Box>
+        </ThemeProvider>
     )
 }
