@@ -1,30 +1,37 @@
 import React from 'react'
 import { Chart, SimpleLineChart, TableView, SimpleAreaChart, SimpleBarChart, StackedBarChart, PieChartWithLabel } from '../components'
-import { Box, Grid, Stack, Container, Paper, Typography } from '@mui/material';
+import { Box, Grid, Stack, Container, Paper, Typography, Chip } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import TagFacesIcon from '@mui/icons-material/TagFaces';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 
 export default function ChartsView() {
 
-    const [ pieElevation, setPieElevation] = React.useState(3)
+    const [pieElevation, setPieElevation] = React.useState(3)
 
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
+    const renderStatus = (params) => {
 
+        return (
+            <Chip
+                label={params.status}
+                color={params.status === 'online' ? 'success' : 'error'}
+                icon={params.status === 'online' ? <TagFacesIcon /> : <SentimentVeryDissatisfiedIcon />}
+            />
+        )
+    }
     const headers = [
         { fieldname: 'name', seqnr: 1, name: 'Name' },
         { fieldname: 'serial', seqnr: 2, name: 'Serial' },
         { fieldname: 'mac', seqnr: 3, name: 'Mac' },
         { fieldname: 'model', seqnr: 4, name: 'Model' },
         { fieldname: 'firmware', seqnr: 5, name: 'Firmware' },
-        { fieldname: 'status', seqnr: 7, name: 'Status', colorize: true },
+        { fieldname: 'status', seqnr: 7, name: 'Status', colorize: false, renderCell: renderStatus },
         { fieldname: 'notes', seqnr: 6, name: 'Notes' },
 
     ]
+
+
 
     const data = [
         {
@@ -36,8 +43,10 @@ export default function ChartsView() {
             "color": '#00e676',
             "notes": "My MR",
             "firmware": "wireless-25-14",
+            "id": Math.random(),
         },
         {
+            "id": Math.random(),
             "name": "My AP 2",
             "serial": "Q234-ABCD-1234",
             "mac": "00:33:22:33:44:55",
@@ -48,6 +57,7 @@ export default function ChartsView() {
             "color": '#00e676'
         },
         {
+            "id": Math.random(),
             "name": "My AP 2",
             "serial": "Q234-ABCD-1234",
             "mac": "00:33:22:33:44:55",
@@ -58,6 +68,7 @@ export default function ChartsView() {
             "color": '#f50057'
         },
         {
+            "id": Math.random(),
             "name": "My AP 2",
             "serial": "Q234-ABCD-1234",
             "mac": "00:33:22:33:44:55",
@@ -68,6 +79,7 @@ export default function ChartsView() {
             "color": '#ffc400'
         },
         {
+            "id": Math.random(),
             "name": "My AP 2",
             "serial": "Q234-ABCD-1234",
             "mac": "00:33:22:33:44:55",
@@ -78,6 +90,7 @@ export default function ChartsView() {
             "color": '#e65100'
         },
         {
+            "id": Math.random(),
             "name": "My AP 2",
             "serial": "Q234-ABCD-1234",
             "mac": "00:33:22:33:44:55",
@@ -134,11 +147,11 @@ export default function ChartsView() {
                     <Grid
                         item
                         xs={12}>
-                        <Paper 
+                        <Paper
                             elevation={pieElevation}
                             onMouseOver={() => setPieElevation(10)}
                             onMouseLeave={() => setPieElevation(3)}
-                            >
+                        >
                             <PieChartWithLabel
                                 title='Status'
                                 chartData={chartData}
@@ -150,13 +163,14 @@ export default function ChartsView() {
                     <Grid
                         item
                         xs={12}>
-                        <Paper elevation={3}>
-                            <TableView
-                                title='Devices'
-                                headers={headers}
-                                data={data}
-                            />
-                        </Paper>
+
+                        <TableView
+                            title='Devices'
+                            headers={headers}
+                            data={data}
+                            useElevation={10}
+                        />
+
 
                     </Grid>
 
@@ -165,7 +179,7 @@ export default function ChartsView() {
                         md={6}
                         sm={12}
                         xs={12}
-                        >
+                    >
                         <Paper elevation={3}>
                             <Chart />
                         </Paper>
@@ -202,6 +216,44 @@ export default function ChartsView() {
                         <Paper elevation={3}>
                             <StackedBarChart />
                         </Paper>
+
+                    </Grid>
+
+                    <Grid item>
+                        <Paper elevation={3}>
+                            <PieChart
+                            title='Pie Chart MUI X'
+                            tooltip={{ trigger: 'item' }}
+                            colors={['red', 'blue', 'green']}
+                            series={[
+                                {
+                                    arcLabel: (item) => `${item.short} (${item.value})`,
+                                    arcLabelMinAngle: 45,
+                                    data: [
+                                        { id: 0, value: 10, label: 'series A', short: 'A' },
+                                        { id: 1, value: 15, label: 'series B', short: 'B' },
+                                        { id: 2, value: 20, label: 'series C', short: 'C' },
+                                    ]
+                                },
+                            ]}
+                            sx={{
+                                [`& .${pieArcLabelClasses.root}`]: {
+                                  fill: 'white',
+                                  fontWeight: 'bold',
+                                },
+                              }}
+                            width={400}
+                            height={200}
+                            /* slotProps={{
+                                legend: {
+                                  direction: 'row',
+                                  position: { vertical: 'top', horizontal: 'middle' },
+                                  padding: 0,
+                                },
+                              }} */
+                        />
+                        </Paper>
+                        
 
                     </Grid>
 
@@ -248,7 +300,7 @@ export default function ChartsView() {
 
                     <Stack gap={2}  >
                         <Paper >
-                            <SimpleBarChart/>
+                            <SimpleBarChart />
                         </Paper>
 
                         <Paper>
