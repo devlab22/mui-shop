@@ -30,7 +30,7 @@ const styles = {
 
 const headers = [
   { fieldname: 'name', seqnr: 1, name: 'Dessert (100g serving)' },
-  { fieldname: 'calories', seqnr: 2, name: 'Calories' },
+  { fieldname: 'calories', seqnr: 2, name: 'Calories', hidden: false },
   { fieldname: 'fat', seqnr: 3, name: 'Fat (g)' },
   { fieldname: 'carbs', seqnr: 4, name: 'Carbs (g)' },
   { fieldname: 'protein', seqnr: 5, name: 'Protein (g)' }

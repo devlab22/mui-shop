@@ -34,15 +34,15 @@ export default function TableView({ title = '', headers = [], data = [], useElev
         return (
             <StyledTableRow
                 key={Math.random()}
-
-             sx={ sum && { '&:last-child td, &:last-child th': { border: 'solid gray 2px' } }}
+                sx={ sum && { '&:last-child td, &:last-child th': { border: 'solid gray 2px' } }}
             >
                 {headers.map(header => (
 
                     <StyledTableCell
                         key={Math.random()}
                         sx={{
-                            color: header.colorize && (row.color && row.color)
+                            color: header.colorize && (row.color && row.color),
+                            display: header.hidden ? 'none' : ''
                         }}
                     >
                         {header.renderCell ?
@@ -71,7 +71,12 @@ export default function TableView({ title = '', headers = [], data = [], useElev
                     <TableHead>
                         <StyledTableRow>
                             {headers.map(item => (
-                                <StyledTableCell key={Math.random()}>{item.name}</StyledTableCell>
+                                <StyledTableCell 
+                                    key={Math.random()}
+                                    sx={{
+                                        display: item.hidden ? 'none' : '' 
+                                    }}
+                                    >{item.name}</StyledTableCell>
                             ))}
                         </StyledTableRow>
                     </TableHead>
