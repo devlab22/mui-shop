@@ -23,7 +23,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export default function TableView({ title = '', headers = [], data = [], useElevation = 3 }) {
+export default function TableView({ title = '', headers = [], data = [], useElevation = 3, sum=false }) {
 
     headers.sort((a, b) => a.seqnr - b.seqnr)
     data.sort((a, b) => a.seqnr - b.seqnr)
@@ -35,7 +35,7 @@ export default function TableView({ title = '', headers = [], data = [], useElev
             <StyledTableRow
                 key={Math.random()}
 
-            // sx={{ '&:last-child td, &:last-child th': { border: 'solid gray 2px' } }}
+             sx={ sum && { '&:last-child td, &:last-child th': { border: 'solid gray 2px' } }}
             >
                 {headers.map(header => (
 
@@ -77,7 +77,7 @@ export default function TableView({ title = '', headers = [], data = [], useElev
                     </TableHead>
                     <TableBody>
                         {data.map(row => (
-                            <Row key={row.id} row={row}/>
+                            <Row key={Math.random()} row={row}/>
                         ))}
                     </TableBody>
                 </Table>

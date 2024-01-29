@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, tableCellClasses } from '@mui/material' 
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, tableCellClasses } from '@mui/material' 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Title } from '../components'
@@ -46,6 +46,16 @@ function createData(name, calories, fat, carbs, protein, price) {
                 customerId: 'Anonymous',
                 amount: 1,
             },
+            {
+                date: '2020-03-02',
+                customerId: 'Anonymous',
+                amount: 1,
+            },
+            {
+                date: '2020-04-02',
+                customerId: 'Anonymous',
+                amount: 1,
+            },
         ],
     };
 }
@@ -78,21 +88,22 @@ function Row(props) {
                 <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
+                           {/*  <Typography variant="h6" gutterBottom component="div">
                                 History
-                            </Typography>
+                            </Typography> */}
+                            <Title title="History" />
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>Customer</TableCell>
-                                        <TableCell align="right">Amount</TableCell>
-                                        <TableCell align="right">Total price ($)</TableCell>
+                                        <StyledTableCell>Date</StyledTableCell>
+                                        <StyledTableCell>Customer</StyledTableCell>
+                                        <StyledTableCell align="right">Amount</StyledTableCell>
+                                        <StyledTableCell align="right">Total price ($)</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.history.map((historyRow) => (
-                                        <TableRow key={historyRow.date}>
+                                        <StyledTableRow key={historyRow.date}>
                                             <TableCell component="th" scope="row">
                                                 {historyRow.date}
                                             </TableCell>
@@ -101,7 +112,7 @@ function Row(props) {
                                             <TableCell align="right">
                                                 {Math.round(historyRow.amount * row.price * 100) / 100}
                                             </TableCell>
-                                        </TableRow>
+                                        </StyledTableRow>
                                     ))}
                                 </TableBody>
                             </Table>

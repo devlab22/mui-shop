@@ -1,14 +1,11 @@
 import React from 'react'
 import { Chart, SimpleLineChart, TableView, SimpleAreaChart, SimpleBarChart, StackedBarChart, PieChartWithLabel, Title } from '../components'
-import { Box, Grid, Stack, Container, Paper, Typography, Chip } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Grid, Stack, Container, Paper, Chip } from '@mui/material';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 
 export default function ChartsView() {
-
-    const [pieElevation, setPieElevation] = React.useState(3)
 
     const renderStatus = (params) => {
 
@@ -28,10 +25,7 @@ export default function ChartsView() {
         { fieldname: 'firmware', seqnr: 5, name: 'Firmware' },
         { fieldname: 'status', seqnr: 7, name: 'Status', colorize: false, renderCell: renderStatus },
         { fieldname: 'notes', seqnr: 6, name: 'Notes' },
-
     ]
-
-
 
     const data = [
         {
@@ -109,36 +103,11 @@ export default function ChartsView() {
         { name: 'Dormant', value: 2, color: '#e65100' },
     ];
 
-    const renderSimpleGrid = () => {
-
-        return (
-            <Container component='main'>
-                <Grid container spacing={1}>
-
-                    <Grid item xs={6}>
-                        <Paper
-                            sx={{ alignItems: 'center' }}
-                        >
-                            <Typography>
-                                xs=6
-                            </Typography>
-                        </Paper>
-
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Paper>
-                            xs=6
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Container>
-        )
-    }
-
     const renderGrid = () => {
 
         return (
             <Container component='main' width='100vw'>
+                <Box>
                 <Grid
                     container
                     spacing={2}
@@ -260,59 +229,67 @@ export default function ChartsView() {
                     </Grid>
 
                 </Grid>
+                </Box>
             </Container>
         )
     }
 
-    return (
-        renderGrid()
-    )
+    const renderMain = () => {
 
-    return (
-        <Container component='main'>
-            <Box>
-                <Stack gap={2}>
-                    <Paper>
-                        <TableView
-                            title='Devices'
-                            headers={headers}
-                            data={data}
-                        />
-                    </Paper>
-
-                    <Paper>
-                        <PieChartWithLabel
-                            title='Status'
-                            chartData={chartData}
-                        />
-                    </Paper>
-
-                    <Paper
-                    >
-                        <Chart />
-                    </Paper>
-
-                    <Paper>
-                        <SimpleLineChart />
-                    </Paper>
-
-                    <Paper>
-                        <SimpleAreaChart />
-                    </Paper>
-
-                    <Stack gap={2}  >
-                        <Paper >
-                            <SimpleBarChart />
-                        </Paper>
-
+        return (
+            <Container component='main' width='100vw'>
+    
+                {/* <Box> */}
+                    <Stack gap={2}>
                         <Paper>
-                            <StackedBarChart />
+                            <TableView
+                                title='Devices'
+                                headers={headers}
+                                data={data}
+                            />
                         </Paper>
+    
+                        <Paper>
+                            <PieChartWithLabel
+                                title='Status'
+                                chartData={chartData}
+                            />
+                        </Paper>
+    
+                        <Paper
+                        >
+                            <Chart />
+                        </Paper>
+    
+                        <Paper>
+                            <SimpleLineChart />
+                        </Paper>
+    
+                        <Paper>
+                            <SimpleAreaChart />
+                        </Paper>
+    
+                        <Stack gap={2}  >
+                            <Paper >
+                                <SimpleBarChart />
+                            </Paper>
+    
+                            <Paper>
+                                <StackedBarChart />
+                            </Paper>
+                        </Stack>
+    
+    
                     </Stack>
+                {/* </Box> */}
+            </Container>
+        )
+    }
 
-
-                </Stack>
-            </Box>
-        </Container>
+    return(
+        <React.Fragment>
+            {renderMain()}
+            {renderGrid()}
+        </React.Fragment>
     )
 }
