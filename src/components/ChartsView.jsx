@@ -1,5 +1,5 @@
 import React from 'react'
-import { Chart, SimpleLineChart, TableView, SimpleAreaChart, SimpleBarChart, StackedBarChart, PieChartWithLabel } from '../components'
+import { Chart, SimpleLineChart, TableView, SimpleAreaChart, SimpleBarChart, StackedBarChart, PieChartWithLabel, Title } from '../components'
 import { Box, Grid, Stack, Container, Paper, Typography, Chip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
@@ -147,17 +147,10 @@ export default function ChartsView() {
                     <Grid
                         item
                         xs={12}>
-                        <Paper
-                            elevation={pieElevation}
-                            onMouseOver={() => setPieElevation(10)}
-                            onMouseLeave={() => setPieElevation(3)}
-                        >
-                            <PieChartWithLabel
-                                title='Status'
-                                chartData={chartData}
-                            />
-                        </Paper>
-
+                        <PieChartWithLabel
+                            title='Status'
+                            chartData={chartData}
+                        />
                     </Grid>
 
                     <Grid
@@ -219,41 +212,50 @@ export default function ChartsView() {
 
                     </Grid>
 
-                    <Grid item>
-                        <Paper elevation={3}>
-                            <PieChart
-                            title='Pie Chart MUI X'
-                            tooltip={{ trigger: 'item' }}
-                            colors={['red', 'blue', 'green']}
-                            series={[
-                                {
-                                    arcLabel: (item) => `${item.short} (${item.value})`,
-                                    arcLabelMinAngle: 45,
-                                    data: [
-                                        { id: 0, value: 10, label: 'series A', short: 'A' },
-                                        { id: 1, value: 15, label: 'series B', short: 'B' },
-                                        { id: 2, value: 20, label: 'series C', short: 'C' },
-                                    ]
-                                },
-                            ]}
-                            sx={{
-                                [`& .${pieArcLabelClasses.root}`]: {
-                                  fill: 'white',
-                                  fontWeight: 'bold',
-                                },
-                              }}
-                            width={400}
-                            height={200}
-                            /* slotProps={{
-                                legend: {
-                                  direction: 'row',
-                                  position: { vertical: 'top', horizontal: 'middle' },
-                                  padding: 0,
-                                },
-                              }} */
-                        />
+                    <Grid item xs={12}>
+                        <Paper elevation={3} sx={{pb: '5px'}}>
+                            <Title title='Pie Chart' />
+                            <Stack
+                                alignItems='center'
+                            >
+                                <PieChart
+                                    tooltip={{}}
+                                    colors={['red', 'blue', 'green', 'orange']}
+                                    series={[
+                                        {
+                                            arcLabel: (item) => `${item.short} (${item.value})`,
+                                            arcLabelMinAngle: 45,
+                                            data: [
+                                                { id: 0, value: 10, label: 'series A', short: 'A' },
+                                                { id: 1, value: 15, label: 'series B', short: 'B' },
+                                                { id: 2, value: 20, label: 'series C', short: 'C' },
+                                                { id: 3, value: 10, label: 'series D', short: 'D' },
+                                            ],
+                                            innerRadius: 20,
+                                            cornerRadius: 5,
+                                            paddingAngle: 5,
+
+                                        },
+                                    ]}
+                                    sx={{
+                                        [`& .${pieArcLabelClasses.root}`]: {
+                                            fill: 'white',
+                                            fontWeight: 'bold',
+                                        },
+                                    }}
+                                    width={400}
+                                    height={200}
+                                /* slotProps={{
+                                    legend: {
+                                      direction: 'row',
+                                      position: { vertical: 'top', horizontal: 'middle' },
+                                      padding: 0,
+                                    },
+                                  }} */
+                                />
+                            </Stack>
                         </Paper>
-                        
+
 
                     </Grid>
 

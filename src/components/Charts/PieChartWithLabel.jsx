@@ -1,13 +1,17 @@
 import React from 'react'
 import { Title } from '..'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Paper } from '@mui/material'
 
 
 export default function PieChartWithLabel({ title = '', chartData = [], height = 300 }) {
 
+    const [elevation, setElevation] = React.useState(3)
     const RADIAN = Math.PI / 180;
 
-    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, startAngle, endAngle, outerRadius, fill, percent, index }) => {
+    const renderCustomizedLabel = (props) => {
+
+        const { cx, cy, midAngle, innerRadius, startAngle, endAngle, outerRadius, fill, percent, index } = props;
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
         const x = cx + radius * Math.cos(-midAngle * RADIAN);
         const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -29,18 +33,25 @@ export default function PieChartWithLabel({ title = '', chartData = [], height =
      } */
 
     return (
-        <React.Fragment>
+        <Paper
+            elevation={elevation}
+            onMouseOver={() => setElevation(10)}
+            onMouseLeave={() => setElevation(3)}
+        >
             <ResponsiveContainer height={height}>
                 <Title title={title} />
-                <PieChart>
+                <PieChart >
                     <Pie
                         data={chartData}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
                         label={renderCustomizedLabel}
-                        // label
+                       //  label
                         outerRadius={80}
+                        innerRadius={20}
+                        paddingAngle={5}
+                        cornerRadius={5}
                         fill="#8884d8"
                         dataKey="value"
                         nameKey="name"
@@ -63,6 +74,6 @@ export default function PieChartWithLabel({ title = '', chartData = [], height =
                     />
                 </PieChart>
             </ResponsiveContainer>
-        </React.Fragment>
+        </Paper>
     )
 }
