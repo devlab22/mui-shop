@@ -48,4 +48,5 @@ export default class Dashboard {
 
         return { regionItems, subregionItems, continentItems }
     }
+
 }

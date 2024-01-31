@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, tableCellClasses } from '@mui/material' 
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, tableCellClasses } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Title } from '../components'
@@ -9,23 +9,23 @@ import { Title } from '../components'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
+        fontSize: 14,
     },
-  }));
-  
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+        backgroundColor: theme.palette.action.hover,
     },
     // hide last border
     '&:last-child td, &:last-child th': {
-      border: 0,
+        border: 0,
     },
-  }));
+}));
 
 function createData(name, calories, fat, carbs, protein, price) {
     return {
@@ -88,7 +88,7 @@ function Row(props) {
                 <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                           {/*  <Typography variant="h6" gutterBottom component="div">
+                            {/*  <Typography variant="h6" gutterBottom component="div">
                                 History
                             </Typography> */}
                             <Title title="History" />
@@ -150,27 +150,36 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
 ];
 
-export default function CollapsibleTableView() {
+export default function CollapsibleTableView({useElevation=3}) {
+
+    const [elevation, setElevation] = React.useState(3)
+    
     return (
-        <TableContainer component={Paper}>
-            <Title title="Collapsible Table" />
-            <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell />
-                        <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                        <StyledTableCell align="right">Calories</StyledTableCell>
-                        <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <Row key={row.name} row={row} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Paper
+            elevation={elevation}
+            onMouseOver={() => setElevation(useElevation)}
+            onMouseLeave={() => setElevation(3)}
+        >
+            <TableContainer>
+                <Title title="Collapsible Table" />
+                <Table aria-label="collapsible table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell />
+                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                            <StyledTableCell align="right">Calories</StyledTableCell>
+                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <Row key={row.name} row={row} />
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
     );
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Paper, tableCellClasses } from '@mui/material'
+import { Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Paper, tableCellClasses, TablePagination } from '@mui/material'
 import { Title } from '../components'
 import { styled } from '@mui/material/styles';
 
@@ -27,7 +27,23 @@ export default function TableView({ title = '', headers = [], data = [], useElev
 
     headers.sort((a, b) => a.seqnr - b.seqnr)
     data.sort((a, b) => a.seqnr - b.seqnr)
+
     const [elevation, setElevation] = React.useState(3)
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    var count = sum ? data.length - 1 : data.length
+    if(count < 0){
+        count = 0
+    }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+      };
+    
+      const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+      };
 
     const Row = ({row={}}) => {
 
@@ -67,7 +83,7 @@ export default function TableView({ title = '', headers = [], data = [], useElev
         >
             <TableContainer>
                 <Title title={title} />
-                <Table>
+                <Table stickyHeader>
                     <TableHead>
                         <StyledTableRow>
                             {headers.map(item => (
@@ -81,12 +97,24 @@ export default function TableView({ title = '', headers = [], data = [], useElev
                         </StyledTableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map(row => (
+                        {data
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map(row => (
                             <Row key={Math.random()} row={row}/>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={count}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
         </Paper>
     )
 }
