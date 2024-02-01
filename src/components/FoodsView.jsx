@@ -1,7 +1,7 @@
 import React from 'react'
 import { default as Food } from '../API/apiFoods'
 import { Paper, TextField, Box, Button, Grid, Stack, List, ListItemButton, ListItemText, ListSubheader, Checkbox, FormGroup, FormLabel, FormControlLabel } from '@mui/material'
-import { LoadingCircle } from '../components'
+import { LoadingCircle, MessageDialog } from '../components'
 
 export default function FoodsView() {
 
@@ -11,6 +11,8 @@ export default function FoodsView() {
     const [nutrients, setNutrients] = React.useState([])
     const [detailsTitle, setDetailsTitle] = React.useState('')
     const [filter, setFilter] = React.useState([])
+    const [message, setMessage] = React.useState('')
+    const [error, setError] = React.useState(false)
 
 
     async function searchFood(value) {
@@ -24,7 +26,28 @@ export default function FoodsView() {
             setFoods(data.foods)
         }
         catch (err) {
-            console.log(err)
+            setError(true)
+            setMessage(err.message)
+        }
+        finally {
+            setIsLoading(false)
+        }
+
+    }
+
+    async function getFoodList() {
+
+        setIsLoading(true)
+
+        const dataType = filter.toString()
+
+        try {
+            const data = await Food.getFoodsList(dataType)
+            setFoods(data)
+        }
+        catch (err) {
+            setError(true)
+            setMessage(err.message)
         }
         finally {
             setIsLoading(false)
@@ -34,14 +57,16 @@ export default function FoodsView() {
 
     async function onSearch() {
 
+        clear()
+
         if (search === '') {
+            getFoodList()
             return
         }
 
-        clear()
-
         if (isNumeric(search)) {
-            searchFoodById(search)
+            const data = await searchFoodById(search)
+            setFoods([data])
         }
         else {
             searchFood(search)
@@ -59,10 +84,12 @@ export default function FoodsView() {
         try {
 
             const data = await Food.getFoodById(fdcId)
-            setFoods([data])
+            return data
         }
         catch (err) {
-            console.log(err)
+            setMessage(err.message)
+            setError(true)
+            return null
         }
         finally {
             setIsLoading(false)
@@ -87,10 +114,15 @@ export default function FoodsView() {
 
     }
 
-    const handleOnClickFood = (food) => {
+    const handleOnClickFood = async (fdcId) => {
 
-        setDetailsTitle(`${food['description']} (${food['fdcId']}) Portion: 100g`)
-        setNutrients(food['foodNutrients'])
+        const food = await searchFoodById(fdcId)
+        //console.log(food)
+        if (food) {
+            setDetailsTitle(`${food['description']} (${food['fdcId']}) Portion: 100g`)
+            setNutrients(food['foodNutrients'])
+        }
+
     }
 
     const Search = () => {
@@ -188,7 +220,7 @@ export default function FoodsView() {
                             sx={{
                                 position: 'relative',
                                 overflow: 'auto',
-                                maxHeight: '70vh',
+                                maxHeight: '50vh',
                             }}
                         >
 
@@ -196,9 +228,12 @@ export default function FoodsView() {
 
                                 <ListItemButton
                                     key={food['fdcId']}
-                                    onClick={() => handleOnClickFood(food)}
+                                    onClick={() => handleOnClickFood(food['fdcId'])}
                                 >
-                                    <ListItemText primary={`${index + 1}. ${food['description']}`} secondary={food['fdcId']} />
+                                    <ListItemText
+                                        primary={`${index + 1}. ${food['description']} (${food['dataType']})`}
+                                        secondary={`fdcId: ${food['fdcId']}`}
+                                    />
                                 </ListItemButton>
                             ))}
                         </List>
@@ -232,17 +267,25 @@ export default function FoodsView() {
                         sx={{
                             position: 'relative',
                             overflow: 'auto',
-                            maxHeight: '82.4vh',
+                            maxHeight: '85.2vh',
                         }}
                     >
 
-                        {nutrients.map((item, index) => (
+                        {nutrients
+                            .filter(item =>
 
-                            <ListItemButton key={Math.random()}>
-                                <ListItemText primary={`${index + 1}. ${item['nutrientName']} ${item['value']} ${item['unitName']}`} secondary={item['nutrientId']} />
-                            </ListItemButton>
+                                item['amount'] ? item : null
+                            )
+                            .map((item, index) => (
 
-                        ))}
+                                <ListItemButton key={Math.random()}>
+                                    <ListItemText
+                                        primary={`${index + 1}. ${item['nutrient']['name']} ${item['amount'] || 0} ${item['nutrient']['unitName']}`}
+                                        secondary={`ID: ${item['nutrient']['id']}`}
+                                    />
+                                </ListItemButton>
+
+                            ))}
 
                     </List>
 
@@ -261,6 +304,17 @@ export default function FoodsView() {
                 }}
             >
 
+                {error &&
+                    <MessageDialog
+                        title='Error'
+                        toggle={true}
+                        message={message}
+                        severity='error'
+                        width='400px'
+                        onReject={() => setError(false)}
+                    />
+                }
+
                 {isLoading ?
                     <LoadingCircle />
                     :
@@ -273,7 +327,7 @@ export default function FoodsView() {
 
                         <Grid item xs={6}>
 
-                            {nutrients.length > 0 && <Details />}
+                           {nutrients.length > 0 && <Details />} 
 
                         </Grid>
 
