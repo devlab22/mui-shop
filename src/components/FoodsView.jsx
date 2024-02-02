@@ -13,6 +13,7 @@ export default function FoodsView() {
     const [filter, setFilter] = React.useState([])
     const [message, setMessage] = React.useState('')
     const [error, setError] = React.useState(false)
+    const [fdcId, setFdcId] = React.useState('')
 
 
     async function searchFood(value) {
@@ -22,7 +23,7 @@ export default function FoodsView() {
         const dataType = filter.toString()
 
         try {
-            const data = await Food.getFoodSearch(value, dataType)
+            const data = await Food.getFoodSearch(value, dataType, 'dataType.keyword')
             setFoods(data.foods)
         }
         catch (err) {
@@ -98,6 +99,7 @@ export default function FoodsView() {
 
     const clear = () => {
 
+        setFdcId('')
         setFoods([])
         setNutrients([])
         setDetailsTitle('')
@@ -119,6 +121,7 @@ export default function FoodsView() {
         const food = await searchFoodById(fdcId)
         //console.log(food)
         if (food) {
+            setFdcId(fdcId)
             setDetailsTitle(`${food['description']} (${food['fdcId']}) Portion: 100g`)
             setNutrients(food['foodNutrients'])
         }
@@ -133,7 +136,9 @@ export default function FoodsView() {
                     variant='outlined'
                     component='div'
                     sx={{
-                        width: '80%'
+                        width: '100%',
+                      //  maxWidth: '600px'
+                       
                     }}
                 >
                     <Stack
@@ -197,17 +202,21 @@ export default function FoodsView() {
                         <Stack
                             gap={1}
                             direction='row'
+                            justifyContent='flex-end'
+                            sx={{
+                                pr: '5px'
+                            }}
                         >
                             <Button
                                 variant="contained"
-                                fullWidth
+                               // fullWidth
                                 onClick={onSearch}
                             >Search</Button>
 
                             <Button
                                 variant="contained"
-                                fullWidth
-                                onClick={() => clear()}
+                               // fullWidth
+                                onClick={clear}
                             >Clear</Button>
                         </Stack>
 
@@ -220,7 +229,7 @@ export default function FoodsView() {
                             sx={{
                                 position: 'relative',
                                 overflow: 'auto',
-                                maxHeight: '50vh',
+                               // maxHeight: '50vh',
                             }}
                         >
 
@@ -228,6 +237,7 @@ export default function FoodsView() {
 
                                 <ListItemButton
                                     key={food['fdcId']}
+                                    selected={fdcId === food['fdcId']}
                                     onClick={() => handleOnClickFood(food['fdcId'])}
                                 >
                                     <ListItemText
@@ -254,7 +264,8 @@ export default function FoodsView() {
                     variant='outlined'
                     component='div'
                     sx={{
-                        width: '100%'
+                        width: '100%',
+                      //  maxWidth: '600px'
                     }}
                 >
 
@@ -267,7 +278,7 @@ export default function FoodsView() {
                         sx={{
                             position: 'relative',
                             overflow: 'auto',
-                            maxHeight: '85.2vh',
+                           // maxHeight: '85.2vh',
                         }}
                     >
 
@@ -298,9 +309,9 @@ export default function FoodsView() {
     return (
         <React.Fragment>
             <Box
-                component={Paper}
+               // component={Paper}
                 sx={{
-                    width: '100%'
+                    width: '100%',
                 }}
             >
 
@@ -319,7 +330,11 @@ export default function FoodsView() {
                     <LoadingCircle />
                     :
 
-                    <Grid container>
+                    <Grid 
+                        container
+                        justifyContent='space-between'
+                        spacing={4}
+                        >
 
                         <Grid item xs={6}>
                             <Search />

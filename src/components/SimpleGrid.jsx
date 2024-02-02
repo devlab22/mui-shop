@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Typography, Grid, Box, Stack, Divider, Paper } from '@mui/material'
-import { Title, MyRadioGroup, CollapsibleTableView, TableView, LoadingCircle } from '../components'
+import { Title, MyRadioGroup, CollapsibleTableView, TableView } from '../components'
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -61,9 +61,8 @@ export default function SpacingGridDemo() {
   const [direction, setDirection] = React.useState('row')
   const [justifyContent, setJustifyContent] = React.useState('center')
   const [alignItems, setAlignItems] = React.useState('center')
-  const [isLoading, setIsLoading] = React.useState(false)
 
-  const Item = ({value=0}) => {
+  const Item = ({ value = 0 }) => {
 
     const [elevation, setElevation] = React.useState(3)
 
@@ -82,104 +81,97 @@ export default function SpacingGridDemo() {
     )
   }
 
-
   return (
     <React.Fragment>
+      <Box>
+        <React.Fragment>
+          {/*This container will be aligned in the center */}
+          {/* Spacing will vary depending on user choice.*/}
+          <Title title="Grid" />
+          <Divider sx={{ m: '10px 0' }} />
+          <Grid
+            container
+            justifyContent={justifyContent}
+            direction={direction}
+            alignItems={alignItems}
+            spacing={spacing}
+          >
+            {/*Render 3 empty black boxes as items of this container*/}
+            {[0, 1, 2, 3, 4].map((value) => (
+              <Grid key={value} item>
+                <Item value={value} />
+              </Grid>
+            ))}
+          </Grid>
+          <Divider sx={{ m: '10px 0' }} />
+        </React.Fragment>
 
-    {isLoading ? 
-      <LoadingCircle/>
-      :
-
-    
-    <Box>
-      <React.Fragment>
-        {/*This container will be aligned in the center */}
-        {/* Spacing will vary depending on user choice.*/}
-        <Title title="Grid" />
-        <Divider sx={{ m: '10px 0' }} />
-        <Grid
-          container
-          justifyContent={justifyContent}
-          direction={direction}
-          alignItems={alignItems}
-          spacing={spacing}
+        <Stack
+          gap={2}
+          direction='row'
+          alignItems='center'
+          justifyContent='space-between'
+          sx={{ pb: '10px' }}
         >
-          {/*Render 3 empty black boxes as items of this container*/}
-          {[0, 1, 2, 3, 4].map((value) => (
-            <Grid key={value} item>
-              <Item value={value}/>
-            </Grid>
-          ))}
-        </Grid>
-        <Divider sx={{ m: '10px 0' }} />
-      </React.Fragment>
 
-      <Stack
-        gap={2}
-        direction='row'
-        alignItems='center'
-        justifyContent='space-between'
-        sx={{ pb: '10px' }}
-      >
+          <MyRadioGroup
+            title={`Direction = ${direction}`}
+            width='300px'
+            elevation={3}
+            // row
+            values={['row', 'row-reverse', 'column', 'column-reverse']}
+            value={direction}
+            onChange={(e) => setDirection(e.target.value)}
+            useElevation={10}
+          />
 
-        <MyRadioGroup
-          title={`Direction = ${direction}`}
-          width='300px'
-          elevation={3}
-          // row
-          values={['row', 'row-reverse', 'column', 'column-reverse']}
-          value={direction}
-          onChange={(e) => setDirection(e.target.value)}
-          useElevation={10}
-        />
+          <MyRadioGroup
+            title={`Spacing = ${spacing}`}
+            //row
+            values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+            value={spacing.toString()}
+            onChange={(e) => setSpacing(Number(e.target.value))}
+            useElevation={10}
+          />
 
-        <MyRadioGroup
-          title={`Spacing = ${spacing}`}
-          //row
-          values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-          value={spacing.toString()}
-          onChange={(e) => setSpacing(Number(e.target.value))}
-          useElevation={10}
-        />
+          <MyRadioGroup
+            title={`justifyContent = ${justifyContent}`}
+            width='350px'
+            // row
+            values={['flex-start', 'center', 'flex-end', 'space-between', 'space-around']}
+            value={justifyContent}
+            onChange={(e) => setJustifyContent(e.target.value)}
+            useElevation={10}
+          />
 
-        <MyRadioGroup
-          title={`justifyContent = ${justifyContent}`}
-          width='350px'
-          // row
-          values={['flex-start', 'center', 'flex-end', 'space-between', 'space-around']}
-          value={justifyContent}
-          onChange={(e) => setJustifyContent(e.target.value)}
-          useElevation={10}
-        />
+          <MyRadioGroup
+            title={`alignItems = ${alignItems}`}
+            width='250px'
+            // row
+            values={['flex-start', 'center', 'flex-end', 'stretch', 'baseline']}
+            value={alignItems}
+            onChange={(e) => setAlignItems(e.target.value)}
+            useElevation={10}
+          />
 
-        <MyRadioGroup
-          title={`alignItems = ${alignItems}`}
-          width='250px'
-          // row
-          values={['flex-start', 'center', 'flex-end', 'stretch', 'baseline']}
-          value={alignItems}
-          onChange={(e) => setAlignItems(e.target.value)}
-          useElevation={10}
-        />
+        </Stack>
 
-      </Stack>
+        <Stack gap={5}>
 
-      <Stack gap={5}>
+          <TableView
+            headers={headers}
+            data={rows}
+            title="Simple Table"
+            //sum
+            useElevation={10}
+          />
 
-        <TableView
-          headers={headers}
-          data={rows}
-          title="Simple Table"
-          //sum
-          useElevation={10}
-        />
+          <CollapsibleTableView useElevation={10} />
 
-        <CollapsibleTableView useElevation={10} />
+        </Stack>
 
-      </Stack>
+      </Box>
 
-    </Box>
-    }
     </React.Fragment>
   );
 }

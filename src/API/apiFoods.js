@@ -6,33 +6,37 @@ const API_KEY_FOOD = "8DK4mTPzPLcVk7Cg7qq3nxqa4ux3nPWmO4qDw3OQA"
 
 export default class Foods{
 
-    static async getFoods(fdcIds, pageSize=100, pageNumber=1){
+    static async getFoods(fdcIds, sortBy='', sortOrder='asc', pageSize=100, pageNumber=1){
 
         const { data } = await axios(`https://api.nal.usda.gov/fdc/v1/foods`, {
             params: {
                 api_key: API_KEY_FOOD,
                 pageSize: pageSize,
                 fdcIds: fdcIds,
-                pageNumber: pageNumber
+                pageNumber: pageNumber,
+                sortBy: sortBy,
+                sortOrder: sortOrder
             }
         });
         return data;
     }
 
-    static async getFoodsList(dataType='', pageSize=100, pageNumber=1){
+    static async getFoodsList(dataType='', sortBy='', sortOrder='asc', pageSize=100, pageNumber=1){
 
         const { data } = await axios(`https://api.nal.usda.gov/fdc/v1/foods/list`, {
             params: {
                 api_key: API_KEY_FOOD,
                 pageSize: pageSize,
                 pageNumber: pageNumber,
-                dataType: dataType
+                dataType: dataType,
+                sortBy: sortBy,
+                sortOrder: sortOrder
             }
         });
         return data;
     }
 
-    static async getFoodSearch(value, dataType='', pageSize=100, pageNumber=1){
+    static async getFoodSearch(value, dataType='', sortBy='', sortOrder='asc', pageSize=100, pageNumber=1){
 
         const { data } = await axios(`https://api.nal.usda.gov/fdc/v1/foods/search`, {
             params: {
@@ -40,7 +44,9 @@ export default class Foods{
                 query: value,
                 pageSize: pageSize,
                 pageNumber: pageNumber,
-                dataType: dataType
+                dataType: dataType,
+                sortBy: sortBy,
+                sortOrder: sortOrder
             }
         });
         return data;
