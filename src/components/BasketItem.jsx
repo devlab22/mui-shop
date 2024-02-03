@@ -5,7 +5,7 @@ const BasketItem = ({removeFromOrder, name, price, quantity, id}) => {
     return (
         <ListItem>
             <Typography variant="body1">
-                {name} {price}руб x{quantity}
+                {name} {price}EUR x{quantity}
             </Typography>
             
             <IconButton

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, Fragment, useEffect } from 'react';
-import { Shop, SimpleGrid, FoodsView, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, ChartsView, StyledTreeView } from './components';
+import { Shop, SimpleGrid, FoodsView, MovebleView, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, ChartsView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
 import PropTypes from 'prop-types';
@@ -12,6 +12,7 @@ import listData from './data/listView.json'
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 
 
 function App() {
@@ -359,6 +360,7 @@ function App() {
           <Tab label="Charts" icon={<BarChartIcon />} value={109} />
           <Tab label="Simple Grid" icon={<BarChartIcon />} value={110} />
           <Tab label="Food Information" icon={<RestaurantIcon />} value={111} />
+          <Tab label='Move Items' icon={<LabelImportantIcon/>} value={112}/>
 
           {/*  {alphabet.map((item, index) => (
             <Tab
@@ -456,6 +458,9 @@ function App() {
       </TabPanel>
       <TabPanel value={value} index={110}>
         <SimpleGrid />
+      </TabPanel>
+      <TabPanel value={value} index={112}>
+          <MovebleView/>
       </TabPanel>
 
 

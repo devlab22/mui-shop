@@ -2,7 +2,7 @@ import axios from "axios";
 
 // docu https://fdc.nal.usda.gov/api-guide.html
 
-const API_KEY_FOOD = "8DK4mTPzPLcVk7Cg7qq3nxqa4ux3nPWmO4qDw3OQA"
+const API_KEY_FOOD = "8DK4mTPzPLcVk7Cg7qq3nxqa4ux3nPWmO4qDw3OQ"
 
 export default class Foods{
 

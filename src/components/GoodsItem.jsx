@@ -46,7 +46,7 @@ const GoodsItem = (props) => {
                     </Typography>
 
                     <Chip 
-                        label={`Цена: ${price} руб.`}
+                        label={`Preis: ${price} EUR.`}
                         color='primary'
                         variant='outlined'
                         />
@@ -64,7 +64,7 @@ const GoodsItem = (props) => {
                             })
                         }
                     >
-                        Купить
+                        kaufen
                     </Button>
 
                     {/* <FormControlLabel
