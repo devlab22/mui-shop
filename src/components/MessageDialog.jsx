@@ -5,7 +5,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function MessageDialog({ autoHide = 6000, toggle = false, title = '', message=null, onReject = Function.prototype, width = '300px', severity = 'info' }) {
+export default function MessageDialog({ autoHide = 6000, toggle = false, title = '', message=null, onReject = Function.prototype, width = '400px', severity = 'info' }) {
     
     return (
         <Modal

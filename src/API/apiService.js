@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default class Dashboard {
 
-    static async getAccumCountry(){
+    static async getAccumCountry() {
 
         const { data } = await axios('https://restcountries.com/v3.1/all');
 
@@ -47,6 +47,24 @@ export default class Dashboard {
         })
 
         return { regionItems, subregionItems, continentItems }
+    }
+
+    static async getVendor(mac_address) {
+
+        try {
+            const data = await axios("https://api.macvendors.com/", {
+                params: {
+                    mac_address: mac_address
+                }
+            }
+            )
+
+            return data
+        }
+        catch (err) {
+            return 'not Found'
+        }
+
     }
 
 }

@@ -13,6 +13,7 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
   const [title, setTitle] = useState('')
   const [messages, setMessages] = useState([])
 
+  const theme = createTheme()
 
   useEffect(() => {
 
@@ -47,7 +49,7 @@ function App() {
 
       setData(myData)
       setStyledList(myData)
-      
+
 
       recursiveTree(treeData.children, null, false)
       setTree(treeData)
@@ -286,11 +288,11 @@ function App() {
     else {
 
       if (selectedNode.id === null) {
-        
+
         setStyledList(prev => [...prev, { id: maxId + 1, parentId: parentId, name: data.name, seqnr: data.seqnr }])
       }
       else {
-        
+
         setStyledList(prev => prev.map(item => {
 
           if (item.id === data.id) {
@@ -331,38 +333,41 @@ function App() {
 
   return (
     <>
-      <Box
-        sx={{
-          borderBottom: 1,
-          borderColor: 'divider',
-        }}>
+      <ThemeProvider>
 
-        <CssBaseline />
-        <Tabs
-          variant='scrollable'
-          value={value}
-          onChange={handleOnTabChanged}
-          aria-label="basic tabs example"
-        >
 
-          <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
-          <Tab label={`Table Countries (${cntCountry})`} icon={<TableRows />} value={102} />
-          <Tab label="Tree Data" icon={<AccountTreeIcon />} value={104} />
-          <Tab label="Tree Data View" icon={<AccountTreeIcon />} value={105} />
-          <Tab
-            label={`Countries (${cntCountry})`}
-            icon={<Flag />}
-            value={101} />
-          <Tab label="Accordion data" icon={<Flag />} value={103} />
-          <Tab label="Styled Tree View" icon={<Flag />} value={106} />
-          <Tab label="Video View" icon={<Flag />} value={107} />
-          <Tab label="Styled List" icon={<Flag />} value={108} />
-          <Tab label="Charts" icon={<BarChartIcon />} value={109} />
-          <Tab label="Simple Grid" icon={<BarChartIcon />} value={110} />
-          <Tab label="Food Information" icon={<RestaurantIcon />} value={111} />
-          <Tab label='Move Items' icon={<LabelImportantIcon/>} value={112}/>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}>
 
-          {/*  {alphabet.map((item, index) => (
+          <CssBaseline />
+          <Tabs
+            variant='scrollable'
+            value={value}
+            onChange={handleOnTabChanged}
+            aria-label="basic tabs example"
+          >
+
+            <Tab label={`Books (${booksCount})`} icon={<AutoStories />} value={100} />
+            <Tab label={`Table Countries (${cntCountry})`} icon={<TableRows />} value={102} />
+            <Tab label="Tree Data" icon={<AccountTreeIcon />} value={104} />
+            <Tab label="Tree Data View" icon={<AccountTreeIcon />} value={105} />
+            <Tab
+              label={`Countries (${cntCountry})`}
+              icon={<Flag />}
+              value={101} />
+            <Tab label="Accordion data" icon={<Flag />} value={103} />
+            <Tab label="Styled Tree View" icon={<Flag />} value={106} />
+            <Tab label="Video View" icon={<Flag />} value={107} />
+            <Tab label="Styled List" icon={<Flag />} value={108} />
+            <Tab label="Charts" icon={<BarChartIcon />} value={109} />
+            <Tab label="Simple Grid" icon={<BarChartIcon />} value={110} />
+            <Tab label="Food Information" icon={<RestaurantIcon />} value={111} />
+            <Tab label='Move Items' icon={<LabelImportantIcon />} value={112} />
+
+            {/*  {alphabet.map((item, index) => (
             <Tab
               key={index}
               label={`${item} (${getCount(item)})`}
@@ -372,147 +377,147 @@ function App() {
           ))
           } */}
 
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={104}>
-        <Fragment>
-          <TreeData
-            nodes={tree}
-            checkbox
-            title="List Item"
-            handleCheck={onCheckboxChanged}
-            handleDeleteItem={handleOnDeleteItem}
-          />
-        </Fragment>
-      </TabPanel>
-      <TabPanel value={value} index={105}>
-        <Fragment>
-          <TreeDataView
-            nodes={treeView}
-            onAdd={(parentId) => alert(`add to node ${parentId}`)}
-            onRemove={(id) => alert(`delete ID: ${id}`)}
-            onEdit={(id) => alert(`edit ID: ${id}`)}
-            onCheck={(id, checked) => console.log(`ID: ${id}, checked: ${checked}`)}
-          // autoSelect
-          />
-        </Fragment>
-      </TabPanel>
-      <TabPanel value={value} index={106}>
-        <Fragment>
-          <StyledTreeView
-            nodes={data}
-            title='My Styled Tree View'
-            onRemove={(id) => alert(`remove id ${id}`)}
-            onEdit={(id) => alert(`edit id ${id}`)}
-            onAdd={(id) => alert(`add to id ${id}`)}
-            onCheck={(id, checked) => console.log(`ID: ${id}, cheked: ${checked}`)}
-          />
-        </Fragment>
-      </TabPanel>
-      <TabPanel value={value} index={107}>
-        <Fragment>
-          <VideoView />
-        </Fragment>
-      </TabPanel>
-      <TabPanel value={value} index={108}>
-        <Fragment>
-          <StyledListView
-            nodes={styledList}
-            title='My Styled List'
-            toolbar={[
-              {
-                id: 1,
-                seqnr: 1,
-                type: 'button',
-                name: 'add item',
-                onClick: handleOnAddStyledItem
-              }
-            ]}
-            onRemove={handleOnRemoveStyledList}
-            onEdit={handleOnEditStyledList}
-            onAdd={handleOnAddStyledItem}
-            onCheck={handleOnCheckStyledList}
-            onClick={handleOnItemClick}
-          />
-        </Fragment>
-      </TabPanel>
-      <TabPanel value={value} index={111}>
-            <FoodsView/>
-      </TabPanel>
-      <TabPanel value={value} index={109}>
-            <ChartsView/>
-      </TabPanel>
-      <TabPanel value={value} index={100}>
-        <Fragment>
-          <Shop setCount={setBooksCount} />
-        </Fragment>
-      </TabPanel>
-      <TabPanel value={value} index={101}>
-        <Countries countries={countries} />
-      </TabPanel>
-      <TabPanel value={value} index={102}>
-        <CustomTableData />
-      </TabPanel>
-      <TabPanel value={value} index={103}>
-        <AccordionData />
-      </TabPanel>
-      <TabPanel value={value} index={110}>
-        <SimpleGrid />
-      </TabPanel>
-      <TabPanel value={value} index={112}>
-          <MovebleView/>
-      </TabPanel>
-
-
-      {alphabet.map((item, index) => (
-        <TabPanel key={index} value={value} index={index}>
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={104}>
           <Fragment>
-            <Countries firstLetter={item} countries={countries} />
+            <TreeData
+              nodes={tree}
+              checkbox
+              title="List Item"
+              handleCheck={onCheckboxChanged}
+              handleDeleteItem={handleOnDeleteItem}
+            />
           </Fragment>
         </TabPanel>
-      ))
-      }
+        <TabPanel value={value} index={105}>
+          <Fragment>
+            <TreeDataView
+              nodes={treeView}
+              onAdd={(parentId) => alert(`add to node ${parentId}`)}
+              onRemove={(id) => alert(`delete ID: ${id}`)}
+              onEdit={(id) => alert(`edit ID: ${id}`)}
+              onCheck={(id, checked) => console.log(`ID: ${id}, checked: ${checked}`)}
+            // autoSelect
+            />
+          </Fragment>
+        </TabPanel>
+        <TabPanel value={value} index={106}>
+          <Fragment>
+            <StyledTreeView
+              nodes={data}
+              title='My Styled Tree View'
+              onRemove={(id) => alert(`remove id ${id}`)}
+              onEdit={(id) => alert(`edit id ${id}`)}
+              onAdd={(id) => alert(`add to id ${id}`)}
+              onCheck={(id, checked) => console.log(`ID: ${id}, cheked: ${checked}`)}
+            />
+          </Fragment>
+        </TabPanel>
+        <TabPanel value={value} index={107}>
+          <Fragment>
+            <VideoView />
+          </Fragment>
+        </TabPanel>
+        <TabPanel value={value} index={108}>
+          <Fragment>
+            <StyledListView
+              nodes={styledList}
+              title='My Styled List'
+              toolbar={[
+                {
+                  id: 1,
+                  seqnr: 1,
+                  type: 'button',
+                  name: 'add item',
+                  onClick: handleOnAddStyledItem
+                }
+              ]}
+              onRemove={handleOnRemoveStyledList}
+              onEdit={handleOnEditStyledList}
+              onAdd={handleOnAddStyledItem}
+              onCheck={handleOnCheckStyledList}
+              onClick={handleOnItemClick}
+            />
+          </Fragment>
+        </TabPanel>
+        <TabPanel value={value} index={111}>
+          <FoodsView />
+        </TabPanel>
+        <TabPanel value={value} index={109}>
+          <ChartsView />
+        </TabPanel>
+        <TabPanel value={value} index={100}>
+          <Fragment>
+            <Shop setCount={setBooksCount} />
+          </Fragment>
+        </TabPanel>
+        <TabPanel value={value} index={101}>
+          <Countries countries={countries} />
+        </TabPanel>
+        <TabPanel value={value} index={102}>
+          <CustomTableData />
+        </TabPanel>
+        <TabPanel value={value} index={103}>
+          <AccordionData />
+        </TabPanel>
+        <TabPanel value={value} index={110}>
+          <SimpleGrid />
+        </TabPanel>
+        <TabPanel value={value} index={112}>
+          <MovebleView />
+        </TabPanel>
 
-      {addItem &&
-        <AddItemDialog
-          toggle={addItem}
-          title={title}
-          item={selectedNode}
-          onReject={() => {
-            setAddItem(false)
-            setSelectedNode({ id: null, name: '', seqnr: 0 })
-            setParentNode({ id: null, name: '', seqnr: 0 })
-          }}
-          onAccept={(value) => {
-            addStyledItem(value)
-            setAddItem(false)
-          }}
-        />
-      }
 
-      {alertItem &&
-        <AlertDialog
-          toggle={alertItem}
-          title={title}
-          question={`Do you want to remove ${selectedNode.name}, id ${selectedNode.id}`}
-          onReject={() => setAlertItem(false)}
-          onAccept={() => {
-            removeStyledItem(selectedNode.id)
-            setAlertItem(false)
-          }}
-        />
-      }
+        {alphabet.map((item, index) => (
+          <TabPanel key={index} value={value} index={index}>
+            <Fragment>
+              <Countries firstLetter={item} countries={countries} />
+            </Fragment>
+          </TabPanel>
+        ))
+        }
 
-      {showMessage &&
-        <MessageDialog
-          toggle={showMessage}
-          onReject={() => setShowMessage(false)}
-          title={title}
-          message={messages}
-          width='400px'
-        />
-      }
+        {addItem &&
+          <AddItemDialog
+            toggle={addItem}
+            title={title}
+            item={selectedNode}
+            onReject={() => {
+              setAddItem(false)
+              setSelectedNode({ id: null, name: '', seqnr: 0 })
+              setParentNode({ id: null, name: '', seqnr: 0 })
+            }}
+            onAccept={(value) => {
+              addStyledItem(value)
+              setAddItem(false)
+            }}
+          />
+        }
 
+        {alertItem &&
+          <AlertDialog
+            toggle={alertItem}
+            title={title}
+            question={`Do you want to remove ${selectedNode.name}, id ${selectedNode.id}`}
+            onReject={() => setAlertItem(false)}
+            onAccept={() => {
+              removeStyledItem(selectedNode.id)
+              setAlertItem(false)
+            }}
+          />
+        }
+
+        {showMessage &&
+          <MessageDialog
+            toggle={showMessage}
+            onReject={() => setShowMessage(false)}
+            title={title}
+            message={messages}
+            width='400px'
+          />
+        }
+      </ThemeProvider>
     </>
   )
 
