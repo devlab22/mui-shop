@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 
 const Search = (props) => {
-    const { onChange, value, sx } = props;
+    const { onChange, value, sx, ...others } = props;
 
     return <TextField
              label='Search'
@@ -10,6 +10,7 @@ const Search = (props) => {
              type='search' 
              value={value} 
              onChange={onChange} 
+             others={others}
              sx={sx}
              />;
 };
