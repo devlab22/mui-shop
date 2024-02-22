@@ -32,13 +32,15 @@ export default function EndpointList({ items = [], selected=[], search = '', onC
                     id="nested-list-subheader"
                     sx={styledSubHeader}
                 >
-                    {`Entpoints: ${items.length}`}
+                    {`Entpoints: ${items.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).length}`}
                 </ListSubheader>
             }
             sx={styledList}
         >
 
-            {items.map(element => (
+            {items
+            .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+            .map(element => (
                 <ListItem
                     key={Math.random()}
                     sx={styledListItem}

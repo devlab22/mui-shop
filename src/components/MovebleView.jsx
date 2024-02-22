@@ -1,7 +1,8 @@
 import React from 'react'
-import { Box, Paper, Stack } from '@mui/material'
+import { Box, Paper, Stack, Button } from '@mui/material'
 import { Title, MessageDialog, LoadingCircle, Search, EndpointGroupList, EndpointList } from '../components'
 import { default as DB } from '../API/apiService'
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 
 export default function MovebleView() {
@@ -14,7 +15,7 @@ export default function MovebleView() {
     const [message, setMessage] = React.useState('')
     const [error, setError] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
-    
+
     const [searchGroupSrc, setSearchGroupSrc] = React.useState('')
     const [searchEndpointSrc, setSearchEndpointSrc] = React.useState('')
 
@@ -22,8 +23,9 @@ export default function MovebleView() {
     const [searchEndpointTarget, setSearchEndpointTarget] = React.useState('')
 
     const [endpointSrc, setEndpointSrc] = React.useState([])
+    const [endpointTarget, setEndpointTarget] = React.useState([])
 
-   
+
 
     React.useEffect(() => {
 
@@ -95,6 +97,20 @@ export default function MovebleView() {
 
     }
 
+    const handleOnCheckboxChange = (event) => {
+
+        const checked = event['checked']
+        const item = event['element']
+
+        if (checked) {
+            setElements(prev => [...prev, item])
+        }
+        else {
+            setElements(prev => prev.filter(element => element['mac'] !== item['mac']))
+        }
+
+    }
+
     const handleOnItemMove = async (item) => {
 
         if (!validateInput(false)) {
@@ -102,10 +118,30 @@ export default function MovebleView() {
             return
         }
 
-        console.log('move', item)
-        try {
+        await reloadEndpoints()
+    }
+
+    const handleOnMoveClick = async () => {
+
+        if (!validateInput()) {
+            setError(true)
+            return
+        }
+
+        await reloadEndpoints()
+       
+    }
+
+    const reloadEndpoints = async () => {
+
+         try {
             setIsLoading(true)
+            setElements([])
             const countries = await DB.getCountries()
+            const endSrc = await loadEndpoints(srcId)
+            setEndpointSrc(endSrc)
+            const endTarget = await loadEndpoints(targetId)
+            setEndpointTarget(endTarget)
         }
         catch (err) {
             console.log(err.message)
@@ -113,7 +149,7 @@ export default function MovebleView() {
         finally {
             setIsLoading(false)
         }
-        setReload(!reload)
+
     }
 
     const loadEndpoints = async (itemId) => {
@@ -128,30 +164,39 @@ export default function MovebleView() {
 
     }
 
-   const handleOnSrcClick = async (item) => {
-    
-    const itemId = item['id']
-    setSrcId(itemId)
+    const handleOnSrcClick = async (item, view) => {
 
-    if (itemId === '') {
-        return
-    }
+        const itemId = item['id']
+        
 
-    try {
-        setIsLoading(true)
-        const countries = await DB.getCountries()
-        const data = await loadEndpoints(itemId)
-        setEndpointSrc(data)
-    }
-    catch (err) {
-        console.log(err.message)
-    }
-    finally {
-        setIsLoading(false)
-    }
+        if (itemId === '') {
+            return
+        }
+
+        try {
+            setIsLoading(true)
+            const countries = await DB.getCountries()
+            const data = await loadEndpoints(itemId)
+
+            if(view === 'src'){
+                setSrcId(itemId)
+                 setEndpointSrc(data)
+            }
+            else{
+                setTargetId(itemId)
+                setEndpointTarget(data)
+            }
+           
+        }
+        catch (err) {
+            console.log(err.message)
+        }
+        finally {
+            setIsLoading(false)
+        }
 
 
-   }
+    }
 
     return (
         <Box
@@ -187,51 +232,135 @@ export default function MovebleView() {
                 >
 
                     <Stack
-                    direction='row'
+                        direction='column'
+                        gap={2}
+                        sx={{
+                            border: '0px solid gray'
+                        }}
                     >
+
+                        <Stack
+                            alignItems='center'
+                            direction='column'
+                        >
+
+                            <Title title={getLabel('source Entpointgroup', srcId)} />
+
+                            <Stack
+                                direction='row'
+                                gap={2}
+                            >
+
+                                <Stack
+                                    direction='column'
+                                    gap={2}
+
+                                >
+                                    <Search
+                                        onChange={(e) => setSearchGroupSrc(e.target.value)}
+                                    />
+                                    <EndpointGroupList
+                                        items={items}
+                                        search={searchGroupSrc}
+                                        selectedItem={srcId}
+                                        onItemClick={(item) => handleOnSrcClick(item, 'src')}
+                                    />
+
+                                </Stack>
+
+
+
+                                <Stack
+                                    direction='column'
+                                    gap={2}
+
+                                >
+                                    <Search
+                                        onChange={(e) => setSearchEndpointSrc(e.target.value)}
+                                    />
+                                    <EndpointList
+                                        items={endpointSrc}
+                                        search={searchEndpointSrc}
+                                        selected={elements}
+                                        onCheckboxChange={handleOnCheckboxChange}
+                                        onMoveItem={handleOnItemMove}
+                                    />
+                                </Stack>
+                            </Stack>
+
+                            <Stack>
+                            </Stack>
+
+                        </Stack>
+
+
+                    </Stack>
+
+
+                    <Button
+                        color='primary'
+                        variant="contained"
+                        endIcon={<KeyboardDoubleArrowRightIcon />}
+                        sx={{
+                            height: '50px',
+                            top: '220px',
+                            position: 'sticky'
+                        }}
+                        onClick={handleOnMoveClick}
+                    >
+                        {`Move (${elements.length})`}
+                    </Button>
+
 
                     <Stack
-                        alignItems='center'
                         direction='column'
+                        gap={2}
+                        sx={{
+                            border: '0px solid gray'
+                        }}
                     >
 
-                        <Title title={getLabel('source Entpointgroup', srcId)} />
-
                         <Stack
-                        direction='row'
-                        gap={2}
+                            alignItems='center'
                         >
 
-                       
-                        <Stack
-                            direction='column'
-                            gap={2}
-                           
-                        >
-                           <Search onChange={(e) => setSearchGroupSrc(e.target.value)}/>
-                           <EndpointGroupList items={items} search={searchGroupSrc} selectedItem={srcId} onItemClick={handleOnSrcClick}/>
-                           
+                            <Title title={getLabel('target Endpointgroup', targetId)} />
                         </Stack>
 
-                      
+                        <Stack
+                            direction='row'
+                            gap={2}
+                        >
+                            <Search
+                                onChange={(e) => setSearchGroupTarget(e.target.value)}
+                            />
+
+                            <Search
+                                onChange={(e) => setSearchEndpointTarget(e.target.value)}
+
+                            />
+                        </Stack>
 
                         <Stack
-                            direction='column'
+                            direction='row'
                             gap={2}
-                           
                         >
-                           <Search onChange={(e) => setSearchEndpointSrc(e.target.value)}/>
-                            <EndpointList items={endpointSrc} search={searchEndpointSrc} onMoveItem={handleOnItemMove}/>
+
+                            <EndpointGroupList
+                                items={items}
+                                search={searchGroupTarget}
+                                onItemClick={(item) => handleOnSrcClick(item, 'target')}
+                            />
+
+                            <EndpointList
+                                items={endpointTarget}
+                                search={searchEndpointTarget}
+                            />
+
                         </Stack>
                     </Stack>
 
-                    <Stack>
-                    </Stack>
 
-                    </Stack>
-                    </Stack>
-
-                   
 
                 </Stack>
             }
