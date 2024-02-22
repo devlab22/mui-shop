@@ -1,22 +1,32 @@
 import React from 'react'
-import { Paper, List, InputLabel, ListItemButton, ListItemText, ListSubheader, Checkbox, Select, FormControl, MenuItem } from '@mui/material'
+import { Box, Stack, List, InputLabel, ListItemButton, ListItemIcon, ListItemText, ListItem, ListSubheader, Checkbox, Select, FormControl, MenuItem } from '@mui/material'
+import { LoadingCircle, Title } from '.'
+import { useTheme } from '@mui/material/styles'
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
-export default function MovebleList({ label = '', reload = false, items = [], children = [], selectedItem = null, onChangeItem = Function.prototype, onCheckboxClick }) {
+export default function MovebleList({ label = '', reload = false, items = [], children = [], selectedItem = null, setSelectedItem = Function.prototype, onCheckboxClick, onMoveItem }) {
 
     const [elements, setElements] = React.useState([])
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const theme = useTheme()
+
+    const styledList = {
+        borderStyle: 'solid',
+        borderColor: theme.palette.primary.main,
+        minWidth: '200px',
+        maxWidth: '300px'
+    }
+
+    const styledSubHeader = {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white'
+    }
 
     React.useEffect(() => {
         loadData(selectedItem)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reload])
-
-    const handleOnChange = async (e) => {
-
-        const itemId = e.target.value
-        await loadData(itemId)
-
-        onChangeItem(itemId)
-    }
+    }, [reload, selectedItem])
 
     function genMAC() {
         var hexDigits = "0123456789ABCDEF";
@@ -36,10 +46,17 @@ export default function MovebleList({ label = '', reload = false, items = [], ch
             return
         }
 
-        const data = []
-        for (var i = 1; i <= 10; i++) {
+        setIsLoading(true)
+        await loadEndpoints(itemId)
+        setIsLoading(false)
+    }
 
-            data.push({ mac: genMAC(), name: `Device ${i}` })
+    const loadEndpoints = async (itemId) => {
+
+        const data = []
+        for (var i = 1; i <= 1000; i++) {
+
+            data.push({ mac: genMAC(), name: `Endpoint ${i} (${itemId})` })
         }
 
         setElements(data)
@@ -54,7 +71,7 @@ export default function MovebleList({ label = '', reload = false, items = [], ch
                     labelId="select-label"
                     value={selectedItem}
                     readOnly={false}
-                    onChange={handleOnChange}
+                    onChange={(event) => setSelectedItem(event.target.value)}
                     label={label}
                 >
                     {
@@ -67,44 +84,105 @@ export default function MovebleList({ label = '', reload = false, items = [], ch
             </FormControl>
         )
     }
+
+    const GroupList = () => {
+
+        return (
+            <List
+                subheader={
+                    <ListSubheader
+                        component="div"
+                        id="nested-list-subheader-group"
+                        sx={styledSubHeader}
+                    >
+                        {`Endpointgroups: ${items.length}`}
+                    </ListSubheader>
+                }
+                sx={styledList}
+            >
+
+                {items.map(item => (
+
+                    <ListItemButton
+                        key={item['id']}
+                        onClick={() => setSelectedItem(item['id'])}
+                        selected={item['id'] === selectedItem}
+                    >
+
+                        <ListItemText
+                            primary={`name: ${item['name']}`}
+                            secondary={`id: ${item['id']}`}
+                        />
+                    </ListItemButton>
+                ))}
+
+            </List>
+        )
+    }
     return (
-        <Paper
-            sx={{
-                width: '500px',
-            }}
-        >
-            <FilterSelection />
 
-            {elements.length > 0 &&
-                <List
-                    subheader={
-                        <ListSubheader component="div" id="nested-list-subheader">
-                            {`Devices: ${elements.length}`}
-                        </ListSubheader>
-                    }
-                >
+        <Box>
 
-                    {elements.map(element => (
-                        <ListItemButton key={Math.random()}>
+            {isLoading ?
+                <LoadingCircle />
+                :
+                <React.Fragment>
 
-                            <Checkbox
-                                sx={{
-                                    display: `${onCheckboxClick ? '' : 'none'}`,
-                                    m: '0 5px 0 -10px'
-                                }}
-                                checked={children.find(item => item['mac'] === element['mac']) ? true : false}
-                                onChange={(e) => onCheckboxClick({ groupId: selectedItem, mac: element['mac'], name: element['name'], checked: e.target.checked })}
-                            />
-                            <ListItemText
-                                primary={`name: ${element['name']}`}
-                                secondary={`mac: ${element['mac']}`}
-                            />
-                        </ListItemButton>
-                    ))}
+                    <Stack
+                        justifyContent='center'
+                        alignItems='center'
+                    >
 
-                </List>
+                        <Title title={label} />
+
+                        <Stack
+                            direction='row'
+                            gap={2}
+                        >
+
+                            <GroupList />
+
+                            <List
+                                subheader={
+                                    <ListSubheader
+                                        component="div"
+                                        id="nested-list-subheader"
+                                        sx={styledSubHeader}
+                                    >
+                                        {`Entpoints: ${elements.length}`}
+                                    </ListSubheader>
+                                }
+                                sx={styledList}
+                            >
+
+                                {elements.map(element => (
+                                    <ListItem key={Math.random()}>
+
+                                        <ListItemIcon>
+                                            <Checkbox
+                                                sx={{
+                                                    display: `${onCheckboxClick ? '' : 'none'}`
+                                                }}
+                                                checked={children.find(item => item['mac'] === element['mac']) ? true : false}
+                                                onChange={(e) => onCheckboxClick({ groupId: selectedItem, mac: element['mac'], name: element['name'], checked: e.target.checked })}
+                                            />
+                                        </ListItemIcon>
+
+                                        <ListItemText
+                                            primary={`name: ${element['name']}`}
+                                            secondary={`mac: ${element['mac']}`}
+                                        />
+                                    </ListItem>
+                                ))}
+
+                            </List>
+                        </Stack>
+                    </Stack>
+
+                </React.Fragment>
             }
 
-        </Paper>
+        </Box>
+
     )
 }

@@ -333,8 +333,7 @@ function App() {
 
   return (
     <>
-      <ThemeProvider>
-
+      <ThemeProvider theme={theme}>
 
         <Box
           sx={{

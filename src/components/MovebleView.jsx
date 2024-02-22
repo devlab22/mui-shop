@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Paper, Container, Button, Stack } from '@mui/material'
+import { Paper, Box, Button, Stack } from '@mui/material'
 import { Title, MovebleList, MessageDialog } from '../components'
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
@@ -18,7 +18,7 @@ export default function MovebleView() {
 
         async function loadData() {
             const tmp = []
-            for (var i = 1; i <= 50; i++) {
+            for (var i = 1; i <= 500; i++) {
                 tmp.push({ id: i, name: `Group ${i}` })
             }
 
@@ -59,7 +59,7 @@ export default function MovebleView() {
             return false
         }
         if(elements.length === 0){
-            setMessage('set Devices')
+            setMessage('set Endpoints')
             return false
         }
 
@@ -83,19 +83,29 @@ export default function MovebleView() {
         setReload(!reload)
     }
 
+    const getLabel = (title='', groupId) => {
+
+        const endpointGroup = items.find(item => item.id === groupId)
+        if(endpointGroup){
+            title = `${title}: ${endpointGroup.name}`
+        }
+
+        return title
+
+    }
 
     return (
-        <Container
+        <Box
             component={Paper}
             sx={{
-                pb: '20px'
+                pb: '20px',
+                minWidth: '1000px'
             }}
         >
             <Stack
                 alignItems='center'
-                sx={{pb: '10px'}}
             >
-                <Title title='Move Devices' />
+                <Title title='Move Endpoints' />
             </Stack>
 
             {error &&
@@ -111,23 +121,26 @@ export default function MovebleView() {
             <Stack
                 direction='row'
                 gap={2}
+                justifyContent='space-around'
             >
                 <MovebleList
                     reload={reload}
                     items={items}
                     selectedItem={srcId}
-                    onChangeItem={value => setSrcId(value)}
+                    setSelectedItem={setSrcId}
                     onCheckboxClick={handleOnCheckboxClick}
                     children={elements}
-                    label='source Group'
+                    label={getLabel('source Entpointgroup', srcId)}
                 />
 
                 <Button
                     variant='contained'
                     endIcon={<KeyboardDoubleArrowRightIcon />}
                     sx={{
-                        height: '45px',
-                        mt: '5px'
+                        height: '48px',
+                        top: '210px',
+                        position: 'sticky',
+                       
                     }}
                     onClick={handleOnMoveClick}
                 >
@@ -138,11 +151,11 @@ export default function MovebleView() {
                     reload={reload}
                     items={items}
                     selectedItem={targetId}
-                    onChangeItem={(value) => setTargetId(value)}
-                    label='target Group'
+                    setSelectedItem={setTargetId}
+                    label={getLabel('target Entpointgroup', targetId)}
                 />
             </Stack>
 
-        </Container>
+        </Box>
     )
 }
