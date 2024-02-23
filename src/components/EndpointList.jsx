@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 
-export default function EndpointList({ items = [], selected=[], search = '', onCheckboxChange, onMoveItem }) {
+export default function EndpointList({ items = [], selected = [], search = '', onCheckboxChange, onMoveItem }) {
 
     const theme = useTheme()
 
@@ -39,29 +39,29 @@ export default function EndpointList({ items = [], selected=[], search = '', onC
         >
 
             {items
-            .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
-            .map(element => (
-                <ListItem
-                    key={Math.random()}
-                    sx={styledListItem}
-                >
+                .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+                .map(element => (
+                    <ListItem
+                        key={Math.random()}
+                        sx={styledListItem}
+                    >
 
-                    {onCheckboxChange &&
-                        <ListItemIcon>
-                            <Checkbox
-                                checked={selected.find(item => item['mac'] === element['mac']) ? true : false}
-                                onChange={(e) => onCheckboxChange({ element, checked: e.target.checked })}
-                            />
-                        </ListItemIcon>
-                    }
+                        {onCheckboxChange &&
+                            <ListItemIcon>
+                                <Checkbox
+                                    checked={selected.find(item => item['mac'] === element['mac']) ? true : false}
+                                    onChange={(e) => onCheckboxChange({ element, checked: e.target.checked })}
+                                />
+                            </ListItemIcon>
+                        }
 
 
-                    <ListItemText
-                        primary={`name: ${element['name']}`}
-                        secondary={`mac: ${element['mac']}`}
-                    />
+                        <ListItemText
+                            primary={`name: ${element['name']}`}
+                            secondary={`mac: ${element['mac']}`}
+                        />
 
-                    {onMoveItem &&
+
 
                         <ListItemSecondaryAction
                             sx={{
@@ -72,20 +72,23 @@ export default function EndpointList({ items = [], selected=[], search = '', onC
                             }}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <IconButton
-                                onClick={() => onMoveItem(element)}
-                                title='move'
-                            >
+                            {onMoveItem &&
+                                <IconButton
+                                    onClick={() => onMoveItem(element)}
+                                    title='move'
+                                >
 
-                                <KeyboardDoubleArrowRightIcon color='primary' />
+                                    <KeyboardDoubleArrowRightIcon color='primary' />
 
-                            </IconButton>
+                                </IconButton>
+                            }
+
                         </ListItemSecondaryAction>
 
-                    }
 
-                </ListItem>
-            ))}
+
+                    </ListItem>
+                ))}
 
         </List>
     )

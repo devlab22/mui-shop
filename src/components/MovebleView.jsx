@@ -79,7 +79,7 @@ export default function MovebleView() {
             return false
         }
         if (checkElements && elements.length === 0) {
-            setMessage('set Endpoints')
+            setMessage('set Endpoints to move')
             return false
         }
 
@@ -121,6 +121,15 @@ export default function MovebleView() {
         await reloadEndpoints()
     }
 
+    const clearContent = () => {
+
+        setElements([])
+        setSearchGroupSrc('')
+        setSearchEndpointSrc('')
+        setSearchEndpointTarget('')
+        setSearchGroupTarget('')
+    }
+
     const handleOnMoveClick = async () => {
 
         if (!validateInput()) {
@@ -129,14 +138,14 @@ export default function MovebleView() {
         }
 
         await reloadEndpoints()
-       
+
     }
 
     const reloadEndpoints = async () => {
 
-         try {
+        try {
             setIsLoading(true)
-            setElements([])
+            clearContent()
             const countries = await DB.getCountries()
             const endSrc = await loadEndpoints(srcId)
             setEndpointSrc(endSrc)
@@ -167,7 +176,7 @@ export default function MovebleView() {
     const handleOnSrcClick = async (item, view) => {
 
         const itemId = item['id']
-        
+
 
         if (itemId === '') {
             return
@@ -178,15 +187,16 @@ export default function MovebleView() {
             const countries = await DB.getCountries()
             const data = await loadEndpoints(itemId)
 
-            if(view === 'src'){
+            if (view === 'src') {
                 setSrcId(itemId)
-                 setEndpointSrc(data)
+                setElements([])
+                setEndpointSrc(data)
             }
-            else{
+            else {
                 setTargetId(itemId)
                 setEndpointTarget(data)
             }
-           
+
         }
         catch (err) {
             console.log(err.message)
@@ -242,6 +252,7 @@ export default function MovebleView() {
                         <Stack
                             alignItems='center'
                             direction='column'
+                            gap={2}
                         >
 
                             <Title title={getLabel('source Entpointgroup', srcId)} />
@@ -257,7 +268,7 @@ export default function MovebleView() {
 
                                 >
                                     <Search
-                                        onChange={(e) => setSearchGroupSrc(e.target.value)}
+                                        onChange={(e) => setSearchGroupSrc(e.target.value) }
                                     />
                                     <EndpointGroupList
                                         items={items}
@@ -267,8 +278,6 @@ export default function MovebleView() {
                                     />
 
                                 </Stack>
-
-
 
                                 <Stack
                                     direction='column'
@@ -293,7 +302,6 @@ export default function MovebleView() {
 
                         </Stack>
 
-
                     </Stack>
 
 
@@ -303,7 +311,7 @@ export default function MovebleView() {
                         endIcon={<KeyboardDoubleArrowRightIcon />}
                         sx={{
                             height: '50px',
-                            top: '220px',
+                            top: '300px',
                             position: 'sticky'
                         }}
                         onClick={handleOnMoveClick}
@@ -331,32 +339,40 @@ export default function MovebleView() {
                             direction='row'
                             gap={2}
                         >
-                            <Search
-                                onChange={(e) => setSearchGroupTarget(e.target.value)}
-                            />
 
-                            <Search
-                                onChange={(e) => setSearchEndpointTarget(e.target.value)}
+                            <Stack
+                                direction='column'
+                                gap={2}
+                            >
+                                <Search
+                                    onChange={(e) => setSearchGroupTarget(e.target.value)}
+                                />
 
-                            />
-                        </Stack>
+                                <EndpointGroupList
+                                    items={items}
+                                    search={searchGroupTarget}
+                                    selectedItem={targetId}
+                                    onItemClick={(item) => handleOnSrcClick(item, 'target')}
+                                />
 
-                        <Stack
-                            direction='row'
-                            gap={2}
-                        >
+                            </Stack>
 
-                            <EndpointGroupList
-                                items={items}
-                                search={searchGroupTarget}
-                                onItemClick={(item) => handleOnSrcClick(item, 'target')}
-                            />
+                            <Stack
+                                direction='column'
+                                gap={2}
+                            >
 
-                            <EndpointList
-                                items={endpointTarget}
-                                search={searchEndpointTarget}
-                            />
+                                <Search
+                                    onChange={(e) => setSearchEndpointTarget(e.target.value)}
 
+                                />
+
+                                <EndpointList
+                                    items={endpointTarget}
+                                    search={searchEndpointTarget}
+                                />
+
+                            </Stack>
                         </Stack>
                     </Stack>
 
