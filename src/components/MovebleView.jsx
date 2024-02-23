@@ -11,7 +11,6 @@ export default function MovebleView() {
     const [srcId, setSrcId] = React.useState('')   // source EndpointGroupId
     const [targetId, setTargetId] = React.useState('') // target EndpointGroupId
     const [elements, setElements] = React.useState([])
-    const [reload, setReload] = React.useState(true)
     const [message, setMessage] = React.useState('')
     const [error, setError] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
@@ -33,7 +32,7 @@ export default function MovebleView() {
 
             try {
                 setIsLoading(true)
-                const countries = await DB.getCountries()
+                await DB.getCountries()
             }
             catch (err) {
                 console.log(err.message)
@@ -146,7 +145,7 @@ export default function MovebleView() {
         try {
             setIsLoading(true)
             clearContent()
-            const countries = await DB.getCountries()
+            await DB.getCountries()
             const endSrc = await loadEndpoints(srcId)
             setEndpointSrc(endSrc)
             const endTarget = await loadEndpoints(targetId)
@@ -184,7 +183,7 @@ export default function MovebleView() {
 
         try {
             setIsLoading(true)
-            const countries = await DB.getCountries()
+            await DB.getCountries()
             const data = await loadEndpoints(itemId)
 
             if (view === 'src') {
