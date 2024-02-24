@@ -299,13 +299,9 @@ export default function MovebleView() {
                                 </Stack>
                             </Stack>
 
-                            <Stack>
-                            </Stack>
-
                         </Stack>
 
                     </Stack>
-
 
                     <Button
                         color='primary'
