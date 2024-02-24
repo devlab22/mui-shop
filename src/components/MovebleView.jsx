@@ -247,9 +247,6 @@ export default function MovebleView() {
                     <Stack
                         direction='column'
                         gap={2}
-                        sx={{
-                            border: '0px solid gray'
-                        }}
                     >
 
                         <Stack
@@ -324,13 +321,9 @@ export default function MovebleView() {
                         {`Move (${elements.length})`}
                     </Button>
 
-
                     <Stack
                         direction='column'
                         gap={2}
-                        sx={{
-                            border: '0px solid gray'
-                        }}
                     >
 
                         <Stack
