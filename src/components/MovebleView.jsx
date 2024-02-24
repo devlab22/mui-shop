@@ -3,7 +3,7 @@ import { Box, Paper, Stack, Button } from '@mui/material'
 import { Title, MessageDialog, LoadingCircle, Search, EndpointGroupList, EndpointList } from '../components'
 import { default as DB } from '../API/apiService'
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-
+import { v4 as uuidv4 } from 'uuid';
 
 export default function MovebleView() {
 
@@ -42,7 +42,7 @@ export default function MovebleView() {
             }
             const tmp = []
             for (var i = 1; i <= 50; i++) {
-                tmp.push({ id: i, name: `Group ${i}` })
+                tmp.push({ id: uuidv4(), name: `Group ${i}` })
             }
 
             setItems(tmp)
@@ -163,9 +163,13 @@ export default function MovebleView() {
     const loadEndpoints = async (itemId) => {
 
         const data = []
+        const endpointGroup = items.find(item => item.id === itemId)
         for (var i = 1; i <= 50; i++) {
 
-            data.push({ mac: genMAC(), name: `Endpoint ${i} (${itemId})` })
+            data.push({
+                mac: genMAC(),
+                name: `Endpoint ${i}`
+            })
         }
 
         return data
@@ -267,7 +271,8 @@ export default function MovebleView() {
 
                                 >
                                     <Search
-                                        onChange={(e) => setSearchGroupSrc(e.target.value) }
+                                        label='Name'
+                                        onChange={(e) => setSearchGroupSrc(e.target.value)}
                                     />
                                     <EndpointGroupList
                                         items={items}
@@ -284,6 +289,7 @@ export default function MovebleView() {
 
                                 >
                                     <Search
+                                        label='Mac'
                                         onChange={(e) => setSearchEndpointSrc(e.target.value)}
                                     />
                                     <EndpointList
@@ -344,6 +350,7 @@ export default function MovebleView() {
                                 gap={2}
                             >
                                 <Search
+                                    label='Name'
                                     onChange={(e) => setSearchGroupTarget(e.target.value)}
                                 />
 
@@ -362,6 +369,7 @@ export default function MovebleView() {
                             >
 
                                 <Search
+                                    label='Mac'
                                     onChange={(e) => setSearchEndpointTarget(e.target.value)}
 
                                 />
@@ -374,8 +382,6 @@ export default function MovebleView() {
                             </Stack>
                         </Stack>
                     </Stack>
-
-
 
                 </Stack>
             }

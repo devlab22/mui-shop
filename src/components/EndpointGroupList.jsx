@@ -10,8 +10,7 @@ const theme = useTheme()
 const styledList = {
     borderStyle: 'solid',
     borderColor: theme.palette.primary.main,
-    minWidth: '200px',
-    maxWidth: '300px'
+    minWidth: '200px'
 }
 
 const styledSubHeader = {
@@ -22,6 +21,18 @@ const styledSubHeader = {
 const styledListItem = {
     border: '1px solid gray'
 }
+
+const getTitle = () => {
+
+    const endpointGroup = items.find(item => item.id === selectedItem)
+    var title = `Endpointgroups (${items.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).length})`
+
+    if(endpointGroup)(
+        title = `${title}: ${endpointGroup.name}`
+    )
+
+    return title
+}
     return (
         <List
             subheader={
@@ -29,7 +40,7 @@ const styledListItem = {
                     component="div"
                     sx={styledSubHeader}
                 >
-                    {`Endpointgroups: ${items.filter(item => item.name.toLowerCase().includes(search.toLowerCase())).length}`}
+                    {getTitle()}
                 </ListSubheader>
             }
             sx={styledList}

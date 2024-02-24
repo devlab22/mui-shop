@@ -11,8 +11,7 @@ export default function EndpointList({ items = [], selected = [], search = '', o
     const styledList = {
         borderStyle: 'solid',
         borderColor: theme.palette.primary.main,
-        minWidth: '200px',
-        maxWidth: '300px'
+        minWidth: '200px'
     }
 
     const styledSubHeader = {
@@ -39,7 +38,7 @@ export default function EndpointList({ items = [], selected = [], search = '', o
         >
 
             {items
-                .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+                .filter(item => item.mac.toLowerCase().includes(search.toLowerCase()))
                 .map(element => (
                     <ListItem
                         key={Math.random()}
@@ -55,24 +54,22 @@ export default function EndpointList({ items = [], selected = [], search = '', o
                             </ListItemIcon>
                         }
 
-
                         <ListItemText
-                            primary={`name: ${element['name']}`}
-                            secondary={`mac: ${element['mac']}`}
+                            secondary={`name: ${element['name']}`}
+                            primary={`mac: ${element['mac']}`}
                         />
+                        
+                        {onMoveItem &&
+                            <ListItemSecondaryAction
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    right: "10px",
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
 
-
-
-                        <ListItemSecondaryAction
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1,
-                                right: "10px",
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {onMoveItem &&
                                 <IconButton
                                     onClick={() => onMoveItem(element)}
                                     title='move'
@@ -81,12 +78,9 @@ export default function EndpointList({ items = [], selected = [], search = '', o
                                     <KeyboardDoubleArrowRightIcon color='primary' />
 
                                 </IconButton>
-                            }
 
-                        </ListItemSecondaryAction>
-
-
-
+                            </ListItemSecondaryAction>
+                        }
                     </ListItem>
                 ))}
 
