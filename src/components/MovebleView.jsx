@@ -309,6 +309,7 @@ export default function MovebleView() {
                         endIcon={<KeyboardDoubleArrowRightIcon />}
                         sx={{
                             height: '50px',
+                            minWidth: '120px',
                             top: '300px',
                             position: 'sticky'
                         }}
