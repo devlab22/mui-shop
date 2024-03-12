@@ -29,7 +29,7 @@ export default function EndpointList({ items = [], selected = [], search = '', o
     const styledList = {
         borderStyle: 'solid',
         borderColor: theme.palette.primary.main,
-        minWidth: '400px'
+        minWidth: '385px'
     }
 
     const styledSubHeader = {

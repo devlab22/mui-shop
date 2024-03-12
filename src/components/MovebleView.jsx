@@ -216,7 +216,7 @@ export default function MovebleView() {
             component={Paper}
             sx={{
                 pb: '20px',
-                minWidth: '860px'
+                minWidth: '1740px'
             }}
         >
             <Stack
@@ -240,31 +240,31 @@ export default function MovebleView() {
                 :
                 <Stack
                     direction='row'
-                    gap={2}
+                    gap={1}
                     justifyContent='space-around'
                 >
 
                     <Stack
                         direction='column'
-                        gap={2}
+                        gap={1}
                     >
 
                         <Stack
                             alignItems='center'
                             direction='column'
-                            gap={2}
+                            gap={1}
                         >
 
                             <Title title={getLabel('source Entpointgroup', srcId)} />
 
                             <Stack
                                 direction='row'
-                                gap={2}
+                                gap={1}
                             >
 
                                 <Stack
                                     direction='column'
-                                    gap={2}
+                                    gap={1}
 
                                 >
                                     <Search
@@ -282,7 +282,7 @@ export default function MovebleView() {
 
                                 <Stack
                                     direction='column'
-                                    gap={2}
+                                    gap={1}
 
                                 >
                                     <Search
@@ -320,7 +320,7 @@ export default function MovebleView() {
 
                     <Stack
                         direction='column'
-                        gap={2}
+                        gap={1}
                     >
 
                         <Stack
@@ -332,12 +332,12 @@ export default function MovebleView() {
 
                         <Stack
                             direction='row'
-                            gap={2}
+                            gap={1}
                         >
 
                             <Stack
                                 direction='column'
-                                gap={2}
+                                gap={1}
                             >
                                 <Search
                                     label='Name'
@@ -355,7 +355,7 @@ export default function MovebleView() {
 
                             <Stack
                                 direction='column'
-                                gap={2}
+                                gap={1}
                             >
 
                                 <Search

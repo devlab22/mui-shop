@@ -106,7 +106,7 @@ export default function TableView({ title = '', headers = [], data = [], useElev
                 </Table>
             </TableContainer>
             <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[10, 25, 50]}
         component="div"
         count={count}
         rowsPerPage={rowsPerPage}

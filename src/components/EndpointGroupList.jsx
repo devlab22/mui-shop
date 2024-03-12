@@ -27,7 +27,7 @@ export default function EndpointGroupList({ items = [], selectedItem, search = '
     const styledList = {
         borderStyle: 'solid',
         borderColor: theme.palette.primary.main,
-        minWidth: '400px'
+        minWidth: '385px'
     }
 
     const styledSubHeader = {
