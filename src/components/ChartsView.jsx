@@ -1,5 +1,5 @@
 import React from 'react'
-import { Chart, SimpleLineChart, TableView, SimpleAreaChart, SimpleBarChart, StackedBarChart, PieChartWithLabel, Title } from '../components'
+import { Chart, SimpleLineChart, TableView, SimpleAreaChart, SimpleBarChart, StackedBarChart, PieChartWithLabel, Title, BarChartH } from '../components'
 import { Box, Grid, Stack, Container, Paper, Chip } from '@mui/material';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
@@ -120,6 +120,14 @@ export default function ChartsView() {
                             title='Status'
                             chartData={chartData}
                         />
+                    </Grid>
+
+            <Title title='bar chart'/>
+                    <Grid
+                        item
+                        xs={12}
+                    >
+                        <BarChartH/>
                     </Grid>
 
                     <Grid
