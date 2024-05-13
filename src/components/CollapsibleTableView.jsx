@@ -173,7 +173,7 @@ export default function CollapsibleTableView({useElevation=3}) {
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             )
-    }, [rows, page, rowsPerPage]
+    }, [ page, rowsPerPage]
     );
 
     const handleChangePage = (event, newPage) => {

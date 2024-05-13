@@ -8,7 +8,7 @@ import { DataGrid, GridToolbarContainer, GridToolbarExport, GridToolbarDensitySe
 import { AlertDialog, MessageDialog, StyledSkeleton } from '../components';
 import Dashboard from '../API/apiService';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { deDE as coreDEDE } from '@mui/material/locale';
+//import { deDE as coreDEDE } from '@mui/material/locale';
 
 const theme = createTheme(
    /*  {
