@@ -1,15 +1,16 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, tableCellClasses } from '@mui/material'
+import { Box, Collapse, TablePagination, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, tableCellClasses } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Title } from '../components'
+import { useTheme } from '@mui/material/styles'
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: theme.palette.primary.main,
         color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -152,7 +153,44 @@ const rows = [
 
 export default function CollapsibleTableView({useElevation=3}) {
 
+    const theme = useTheme()
     const [elevation, setElevation] = React.useState(3)
+    const [rowsPerPage, setRowsPerPage] = React.useState(2)
+    const [page, setPage] = React.useState(0)
+
+    const visibleRows = React.useMemo(() => {
+
+        var filteredItems = rows.slice()
+
+       // const filteredItems = rows.filter(item => item.mac.toLowerCase().includes(search.toLowerCase()))
+
+        if (filteredItems.length < rows.length) {
+            setPage(0)
+        }
+
+        return filteredItems
+            .slice(
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage,
+            )
+    }, [rows, page, rowsPerPage]
+    );
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    }
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const styledPagination = {
+      //  borderTop: '1px solid gray',
+        borderColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.secondary.main,
+        color: 'white'
+    }
     
     return (
         <Paper
@@ -174,11 +212,22 @@ export default function CollapsibleTableView({useElevation=3}) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {visibleRows.map((row) => (
                             <Row key={row.name} row={row} />
                         ))}
                     </TableBody>
                 </Table>
+
+                <TablePagination
+                rowsPerPageOptions={[2, 5, 10, 25, 50]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                sx={styledPagination}
+            />
             </TableContainer>
         </Paper>
     );

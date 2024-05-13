@@ -16,8 +16,8 @@ const theme = createTheme(
         primary: { main: '#1976d2' },
       },
     }, */
-    deDE,
-    coreDEDE,
+  //  deDE,
+    //coreDEDE,
   );
 
 export default function CustomTableData() {
@@ -263,7 +263,7 @@ export default function CustomTableData() {
                                 pageSize={25}
                                 loading={isLoading}
                                 checkboxSelection={true}
-                                /* localeText={{
+                               /*  localeText={{
                                     MuiTablePagination: {
                                         labelDisplayedRows: ({ from, to, count }) =>
                                             `${from} - ${to} of more than ${count}`,
