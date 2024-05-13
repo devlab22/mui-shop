@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Typography, Grid, Box, Stack, Divider, Paper } from '@mui/material'
-import { Title, MyRadioGroup, CollapsibleTableView, TableView } from '../components'
+import { Title, MyRadioGroup, CollapsibleTableView, TableView, LoadingCircle } from '../components'
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -68,6 +68,7 @@ export default function SpacingGridDemo() {
   const [direction, setDirection] = React.useState('row')
   const [justifyContent, setJustifyContent] = React.useState('center')
   const [alignItems, setAlignItems] = React.useState('center')
+  const content = ["circle", "blocks", "grid", "dots", "bars", "dna", "glass", "progressbar", "rotatingSquare"]
 
   const Item = ({ value = 0 }) => {
 
@@ -94,6 +95,21 @@ export default function SpacingGridDemo() {
         <React.Fragment>
           {/*This container will be aligned in the center */}
           {/* Spacing will vary depending on user choice.*/}
+          <Title title="Loading..." />
+          <Grid
+            container
+            spacing={2}
+            justifyContent="space-around"
+            alignItems="center"
+          >
+            {content.map((value, index) => (
+              <Grid  key={index} item>
+                 <LoadingCircle content={value} />
+              </Grid>
+             
+            ))}
+          </Grid>
+
           <Title title="Grid" />
           <Divider sx={{ m: '10px 0' }} />
           <Grid
