@@ -11,9 +11,9 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     color: theme.palette.text.secondary,
     [`& .${treeItemClasses.content}`]: {
         color: theme.palette.text.secondary,
-        borderTopRightRadius: theme.spacing(2),
-        borderBottomRightRadius: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+       // borderTopRightRadius: theme.spacing(2),
+       // borderBottomRightRadius: theme.spacing(2),
+       // paddingRight: theme.spacing(1),
         fontWeight: theme.typography.fontWeightMedium,
         '&.Mui-expanded': {
             fontWeight: theme.typography.fontWeightRegular,
@@ -33,7 +33,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     [`& .${treeItemClasses.group}`]: {
        // marginLeft: 0,
         [`& .${treeItemClasses.content}`]: {
-            paddingLeft: theme.spacing(2),
+           // paddingLeft: theme.spacing(2),
         },
     },
 }));
@@ -72,7 +72,7 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
                     display="flex"
                     alignItems="center"
                     spacing={1}
-                    sx={{ p: "10px 0px" }}
+                    sx={{ p: "5px 0px" }}
                 >
 
                     {onCheck &&

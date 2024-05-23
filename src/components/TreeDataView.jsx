@@ -51,7 +51,7 @@ export default function TreeDataView({ nodes, onCheck, onRemove, onAdd, onEdit, 
         }
 
         if (onAdd) {
-            buttons.push({
+            /* buttons.push({
                 id: 2,
                 type: "img",
                 icon: <AddCircleIcon color='primary' />,
@@ -59,7 +59,7 @@ export default function TreeDataView({ nodes, onCheck, onRemove, onAdd, onEdit, 
                 name: "add item",
                 seqnr: 2
 
-            })
+            }) */
 
             buttons.push({
                 id: 3,
@@ -67,6 +67,7 @@ export default function TreeDataView({ nodes, onCheck, onRemove, onAdd, onEdit, 
                 onClick: onAdd,
                 seqnr: 3,
                 name: "add item",
+                title: 'add item',
                 startIcon: <AddCircleIcon />
 
             })
@@ -163,13 +164,10 @@ export default function TreeDataView({ nodes, onCheck, onRemove, onAdd, onEdit, 
                     onCheck={onCheck && ((e) => onCheck(node.id, e.target.checked))}
                 >
 
-
                     {Array.isArray(node.children)
                         ? node.children.map((item) => renderStyledItems(item))
                         : null
                     }
-
-                   
 
                 </StyledTreeItem>
             </Fragment>
