@@ -1,9 +1,9 @@
 import React from 'react'
 import { FormLabel, FormControlLabel, Grid, RadioGroup, Radio, Paper, Typography } from '@mui/material'
 
-export default function MyRadioGroup({ title = '', value = '', row = false, values = [], onChange = Function.prototype, width='auto', height='auto', useElevation=3 }) {
+export default function MyRadioGroup({ title = '', value = '', row = false, values = [], onChange = Function.prototype, width='auto', height='auto', useElevation=3, leaveElevation=3 }) {
 
-    const [elevation, setElevation] = React.useState(3)
+    const [elevation, setElevation] = React.useState(useElevation)
     return (
         <Paper
             sx={{
@@ -13,7 +13,7 @@ export default function MyRadioGroup({ title = '', value = '', row = false, valu
             }}
             elevation={elevation}
             onMouseOver={() => setElevation(useElevation)}
-            onMouseLeave={() => setElevation(3)}
+            onMouseLeave={() => setElevation(leaveElevation)}
             >
             <React.Fragment>
                 <FormLabel>
@@ -39,9 +39,9 @@ export default function MyRadioGroup({ title = '', value = '', row = false, valu
                         <Grid key={Math.random()} item xs='auto' md='auto'>
                              <FormControlLabel
                                     key={Math.random()}
-                                    value={value}
+                                    value={value.name}
                                     control={<Radio />}
-                                    label={value}
+                                    label={value.label}
                                 />
                         </Grid>                  
                                

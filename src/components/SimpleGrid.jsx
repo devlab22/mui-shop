@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Typography, Grid, Box, Stack, Divider, Paper } from '@mui/material'
-import { Title, MyRadioGroup, CollapsibleTableView, TableView, LoadingCircle } from '../components'
+import { Title, SearchSubmit, MyRadioGroup, CollapsibleTableView, TableView, LoadingCircle } from '../components'
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -68,6 +68,7 @@ export default function SpacingGridDemo() {
   const [direction, setDirection] = React.useState('row')
   const [justifyContent, setJustifyContent] = React.useState('center')
   const [alignItems, setAlignItems] = React.useState('center')
+  const [radioValue, setRadioValue] = React.useState('')
   const content = ["circle", "blocks", "grid", "dots", "bars", "dna", "glass", "progressbar", "rotatingSquare"]
 
   const Item = ({ value = 0 }) => {
@@ -95,6 +96,17 @@ export default function SpacingGridDemo() {
         <React.Fragment>
           {/*This container will be aligned in the center */}
           {/* Spacing will vary depending on user choice.*/}
+          <Title title='Search'/>
+          <SearchSubmit 
+            label='Search'
+            onSubmit={(e) => console.log(e)}
+            onRadioChange={(val) => {
+              console.log(val)
+              setRadioValue(val)
+            }}
+            rvalue={radioValue}
+            radiobuttons={[{name: 'name', label: 'Name'}, {name: 'ipaddress', label: 'IP Address'}]}
+            />
           <Title title="Loading..." />
           <Grid
             container
@@ -142,7 +154,7 @@ export default function SpacingGridDemo() {
             width='300px'
             elevation={3}
             // row
-            values={['row', 'row-reverse', 'column', 'column-reverse']}
+            values={[{name: 'row', label: 'Row'}, {name : 'row-reverse', label: 'row-reverse'}, {name: 'column', label: 'column'}, {name: 'column-reverse', label: 'column-reverse'}]}
             value={direction}
             onChange={(e) => setDirection(e.target.value)}
             useElevation={10}
@@ -151,7 +163,7 @@ export default function SpacingGridDemo() {
           <MyRadioGroup
             title={`Spacing = ${spacing}`}
             //row
-            values={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+            values={[{name: 0, label: 0}, {name: 1, label: 1}, {name: 2, label: 2}]}
             value={spacing.toString()}
             onChange={(e) => setSpacing(Number(e.target.value))}
             useElevation={10}
@@ -161,7 +173,7 @@ export default function SpacingGridDemo() {
             title={`justifyContent = ${justifyContent}`}
             width='350px'
             // row
-            values={['flex-start', 'center', 'flex-end', 'space-between', 'space-around']}
+            values={[{name: 'flex-start', label:'flex-start'}, {name: 'center', label: 'center'}, {name:'flex-end', label: 'flex-end'}, {name: 'space-between', label: 'space-between'}, {name: 'space-around', label: 'space-around'}]}
             value={justifyContent}
             onChange={(e) => setJustifyContent(e.target.value)}
             useElevation={10}
@@ -171,7 +183,7 @@ export default function SpacingGridDemo() {
             title={`alignItems = ${alignItems}`}
             width='250px'
             // row
-            values={['flex-start', 'center', 'flex-end', 'stretch', 'baseline']}
+            values={[{name: 'flex-start', label: 'flex-start'}, {name: 'center', label: 'center'}, {name: 'flex-end', label: 'flex-end'}, {name: 'stretch', label: 'stretch'}, {name: 'baseline', label: 'baseline'}]}
             value={alignItems}
             onChange={(e) => setAlignItems(e.target.value)}
             useElevation={10}
