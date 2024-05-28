@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 export default class Dashboard {
 
     static async getAccumCountry() {
@@ -64,8 +65,15 @@ export default class Dashboard {
 
     static async getRandomImage() {
 
-        const data = await axios("https://source.unsplash.com/random?wallpapers")
-        return data
+        var url = ''
+        const {data} = await axios("data/config.json")
+        const images = data['images'] || []
+        if(images.length > 0){
+            const index = Math.floor(Math.random() * images.length);
+            url = images[index]
+        }
+        
+        return url
     }
 
 }
