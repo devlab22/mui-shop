@@ -51,20 +51,21 @@ export default class Dashboard {
 
     static async getVendor(mac_address) {
 
-        try {
-            const data = await axios("https://api.macvendors.com/", {
-                params: {
-                    mac_address: mac_address
-                }
+        const data = await axios("https://api.macvendors.com/", {
+            params: {
+                mac_address: mac_address
             }
-            )
-
-            return data
         }
-        catch (err) {
-            return 'not Found'
-        }
+        )
 
+        return data
+
+    }
+
+    static async getRandomImage() {
+
+        const data = await axios("https://source.unsplash.com/random?wallpapers")
+        return data
     }
 
 }

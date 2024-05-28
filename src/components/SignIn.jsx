@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {default as API} from '../API/apiService'
 
 function Copyright(props) {
   return (
@@ -31,6 +32,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,6 +41,23 @@ export default function SignInSide() {
       password: data.get('password'),
     });
   };
+
+  React.useEffect(() => {
+
+    async function loadData(){
+
+        try{
+
+          const image = await API.getRandomImage()
+          console.log(image)
+        }
+        catch(err){
+
+        }
+    }
+
+    loadData()
+  }, [])
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -50,7 +69,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://api.unsplash.com/fotos)',
+            backgroundImage: 'url(https://api.unsplash.com/photos/random?count=1)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
