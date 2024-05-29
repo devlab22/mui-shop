@@ -54,7 +54,7 @@ export default function SignInSide() {
 
       try {
 
-        const image = await API.getRandomImage()
+        var image = await API.getRandomImage()
         setUrl(image)
       }
       catch (err) {
@@ -72,8 +72,8 @@ export default function SignInSide() {
         <Grid
           item
           xs={false}
-          sm={4}
-          md={7}
+          sm={6}
+          md={8}
           sx={{
             backgroundImage: `url(${url})`,
             backgroundRepeat: 'no-repeat',
@@ -83,7 +83,7 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={6} md={4} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
