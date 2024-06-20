@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { default as API } from '../API/apiService'
+import { Touchable } from '../components'
+import { Card, CardActionArea, CardContent, Stack, CardHeader } from '@mui/material';
 
 function Copyright(props) {
   return (
@@ -149,7 +151,32 @@ export default function SignInSide() {
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={3} md={3} component={Paper} elevation={6} square>
+        <Grid item xs={6} sm={3} md={3} component={Paper} elevation={6} square>
+          <Grid
+            container
+            alignItems='center'
+            justifyContent="space-around"
+            spacing={1}
+            sx={{ pt: '5px' }}
+          >
+
+            <Touchable
+              id='1'
+              title='Set Enpoints'
+              onCardClicked={(id) => console.log(id)}
+              text='info'
+            />
+
+            <Touchable
+              id='2'
+              title='Set other Data'
+              onCardClicked={(id) => console.log(id)}
+              text='info'
+            />
+
+
+
+          </Grid>
 
         </Grid>
 
