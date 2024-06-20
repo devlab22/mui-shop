@@ -72,6 +72,9 @@ export default class Dashboard {
             const index = Math.floor(Math.random() * images.length);
             url = images[index]
         }
+        else{
+            url = "https://source.unsplash.com/random?wallpapers"
+        }
         
         return url
     }

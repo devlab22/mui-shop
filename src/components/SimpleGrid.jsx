@@ -162,8 +162,8 @@ export default function SpacingGridDemo() {
 
           <MyRadioGroup
             title={`Spacing = ${spacing}`}
-            //row
-            values={[{name: 0, label: 0}, {name: 1, label: 1}, {name: 2, label: 2}]}
+            row
+            values={[{name: 0, label: 0}, {name: 1, label: 1}, {name: 2, label: 2}, {name: 3, label: 3}, {name: 4, label: 4}]}
             value={spacing.toString()}
             onChange={(e) => setSpacing(Number(e.target.value))}
             useElevation={10}

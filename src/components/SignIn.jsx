@@ -73,7 +73,7 @@ export default function SignInSide() {
           item
           xs={false}
           sm={6}
-          md={8}
+          md={6}
           sx={{
             backgroundImage: `url(${url})`,
             backgroundRepeat: 'no-repeat',
@@ -83,7 +83,7 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={6} md={4} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={3} md={3} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -148,6 +148,11 @@ export default function SignInSide() {
             </Box>
           </Box>
         </Grid>
+
+        <Grid item xs={12} sm={3} md={3} component={Paper} elevation={6} square>
+
+        </Grid>
+
       </Grid>
     </ThemeProvider>
   );
