@@ -13,8 +13,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { default as API } from '../API/apiService'
-import { Touchable } from '../components'
-import { Card, CardActionArea, CardContent, Stack, CardHeader } from '@mui/material';
+import { Touchable, MessageDialog } from '../components'
+import InfoIcon from '@mui/icons-material/Info';
+import SaveIcon from '@mui/icons-material/Save';
 
 function Copyright(props) {
   return (
@@ -36,6 +37,19 @@ const defaultTheme = createTheme();
 export default function SignInSide() {
 
   const [url, setUrl] = React.useState('')
+  const [open, setOpen] = React.useState(false)
+  const [message, setMessage] = React.useState('')
+  const [title, setTitle] = React.useState('')
+
+  const sapActions = [
+    { id: 1, title: 'Set Endpoints',
+      // keyValues: [{key: 'key1', value: 'value 1'}],
+       values: ['info 1', 'info 2'], 
+       description: 'set endpoints' },
+    { id: 2, title: 'Set other Data', values: ['info 3', 'info 4'], description: 'set other data' },
+    { id: 3, title: 'Set other Data', values: ['info 3', 'info 4'], description: 'set other data' },
+    { id: 4, title: 'Set other Data',values: ['info 3', 'info 4'], description: 'set other data' }
+  ]
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -45,6 +59,13 @@ export default function SignInSide() {
       password: data.get('password'),
     });
   };
+
+  const handleOnSapAction = (id) => {
+    const action = sapActions.find(item => item.id === id)
+    setMessage(action.description)
+    setTitle(action.title)
+    setOpen(true)
+  }
 
   React.useEffect(() => {
 
@@ -65,6 +86,7 @@ export default function SignInSide() {
     }
 
     loadData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -85,14 +107,13 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={3} md={3} component={Paper} elevation={6} square>
+        <Grid item xs={3} sm={2} md={2} component={Paper} elevation={6} square>
           <Box
             sx={{
-              my: 8,
-              mx: 4,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              padding: '10px'
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -151,30 +172,39 @@ export default function SignInSide() {
           </Box>
         </Grid>
 
-        <Grid item xs={6} sm={3} md={3} component={Paper} elevation={6} square>
+        <Grid item xs={9} sm={4} md={4} component={Paper} elevation={6} square>
           <Grid
             container
             alignItems='center'
-            justifyContent="space-around"
-            spacing={1}
-            sx={{ pt: '5px' }}
+            justifyContent="start"
+            spacing={2}
+            sx={{ p: '10px' }}
           >
 
-            <Touchable
-              id='1'
-              title='Set Enpoints'
-              onCardClicked={(id) => console.log(id)}
-              text='info'
-            />
+            {sapActions.map(action => (
+              
+              <Touchable
+                key={action.id}
+                minHeight={220}
+               // onCardClicked={(id) => handleOnSapAction(id)}
+                buttons={[
+                  {id: 1, seqnr: 2, icon: <InfoIcon color='primary'/>, title: 'info', onClick: handleOnSapAction},
+                  {id: 2, seqnr: 1, icon: <SaveIcon color='primary'/>, title: 'set endpoints', onClick: handleOnSapAction}
 
-            <Touchable
-              id='2'
-              title='Set other Data'
-              onCardClicked={(id) => console.log(id)}
-              text='info'
-            />
+                ]}
+                {...action}
+              />
+             
+            ))}
 
-
+            {open && (
+              <MessageDialog
+                toggle={open}
+                title={title}
+                message={message}
+                onReject={() => setOpen(false)}
+              />
+            )}
 
           </Grid>
 

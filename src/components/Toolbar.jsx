@@ -1,44 +1,44 @@
 import React from 'react';
 //import { CSVLink } from 'react-csv';
-import { Box, Avatar, Stack, Button, Checkbox, IconButton, TextField } from '@mui/material';
+import { Box, Grid, Avatar, Button, Checkbox, IconButton, TextField } from '@mui/material';
 
-export default function Toolbar({ buttons = [], styles = {width: '100%'} }) {
+export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
 
+    const setButton = (button) => {
+        if (button.type === 'checkbox') {
+            return setCheckboxToolbar(button);
+        }
+        else if (button.type === 'img') {
+            return setImageToolbar(button);
+        }
+        else if (button.type === 'input') {
+            return setInputToolbar(button);
+        }
+        /*  else if (button.type === 'CSVLink') {
+             return setCSVLink(button);
+         } */
+        else {
+            return setButtonToolbar(button);
+        }
+    }
     const setToolbar = () => {
 
         buttons.sort((a, b) => a.seqnr - b.seqnr);
-    
+
         return (
-            <Box sx={styles}>
-                <Stack
-                    direction="row"
-                    spacing={1}
-                    alignItems='flex-start'
-                    sx={{p:1}}               
-                >
+            <Grid
+                sx={styles}
+                container
+                direction='row'
+                justifyContent='flex-end'
+            >
+                  {buttons.map(button => (
+                    <Grid item>
+                       {setButton(button)} 
+                    </Grid>
+                  ))}
 
-                    {
-                        buttons.map(button => {
-                            if (button.type === 'checkbox') {
-                                return setCheckboxToolbar(button);
-                            }
-                            else if (button.type === 'img') {
-                                return setImageToolbar(button);
-                            }
-                            else if (button.type === 'input') {
-                                return setInputToolbar(button);
-                            }
-                            /*  else if (button.type === 'CSVLink') {
-                                 return setCSVLink(button);
-                             } */
-                            else {
-                                return setButtonToolbar(button);
-                            }
-                        })
-                    }
-
-                </Stack>
-             </Box >
+            </Grid >
 
         )
     }
@@ -56,7 +56,7 @@ export default function Toolbar({ buttons = [], styles = {width: '100%'} }) {
             >
                 {button.name}
             </Button>
-           
+
         )
     }
     const setInputToolbar = (button) => {
@@ -103,7 +103,7 @@ export default function Toolbar({ buttons = [], styles = {width: '100%'} }) {
     }
 
     const setImageToolbar = (button) => {
-        
+
         return (
             <IconButton
                 key={button.id}
