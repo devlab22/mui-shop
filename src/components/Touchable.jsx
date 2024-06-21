@@ -1,6 +1,5 @@
 import React from 'react'
 import { Grid, IconButton, Avatar, CardMedia, CardContent, Card, CardActions, CardActionArea, Typography, Stack, CardHeader } from '@mui/material';
-import { default as API } from '../API/apiService'
 
 export default function Touchable({ minHeight = 50, avatar, poster, id = '', title = '', keyValues = [], values = [], buttons = [], onCardClicked }) {
 
