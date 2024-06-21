@@ -42,13 +42,13 @@ export default function SignInSide() {
   const [title, setTitle] = React.useState('')
 
   const sapActions = [
-    { id: 1, title: 'Set Endpoints',
+    { id: 1, title: 'Set Endpoints', poster: true,
       // keyValues: [{key: 'key1', value: 'value 1'}],
-       values: ['info 1', 'info 2'], 
+       values: ['info 1'], 
        description: 'set endpoints' },
-    { id: 2, title: 'Set other Data', values: ['info 3', 'info 4'], description: 'set other data' },
-    { id: 3, title: 'Set other Data', values: ['info 3', 'info 4'], description: 'set other data' },
-    { id: 4, title: 'Set other Data',values: ['info 3', 'info 4'], description: 'set other data' }
+    { id: 2, poster: true, title: 'Set other Data', values: ['info 3'], description: 'set other data' },
+    { id: 3, poster: true, title: 'Set other Data', values: ['info 3'], description: 'set other data' },
+    { id: 4, poster: true, title: 'Set other Data',values: ['info 3'], description: 'set other data' }
   ]
 
   const handleSubmit = (event) => {

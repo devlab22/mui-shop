@@ -1,9 +1,25 @@
 import React from 'react'
 import { Grid, IconButton, Avatar, CardMedia, CardContent, Card, CardActions, CardActionArea, Typography, Stack, CardHeader } from '@mui/material';
+import {default as API} from '../API/apiService'
 
-export default function Touchable({ minHeight = 50, avatar, poster, id = '', title = '', keyValues = [], values = [], buttons = [], onCardClicked }) {
+export default function Touchable({ minHeight = 50, avatar, poster=false, id = '', title = '', keyValues = [], values = [], buttons = [], onCardClicked }) {
 
     const [raised, setRaised] = React.useState(false)
+    const [post, setPost] = React.useState(null)
+
+    React.useEffect(() => {
+
+        async function getImage(){
+
+            if(poster){
+                const tmp = await API.getRandomImage()
+                setPost(tmp)
+            }
+        }
+
+        getImage()
+
+    }, [])
 
     const addContent = (params = {}) => {
 
@@ -71,10 +87,10 @@ export default function Touchable({ minHeight = 50, avatar, poster, id = '', tit
 
                 )}
 
-                {poster && (
+                {post && (
                     <CardMedia
                         height='140'
-                        image={poster}
+                        image={post}
                         component='img'
                     />
                 )}
