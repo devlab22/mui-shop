@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +16,9 @@ import { default as API } from '../API/apiService'
 import { Touchable, MessageDialog } from '../components'
 import InfoIcon from '@mui/icons-material/Info';
 import SaveIcon from '@mui/icons-material/Save';
+import AppContext from '../context';
+import AodIcon from '@mui/icons-material/Aod';
+import AppleIcon from '@mui/icons-material/Apple';
 
 function Copyright(props) {
   return (
@@ -36,20 +39,68 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
 
+  const { config } = useContext(AppContext);
+
   const [url, setUrl] = React.useState('')
   const [open, setOpen] = React.useState(false)
   const [message, setMessage] = React.useState('')
   const [title, setTitle] = React.useState('')
+  const [sapActions, setSapActions] = useState([])
+  const [severity, setSeverity] = useState('info')
 
-  const sapActions = [
-    { id: 1, title: 'Set Endpoints', poster: true,
-      // keyValues: [{key: 'key1', value: 'value 1'}],
-       values: ['info 1'], 
-       description: 'set endpoints' },
-    { id: 2, poster: true, title: 'Set other Data', values: ['info 3'], description: 'set other data' },
-    { id: 3, poster: true, title: 'Set other Data', values: ['info 3'], description: 'set other data' },
-    { id: 4, poster: true, title: 'Set other Data',values: ['info 3'], description: 'set other data' }
-  ]
+  React.useEffect(() => {
+
+    async function loadData() {
+
+      setSapActions([
+        {
+          id: 1, title: 'Set Endpoints',
+          poster: getRandomImage(),
+          avatar: <AodIcon />,
+          keyValues: [{ key: 'key1', value: 'value 1' }],
+          values: ['info 1', 'info 3'],
+          description: 'Endpoints',
+         /*  customButtons: [
+            { id: 2, seqnr: 1, type: 'img', icon: <SaveIcon color='primary' />, title: 'set endpoints', onClick: handleOnSapAction, description: 'description other data' }
+
+          ] */
+        },
+        {
+          id: 2,
+          poster: getRandomImage(),
+          avatar: <AppleIcon />,
+          /* customButtons: [
+            { id: 2, seqnr: 1, type: 'img', icon: <SaveIcon color='primary' />, title: 'set endpoints', onClick: handleOnSapAction, description: 'description other data' }
+
+          ], */
+          title: 'Set other Data', values: ['info 3'], description: 'description other data'
+        },
+        { id: 3, poster: getRandomImage(), title: 'Set other Data', values: ['info 3'], description: 'description other data' },
+        { id: 4, poster: getRandomImage(), title: 'Set other Data', values: ['info 3'], description: 'description other data' }
+      ])
+      try {
+
+        var image = getRandomImage()
+        setUrl(image)
+      }
+      catch (err) {
+
+      }
+    }
+
+    loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const getRandomImage = () => {
+
+    const images = config['images'] || []
+
+    const image = API.getRandomImage(images)
+
+    return image
+
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -61,37 +112,26 @@ export default function SignInSide() {
   };
 
   const handleOnSapAction = (id) => {
+    console.log(sapActions)
     const action = sapActions.find(item => item.id === id)
-    setMessage(action.description)
-    setTitle(action.title)
+    console.log(id)
+    console.log(action)
+    if (action) {
+      setMessage(action['description'] || 'not found')
+      setTitle(action['title'] || 'not found')
+      setSeverity('info')
+    }
+    else {
+      setMessage('')
+      setTitle(`id ${id} not found`)
+      setSeverity('error')
+    }
     setOpen(true)
   }
 
-  React.useEffect(() => {
-
-    async function loadData() {
-
-      if (url.length > 0) {
-        return
-      }
-
-      try {
-
-        var image = await API.getRandomImage()
-        setUrl(image)
-      }
-      catch (err) {
-
-      }
-    }
-
-    loadData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '89vh' }}>
         <CssBaseline />
         <Grid
           item
@@ -182,19 +222,19 @@ export default function SignInSide() {
           >
 
             {sapActions.map(action => (
-              
+
               <Touchable
                 key={action.id}
                 minHeight={220}
-               // onCardClicked={(id) => handleOnSapAction(id)}
+                onCardClicked={(id) => handleOnSapAction(id)}
                 buttons={[
-                  {id: 1, seqnr: 2, icon: <InfoIcon color='primary'/>, title: 'info', onClick: handleOnSapAction},
-                  {id: 2, seqnr: 1, icon: <SaveIcon color='primary'/>, title: 'set endpoints', onClick: handleOnSapAction}
+                  { id: 1, seqnr: 2, type: 'img', icon: <InfoIcon color='primary' />, title: 'info', name: 'info', onClick: handleOnSapAction },
+                  { id: 2, seqnr: 1, type: 'img', icon: <SaveIcon color='primary' />, title: 'set endpoints', name: 'set data', onClick: handleOnSapAction }
 
                 ]}
                 {...action}
               />
-             
+
             ))}
 
             {open && (
@@ -202,6 +242,7 @@ export default function SignInSide() {
                 toggle={open}
                 title={title}
                 message={message}
+                severity={severity}
                 onReject={() => setOpen(false)}
               />
             )}

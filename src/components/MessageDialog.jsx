@@ -22,7 +22,10 @@ export default function MessageDialog({ autoHide = 6000, toggle = false, title =
                     variant="filled"
                     severity={severity}
                     onClose={onReject}
-                    sx={{ width: width }}
+                    sx={{ 
+                        width: width,
+                        minHeight: '80px'
+                    }}
                 >
 
                     {title &&

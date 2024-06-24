@@ -1,25 +1,15 @@
 import React from 'react'
-import { Grid, IconButton, Avatar, CardMedia, CardContent, Card, CardActions, CardActionArea, Typography, Stack, CardHeader } from '@mui/material';
-import {default as API} from '../API/apiService'
+import { Grid, Avatar, CardMedia, CardContent, Card, CardActions, CardActionArea, Typography, Stack, CardHeader } from '@mui/material';
+import { Toolbar} from '../components'
 
-export default function Touchable({ minHeight = 50, avatar, poster=false, id = '', title = '', keyValues = [], values = [], buttons = [], onCardClicked }) {
+export default function Touchable({ minHeight = 50, avatar, poster = false, id = '', title = '', keyValues = [], values = [], buttons = [], customButtons = [], onCardClicked }) {
 
     const [raised, setRaised] = React.useState(false)
-    const [post, setPost] = React.useState(null)
 
-    React.useEffect(() => {
-
-        async function getImage(){
-
-            if(poster){
-                const tmp = await API.getRandomImage()
-                setPost(tmp)
-            }
-        }
-
-        getImage()
-
-    }, [])
+    const toolbarStyle = {
+        width: '100%',
+        justifyContent: 'flex-end'
+    }
 
     const addContent = (params = {}) => {
 
@@ -28,10 +18,11 @@ export default function Touchable({ minHeight = 50, avatar, poster=false, id = '
                 flexDirection='row'
                 gap='5px'
                 key={params.key}
+
             >
                 <Typography
                     variant='p'
-                    component='h4'
+                    component='h3'
                     sx={{ opacity: '0.7' }}
                 >
                     {`${params.key}:`}
@@ -39,7 +30,7 @@ export default function Touchable({ minHeight = 50, avatar, poster=false, id = '
 
                 <Typography
                     variant='p'
-                    component='h4'
+                    component='h3'
                 >
                     {params.value}
                 </Typography>
@@ -52,6 +43,7 @@ export default function Touchable({ minHeight = 50, avatar, poster=false, id = '
         return (
             <Stack
                 gap='5px'
+                sx={{pl: '5px'}}
             >
 
                 {keyValues.map(value => (
@@ -80,22 +72,26 @@ export default function Touchable({ minHeight = 50, avatar, poster=false, id = '
                         <Avatar
                             sx={{
                                 bgcolor: 'secondary.main'
-                            }}>
+                            }}
+                        >
                             {avatar}
                         </Avatar>
                     </Stack>
 
                 )}
 
-                {post && (
+                {poster && (
                     <CardMedia
                         height='140'
-                        image={post}
+                        image={poster}
                         component='img'
                     />
                 )}
 
-                <Stack gap='5px'>
+                <Stack 
+                    gap='5px'
+                    sx={{pt: '5px'}}
+                    >
 
                     {values.map((value, index) => (
                         <Typography
@@ -132,34 +128,6 @@ export default function Touchable({ minHeight = 50, avatar, poster=false, id = '
             </CardActionArea>
         )
     }
-    const setToolbar = () => {
-
-        if (buttons.length > 1) {
-            buttons.sort((a, b) => a.seqnr - b.seqnr);
-        }
-
-        return (
-            <Grid
-                container
-                direction='row'
-                justifyContent='flex-end'
-            >
-
-                {buttons.map(button => (
-
-                    <Grid item key={button.id}>
-                        <IconButton
-                            onClick={() => button.onClick(id)}
-                            title={button.title}
-                        >
-                            {button.icon}
-                        </IconButton>
-                    </Grid>
-                ))}
-
-            </Grid>
-        )
-    }
 
     return (
         <Grid item xs='auto' md='auto'>
@@ -181,9 +149,10 @@ export default function Touchable({ minHeight = 50, avatar, poster=false, id = '
                     :
                     setContentArea()
                 }
-                {buttons.length > 0 && (
+                {(buttons.length > 0 || customButtons.length > 0) && (
                     <CardActions>
-                        {setToolbar()}
+                        <Toolbar id={id} buttons={customButtons} styles={toolbarStyle} />
+                        <Toolbar id={id} buttons={buttons} styles={toolbarStyle}/>
                     </CardActions>
                 )}
 

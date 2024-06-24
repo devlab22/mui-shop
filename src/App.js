@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, createContext, useContext } from 'react';
 import { SignIn, Shop, SimpleGrid, FoodsView, MovebleView, AlertDialog, MessageDialog, AddItemDialog, VideoView, StyledListView, Countries, CustomTableData, AccordionData, TreeData, TreeDataView, ChartsView, StyledTreeView } from './components';
 import { Box, CssBaseline, Tabs, Tab, Typography } from '@mui/material';
 import { Flag, AutoStories, TableRows } from '@mui/icons-material';
@@ -14,7 +14,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import AppContext from './context'
+import axios from 'axios';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
   const [parentNode, setParentNode] = useState({ id: null, name: '', seqnr: 0 })
   const [title, setTitle] = useState('')
   const [messages, setMessages] = useState([])
+  const [config, setConfig] = useState({})
 
   const theme = createTheme()
 
@@ -79,7 +81,8 @@ function App() {
         });
 
         setCntTab(tmp);
-
+        const configData  = await axios("data/config.json")
+        setConfig(configData.data)
         setIsLoading(false);
       }
       catch (e) {
@@ -332,7 +335,10 @@ function App() {
   }
 
   return (
-    <>
+    <AppContext.Provider value={{
+      config
+    }}
+    >
       <ThemeProvider theme={theme}>
 
         <Box
@@ -521,7 +527,7 @@ function App() {
           />
         }
       </ThemeProvider>
-    </>
+      </AppContext.Provider>
   )
 
 }

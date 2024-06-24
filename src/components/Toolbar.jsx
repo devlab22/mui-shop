@@ -1,8 +1,8 @@
 import React from 'react';
 //import { CSVLink } from 'react-csv';
-import { Box, Grid, Avatar, Button, Checkbox, IconButton, TextField } from '@mui/material';
+import { Grid, Avatar, Button, Checkbox, IconButton, TextField } from '@mui/material';
 
-export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
+export default function Toolbar({ id=null, buttons = [], styles = { width: '100%' } }) {
 
     const setButton = (button) => {
         if (button.type === 'checkbox') {
@@ -30,10 +30,9 @@ export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
                 sx={styles}
                 container
                 direction='row'
-                justifyContent='flex-end'
             >
                   {buttons.map(button => (
-                    <Grid item>
+                    <Grid item key={button.id}>
                        {setButton(button)} 
                     </Grid>
                   ))}
@@ -48,8 +47,8 @@ export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
         return (
             <Button
                 key={button.id}
-                variant="contained"
-                onClick={() => button.onClick(null)}
+                variant={button.variant || 'contained'}
+                onClick={() => button.onClick(id)}
                 title={button.name}
                 endIcon={button.endIcon && button.endIcon}
                 startIcon={button.startIcon && button.startIcon}
@@ -68,7 +67,7 @@ export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
                     <TextField
                         type='file'
                         accept={button.accept}
-                        onChange={button.onClick}
+                        onChange={(event) => button.onClick(id, event.target.value)}
                         sx={{ display: 'none' }}
                     />
 
@@ -107,7 +106,7 @@ export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
         return (
             <IconButton
                 key={button.id}
-                onClick={() => button.onClick(null)}
+                onClick={() => button.onClick(id)}
                 title={button.name}
             >
 
@@ -133,7 +132,7 @@ export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
             <Checkbox
                 key={button.id}
                 checked={button.checked}
-                onChange={e => button.onClick(null, e.target.checked)}
+                onChange={e => button.onClick(id, e.target.checked)}
                 title={button.name}
             />
         )
@@ -171,19 +170,12 @@ export default function Toolbar({ buttons = [], styles = { width: '100%' } }) {
      } */
 
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignContent: 'space-between',
-
-            }}
-        >
+        <React.Fragment>
             {
                 Array.isArray(buttons) && (
                     setToolbar()
                 )
             }
-        </Box>
+        </React.Fragment>
     )
 }
