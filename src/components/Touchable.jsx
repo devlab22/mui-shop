@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Avatar, CardMedia, CardContent, Card, CardActions, CardActionArea, Typography, Stack, CardHeader } from '@mui/material';
 import { Toolbar} from '../components'
 
-export default function Touchable({ minHeight = 50, avatar, poster = false, id = '', title = '', keyValues = [], values = [], buttons = [], customButtons = [], onCardClicked }) {
+export default function Touchable({ minHeight = 50, avatar, poster = null, id = '', title = '', keyValues = [], values = [], buttons = [], onCardClicked }) {
 
     const [raised, setRaised] = React.useState(false)
 
@@ -84,6 +84,7 @@ export default function Touchable({ minHeight = 50, avatar, poster = false, id =
                     <CardMedia
                         height='140'
                         image={poster}
+                        alt='Image'
                         component='img'
                     />
                 )}
@@ -149,9 +150,8 @@ export default function Touchable({ minHeight = 50, avatar, poster = false, id =
                     :
                     setContentArea()
                 }
-                {(buttons.length > 0 || customButtons.length > 0) && (
+                {(buttons.length > 0) && (
                     <CardActions>
-                        <Toolbar id={id} buttons={customButtons} styles={toolbarStyle} />
                         <Toolbar id={id} buttons={buttons} styles={toolbarStyle}/>
                     </CardActions>
                 )}

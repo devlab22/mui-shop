@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,12 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { default as API } from '../API/apiService'
-import { Touchable, MessageDialog } from '../components'
-import InfoIcon from '@mui/icons-material/Info';
-import SaveIcon from '@mui/icons-material/Save';
 import AppContext from '../context';
-import AodIcon from '@mui/icons-material/Aod';
-import AppleIcon from '@mui/icons-material/Apple';
 
 function Copyright(props) {
   return (
@@ -42,42 +37,11 @@ export default function SignInSide() {
   const { config } = useContext(AppContext);
 
   const [url, setUrl] = React.useState('')
-  const [open, setOpen] = React.useState(false)
-  const [message, setMessage] = React.useState('')
-  const [title, setTitle] = React.useState('')
-  const [sapActions, setSapActions] = useState([])
-  const [severity, setSeverity] = useState('info')
 
   React.useEffect(() => {
 
     async function loadData() {
 
-      setSapActions([
-        {
-          id: 1, title: 'Set Endpoints',
-          poster: getRandomImage(),
-          avatar: <AodIcon />,
-          keyValues: [{ key: 'key1', value: 'value 1' }],
-          values: ['info 1', 'info 3'],
-          description: 'Endpoints',
-         /*  customButtons: [
-            { id: 2, seqnr: 1, type: 'img', icon: <SaveIcon color='primary' />, title: 'set endpoints', onClick: handleOnSapAction, description: 'description other data' }
-
-          ] */
-        },
-        {
-          id: 2,
-          poster: getRandomImage(),
-          avatar: <AppleIcon />,
-          /* customButtons: [
-            { id: 2, seqnr: 1, type: 'img', icon: <SaveIcon color='primary' />, title: 'set endpoints', onClick: handleOnSapAction, description: 'description other data' }
-
-          ], */
-          title: 'Set other Data', values: ['info 3'], description: 'description other data'
-        },
-        { id: 3, poster: getRandomImage(), title: 'Set other Data', values: ['info 3'], description: 'description other data' },
-        { id: 4, poster: getRandomImage(), title: 'Set other Data', values: ['info 3'], description: 'description other data' }
-      ])
       try {
 
         var image = getRandomImage()
@@ -111,33 +75,15 @@ export default function SignInSide() {
     });
   };
 
-  const handleOnSapAction = (id) => {
-    console.log(sapActions)
-    const action = sapActions.find(item => item.id === id)
-    console.log(id)
-    console.log(action)
-    if (action) {
-      setMessage(action['description'] || 'not found')
-      setTitle(action['title'] || 'not found')
-      setSeverity('info')
-    }
-    else {
-      setMessage('')
-      setTitle(`id ${id} not found`)
-      setSeverity('error')
-    }
-    setOpen(true)
-  }
-
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '89vh' }}>
+      <Grid container component="main" sx={{ height: '85vh' }}>
         <CssBaseline />
         <Grid
           item
           xs={false}
-          sm={6}
-          md={6}
+          sm={9}
+          md={9}
           sx={{
             backgroundImage: `url(${url})`,
             backgroundRepeat: 'no-repeat',
@@ -147,7 +93,7 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={3} sm={2} md={2} component={Paper} elevation={6} square>
+        <Grid item xs={3} sm={3} md={3} component={Paper} elevation={6} square>
           <Box
             sx={{
               display: 'flex',
@@ -162,7 +108,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box 
+              component="form" 
+              noValidate 
+              onSubmit={handleSubmit} 
+              sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -210,45 +160,6 @@ export default function SignInSide() {
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
-        </Grid>
-
-        <Grid item xs={9} sm={4} md={4} component={Paper} elevation={6} square>
-          <Grid
-            container
-            alignItems='center'
-            justifyContent="start"
-            spacing={2}
-            sx={{ p: '10px' }}
-          >
-
-            {sapActions.map(action => (
-
-              <Touchable
-                key={action.id}
-                minHeight={220}
-                onCardClicked={(id) => handleOnSapAction(id)}
-                buttons={[
-                  { id: 1, seqnr: 2, type: 'img', icon: <InfoIcon color='primary' />, title: 'info', name: 'info', onClick: handleOnSapAction },
-                  { id: 2, seqnr: 1, type: 'img', icon: <SaveIcon color='primary' />, title: 'set endpoints', name: 'set data', onClick: handleOnSapAction }
-
-                ]}
-                {...action}
-              />
-
-            ))}
-
-            {open && (
-              <MessageDialog
-                toggle={open}
-                title={title}
-                message={message}
-                severity={severity}
-                onReject={() => setOpen(false)}
-              />
-            )}
-
-          </Grid>
-
         </Grid>
 
       </Grid>
