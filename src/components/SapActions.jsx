@@ -76,7 +76,7 @@ export default function SapActions() {
 
     }
 
-    const showMessage = (title='', message='', severity='info') => {
+    const showMessage = (title = '', message = '', severity = 'info') => {
         setTitle(title)
         setMessage(message)
         setSeverity(severity)
@@ -129,9 +129,15 @@ export default function SapActions() {
     }
 
     return (
-        <Grid container component='main' height='85vh'>
+        <Grid
+            container
+            component='main'
+            height='85vh'
+        >
             <CssBaseline />
-            <Grid item xs={3} sm={3} md={3} component={Paper} elevation={6} square>
+            <Grid item xs={3} sm={3} md={3}
+                component={Paper} elevation={6}
+                square>
                 <Box
                     sx={{
                         display: 'flex',
@@ -146,10 +152,10 @@ export default function SapActions() {
                         sx={{ width: 'auto', height: '120px' }}
                     />
 
-                    {/* <Avatar
+                    {/*  <Avatar
                         alt='sapui5'
                         src='img/sap/sapui5.png'
-                        sx={{ width: 'auto', height: '8rem' }}
+                        sx={{ width: 'auto', height: '120px' }}
                     /> */}
 
                     <Box
@@ -210,11 +216,11 @@ export default function SapActions() {
 
                         <FormControlLabel
                             control={
-                            <Checkbox 
-                                value="remember" 
-                                color="primary" 
-                                checked={signIn.remember}
-                                onChange={(event) => setSignIn(prev => ({ ...prev, remember: event.target.checked }))}
+                                <Checkbox
+                                    value="remember"
+                                    color="primary"
+                                    checked={signIn.remember}
+                                    onChange={(event) => setSignIn(prev => ({ ...prev, remember: event.target.checked }))}
                                 />
                             }
                             label="Remember me"
@@ -225,13 +231,15 @@ export default function SapActions() {
 
 
             </Grid>
-            <Grid item xs={9} sm={9} md={9} component={Paper} elevation={6} square>
+            <Grid item xs={9} sm={9} md={9}
+                //component={Paper} elevation={6}
+                square>
                 <Grid
                     container
                     alignItems='center'
                     justifyContent="start"
                     spacing={2}
-                    sx={{ p: '10px' }}
+                    sx={{ p: '15px' }}
                 >
 
                     {sapActions.map(action => (

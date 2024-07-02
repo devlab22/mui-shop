@@ -1,9 +1,15 @@
 import React from 'react';
 import { Circles, Blocks, Grid, ThreeDots, Bars, Dna, MagnifyingGlass, ProgressBar, RotatingSquare } from 'react-loader-spinner';
 import { Stack } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
+export default function LoadingCircle({ content = 'circle', color = null, height = 120, width = 120 }) {
 
-export default function LoadingCircle({ content = 'circle', color = '#1976D2', height = 120, width = 120 }) {
+    const theme = useTheme()
+
+    if(!color){
+        color = theme.palette.primary.main
+    }
 
     const renderContent = () => {
 
@@ -30,6 +36,7 @@ export default function LoadingCircle({ content = 'circle', color = '#1976D2', h
                         ariaLabel="blocks-loading"
                         wrapperStyle={{}}
                         wrapperClass=""
+                        color={color}
                     />
                 )
 
@@ -80,6 +87,7 @@ export default function LoadingCircle({ content = 'circle', color = '#1976D2', h
                         ariaLabel="dna-loading"
                         wrapperStyle={{}}
                         wrapperClass="dna-wrapper"
+                        color={color}
                     />
                 )
             case 'glass':
@@ -91,8 +99,7 @@ export default function LoadingCircle({ content = 'circle', color = '#1976D2', h
                         ariaLabel="MagnifyingGlass-loading"
                         wrapperStyle={{}}
                         wrapperClass="MagnifyingGlass-wrapper"
-                        glassColor='#c0efff'
-                        color='#e15b64'
+                        glassColor='#c0efff'   
                     />
                 )
             case 'progressbar':
