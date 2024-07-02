@@ -4,7 +4,7 @@ import { Search, MyRadioGroup } from '.'
 
 export default function SearchSubmit(props) {
 
-    const { onRadioChange= Function.prototype, onSubmit = Function.prototype, onChange=Function.prototype, sxSearch = { width: '40%', minWidth: '400px' }, sxCard = { p: '5px', minWidth: '550px', width: 'auto', maxWidth: '40%', borderRadius: '20px', m: '10px' }, label, value = '', radiobuttons=[], rvalue='', radioTitle='' } = props
+    const { onRadioChange= Function.prototype, onSubmit = Function.prototype, onChange=Function.prototype, sxSearch = { width: '40%', minWidth: '400px' }, sxCard = { p: '5px', minWidth: '550px', width: 'auto', maxWidth: '40%', borderRadius: '20px', m: '10px' }, label, value = '', radiobuttons=[], rvalue='', radioTitle='', row=false } = props
 
     const [searchValue, setSearchValue] = React.useState(value);
     const [raised, setRaised] = React.useState(false);
@@ -70,6 +70,7 @@ export default function SearchSubmit(props) {
                     onChange={handleOnRadioChange}
                     useElevation={0}
                     leaveElevation={0}
+                    row={row}
                 />
 
                 <FormHelperText sx={{color: 'red'}}>{helperText}</FormHelperText>

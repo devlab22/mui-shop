@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box, TextField, Avatar, CssBaseline, Paper } from '@mui/material'
+import { Grid, Box, TextField, Avatar, CssBaseline, Paper, FormControlLabel, Checkbox } from '@mui/material'
 import { Touchable, MessageDialog } from '../components'
 import { Info, Save, Aod, Apple } from '@mui/icons-material';
 import AppContext from '../context';
@@ -16,7 +16,8 @@ export default function SapActions() {
         username: '',
         password: '',
         url: '',
-        client: ''
+        client: '',
+        remember: false
     })
 
     const { config } = React.useContext(AppContext);
@@ -75,6 +76,13 @@ export default function SapActions() {
 
     }
 
+    const showMessage = (title='', message='', severity='info') => {
+        setTitle(title)
+        setMessage(message)
+        setSeverity(severity)
+        setOpen(true)
+    }
+
     const checkSignIn = () => {
         var checked = true
 
@@ -84,9 +92,7 @@ export default function SapActions() {
             || (signIn.client === 0)
         ) {
             checked = false
-            setTitle('SAP Authorization')
-            setMessage('Login data is invalid')
-            setSeverity('error')
+            showMessage('SAP Authorization', 'Login data is invalid', 'error')
             setOpen(true)
         }
 
@@ -99,37 +105,27 @@ export default function SapActions() {
         if (!checked) {
             return
         }
-       
+
         const action = sapActions.find(item => item.id === id)
-        
+
         if (action) {
-            setMessage(action['description'] || 'not found')
-            setTitle(action['title'] || 'not found')
-            setSeverity('info')
+            showMessage(action['title'], action['description'], 'info')
         }
         else {
-            setMessage('')
-            setTitle(`id ${id} not found`)
-            setSeverity('error')
+            showMessage('SAP Action', `id ${id} not found`, 'error')
         }
-        setOpen(true)
     }
 
     const handleOnSapActionInfo = (id) => {
 
         const action = sapActions.find(item => item.id === id)
-       
+
         if (action) {
-            setMessage(action['description'] || 'not found')
-            setTitle(action['title'] || 'not found')
-            setSeverity('info')
+            showMessage(action['title'], action['description'], 'info')
         }
         else {
-            setMessage('')
-            setTitle(`id ${id} not found`)
-            setSeverity('error')
+            showMessage('SAP Action', `id ${id} not found`, 'error')
         }
-        setOpen(true)
     }
 
     return (
@@ -141,25 +137,25 @@ export default function SapActions() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        padding: '10px'
+                        padding: '10px 20px'
                     }}
                 >
                     <Avatar
-                        alt='sapui5'
+                        alt='sap'
                         src='img/sap/sap_logo.png'
-                        sx={{ width: 'auto', height: '10rem' }}
+                        sx={{ width: 'auto', height: '120px' }}
                     />
 
                     {/* <Avatar
                         alt='sapui5'
                         src='img/sap/sapui5.png'
-                        sx={{ width: 'auto', height: '10rem' }}
+                        sx={{ width: 'auto', height: '8rem' }}
                     /> */}
 
                     <Box
                         component='form'
                         sx={{
-                            padding: '0 5px'
+                            padding: '0 0px'
                         }}
                     >
                         <TextField
@@ -212,6 +208,18 @@ export default function SapActions() {
                             onChange={(event) => setSignIn(prev => ({ ...prev, client: event.target.value }))}
                         />
 
+                        <FormControlLabel
+                            control={
+                            <Checkbox 
+                                value="remember" 
+                                color="primary" 
+                                checked={signIn.remember}
+                                onChange={(event) => setSignIn(prev => ({ ...prev, remember: event.target.checked }))}
+                                />
+                            }
+                            label="Remember me"
+                        />
+
                     </Box>
                 </Box>
 
@@ -231,7 +239,7 @@ export default function SapActions() {
                         <Touchable
                             key={action.id}
                             minHeight={220}
-                           // onCardClicked={(id) => handleOnSapActionInfo(id)}
+                            // onCardClicked={(id) => handleOnSapActionInfo(id)}
                             buttons={[
                                 { id: 1, seqnr: 2, type: 'img', icon: <Info color='primary' />, title: 'info', name: 'info', onClick: handleOnSapActionInfo },
                                 { id: 2, seqnr: 1, type: 'img', icon: <Save color='primary' />, title: 'set endpoints', name: 'set data', onClick: handleOnSapAction }

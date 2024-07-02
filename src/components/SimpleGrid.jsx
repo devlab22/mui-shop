@@ -99,6 +99,7 @@ export default function SpacingGridDemo() {
           <Title title='Search'/>
           <SearchSubmit 
             label='Search'
+            row={true}
             onSubmit={(e) => console.log(e)}
             onRadioChange={(val) => {
               console.log(val)
